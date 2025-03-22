@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:krishi_connect_app/pages/login.dart';
 import 'package:krishi_connect_app/pages/profile.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -234,6 +235,10 @@ class _RegisterationState extends State<Registeration> {
                   ),
                 ),
               ),
+              SizedBox(height: 20),
+              GestureDetector(onTap: () {
+                Navigator.push(context,MaterialPageRoute(builder: (context) => LoginPage()));
+              },child: Text('Already Registered? Login here!')),
             ],
           ),
         ),
