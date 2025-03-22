@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:krishi_connect_app/api/news_api.dart';
+import 'package:krishi_connect_app/services/api/news_api.dart';
 import 'package:krishi_connect_app/data/company_listing.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
