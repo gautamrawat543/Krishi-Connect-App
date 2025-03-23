@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:krishi_connect_app/pages/login.dart';
 import 'package:krishi_connect_app/pages/profile.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -67,8 +68,7 @@ class _RegisterationState extends State<Registeration> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -122,8 +122,7 @@ class _RegisterationState extends State<Registeration> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -231,6 +230,28 @@ class _RegisterationState extends State<Registeration> {
                       color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                child: Text.rich(
+                  TextSpan(
+                    text: 'Already have an account? ',
+                    children: [
+                      TextSpan(
+                        text: 'Login Here',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        )
+                      ),
+                    ],
                   ),
                 ),
               ),

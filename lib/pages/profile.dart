@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:krishi_connect_app/services/api/location_api.dart';
 import 'package:krishi_connect_app/main_screen.dart';
+import 'package:krishi_connect_app/services/api/register_api.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class Profile extends StatefulWidget {
@@ -15,9 +16,16 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final TextEditingController _pincodeController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   String _state = 'N/A';
   String _city = 'N/A';
   bool _isLoading = false;
+
+  bool isValidEmail(String email) {
+    return RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+        .hasMatch(email);
+  }
 
   Future<void> _fetchLocationDetails() async {
     String pincode = _pincodeController.text.trim();
@@ -45,13 +53,54 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  void completeRegistration(BuildContext context) async {
-    await SharedPrefHelper.setRegistered(true);
-    await SharedPrefHelper.setUsername(widget.name);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => MainScreen()),
+  // void completeRegistration(BuildContext context) async {
+  //   await SharedPrefHelper.setRegistered(true);
+  //   await SharedPrefHelper.setUsername(widget.name);
+  //   Navigator.pushReplacement(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => MainScreen()),
+  //   );
+  // }
+
+  bool isRegistered = false;
+  void registerNewUser() async {
+    setState(() {
+      isRegistered = true;
+    });
+    RegisterService apiService = RegisterService();
+    String role = await SharedPrefHelper.getUserrole();
+
+    var response = await apiService.registerUser(
+      name: widget.name,
+      email: _emailController.text,
+      phone: widget.number,
+      password: _passwordController.text,
+      role: role.toUpperCase(),
+      location: _city,
+      profilePicture: "https://example.com/profile.jpg",
     );
+
+    if (response.containsKey("error")) {
+      print("Error: ${response['error']}");
+      setState(() {
+        isRegistered = false;
+      });
+    } else {
+      print("User registered successfully: ${response}");
+
+      setState(() {
+        isRegistered = false;
+      });
+      // Save registration state
+      await SharedPrefHelper.setRegistered(true);
+      await SharedPrefHelper.setUsername(widget.name);
+
+      // Navigate to MainScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainScreen()),
+      );
+    }
   }
 
   @override
@@ -139,6 +188,75 @@ class _ProfileState extends State<Profile> {
                         color: Colors.white,
                       ),
                       textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Enter Email:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+                  SizedBox(
+                    width: width * 0.5,
+                    height: 40,
+                    child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _emailController,
+                      cursorColor: Colors.green,
+                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Email',
+                        floatingLabelStyle: TextStyle(color: Colors.green),
+                        focusColor: Colors.green,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green, width: 2),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green, width: 2),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Enter Password:',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+                  SizedBox(
+                    width: width * 0.5,
+                    height: 40,
+                    child: TextFormField(
+                      controller: _passwordController,
+                      cursorColor: Colors.green,
+                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Password',
+                        floatingLabelStyle: TextStyle(color: Colors.green),
+                        focusColor: Colors.green,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green, width: 2),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.green, width: 2),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -268,8 +386,10 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (_pincodeController.text.isEmpty ||
+                      _emailController.text.isEmpty ||
+                      _passwordController.text.isEmpty ||
                       _state == 'N/A' ||
                       _city == 'N/A' ||
                       _state == 'Not Found' ||
@@ -279,8 +399,14 @@ class _ProfileState extends State<Profile> {
                           content: Text(
                               "Please fill in all details before proceeding")),
                     );
+                  } else if (!isValidEmail(_emailController.text)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text("Please enter a valid email")),
+                    );
+                    return;
                   } else {
-                    completeRegistration(context);
+                    registerNewUser();
                   }
                 },
                 child: Container(
@@ -291,14 +417,18 @@ class _ProfileState extends State<Profile> {
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
-                    'Submit',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: isRegistered
+                      ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : const Text(
+                          'Submit',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
             ],
