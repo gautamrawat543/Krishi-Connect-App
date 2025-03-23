@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:krishi_connect_app/pages/login.dart';
 import 'package:krishi_connect_app/pages/profile.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart';
+import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class Registeration extends StatefulWidget {
@@ -22,12 +22,11 @@ class _RegisterationState extends State<Registeration> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       SharedPrefHelper.setUserrole(_selectedRole);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => Profile(
-            name: _nameController.text,
-            number: _numberController.text,
-          ),
+      NavigationHelper.push(
+        context,
+        Profile(
+          name: _nameController.text,
+          number: _numberController.text,
         ),
       );
     } else {
@@ -224,11 +223,7 @@ class _RegisterationState extends State<Registeration> {
                   ),
                   child: const Text(
                     'Continue',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    style: AppTextStyles.buttonTextStyle,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -236,8 +231,7 @@ class _RegisterationState extends State<Registeration> {
               SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginPage()));
+                  NavigationHelper.push(context, LoginPage());
                 },
                 child: Text.rich(
                   TextSpan(
@@ -249,7 +243,7 @@ class _RegisterationState extends State<Registeration> {
                           color: Colors.green,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                        )
+                        ),
                       ),
                     ],
                   ),

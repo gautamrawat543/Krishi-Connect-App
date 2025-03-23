@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:krishi_connect_app/services/api/location_api.dart';
 import 'package:krishi_connect_app/main_screen.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class Profile extends StatefulWidget {
@@ -312,11 +313,7 @@ class _ProfileState extends State<Profile> {
                         )
                       : Text(
                           'Get Details',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                          style: AppTextStyles.buttonTextStyle,
                         ),
                 ),
               ),
@@ -423,11 +420,7 @@ class _ProfileState extends State<Profile> {
                         )
                       : const Text(
                           'Submit',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                          style: AppTextStyles.buttonTextStyle,
                         ),
                 ),
               ),
