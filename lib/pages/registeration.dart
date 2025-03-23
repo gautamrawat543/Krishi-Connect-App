@@ -68,8 +68,7 @@ class _RegisterationState extends State<Registeration> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -123,8 +122,7 @@ class _RegisterationState extends State<Registeration> {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -236,9 +234,27 @@ class _RegisterationState extends State<Registeration> {
                 ),
               ),
               SizedBox(height: 20),
-              GestureDetector(onTap: () {
-                Navigator.push(context,MaterialPageRoute(builder: (context) => LoginPage()));
-              },child: Text('Already Registered? Login here!')),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                child: Text.rich(
+                  TextSpan(
+                    text: 'Already have an account? ',
+                    children: [
+                      TextSpan(
+                        text: 'Login Here',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        )
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
