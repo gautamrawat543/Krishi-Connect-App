@@ -21,12 +21,12 @@ class _RegisterationState extends State<Registeration> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      SharedPrefHelper.setUserrole(_selectedRole);
       NavigationHelper.push(
         context,
         Profile(
           name: _nameController.text,
           number: _numberController.text,
+          role: _selectedRole,
         ),
       );
     } else {
@@ -202,7 +202,7 @@ class _RegisterationState extends State<Registeration> {
                 title: const Text('Company'),
                 leading: Radio<String>(
                   activeColor: Colors.green,
-                  value: 'Company',
+                  value: 'Business',
                   groupValue: _selectedRole,
                   onChanged: (String? value) {
                     setState(() {

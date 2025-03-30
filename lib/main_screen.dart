@@ -21,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
     // TODO: implement initState
     super.initState();
     // List of pages to switch between
-    _pages = SharedPrefHelper.getUserrole() == 'Farmer'
+    _pages = SharedPrefHelper.getUserrole() == 'FARMER'
         ? [
             const SearchPage(),
             const FarmerHome(),

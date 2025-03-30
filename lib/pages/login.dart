@@ -40,7 +40,13 @@ class _LoginPageState extends State<LoginPage> {
       // Assuming response contains user role
       String token = response["token"];
       print(token);
+      Map<String, dynamic> userDetail = await service.getUserByPhone(
+          phone: _numberController.text, token: token);
+      print(userDetail);
       SharedPrefHelper.setRegistered(true);
+      SharedPrefHelper.setToken(token);
+      SharedPrefHelper.setUserrole(userDetail["role"]);
+      SharedPrefHelper.setUsername(userDetail["name"]);
 
       // Navigate to MainScreen
       Navigator.pushAndRemoveUntil(

@@ -6,10 +6,15 @@ import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({super.key, required this.name, required this.number});
+  const Profile(
+      {super.key,
+      required this.name,
+      required this.number,
+      required this.role});
 
   final String name;
   final String number;
+  final String role;
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -69,14 +74,13 @@ class _ProfileState extends State<Profile> {
       isRegistered = true;
     });
     RegisterService apiService = RegisterService();
-    String role = await SharedPrefHelper.getUserrole();
 
     var response = await apiService.registerUser(
       name: widget.name,
       email: _emailController.text,
       phone: widget.number,
       password: _passwordController.text,
-      role: role.toUpperCase(),
+      role: widget.role,
       location: _city,
       profilePicture: "https://example.com/profile.jpg",
     );
@@ -94,12 +98,16 @@ class _ProfileState extends State<Profile> {
       });
       // Save registration state
       await SharedPrefHelper.setRegistered(true);
-      await SharedPrefHelper.setUsername(widget.name);
+      await SharedPrefHelper.setUsername(response["name"]);
+      await SharedPrefHelper.setUserrole(response["role"]);
 
       // Navigate to MainScreen
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => MainScreen()),
+        MaterialPageRoute(
+          builder: (context) => MainScreen(),
+        ),
+        (route) => false,
       );
     }
   }

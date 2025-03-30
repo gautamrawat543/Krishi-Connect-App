@@ -35,7 +35,17 @@ class SharedPrefHelper {
 
   // Get Userrole
   static String getUserrole() {
-    return _prefs?.getString('userrole') ?? 'Farmer';
+    return _prefs?.getString('userrole') ?? 'FARMER';
+  }
+
+  // Save Token
+  static Future<void> setToken(String token) async {
+    await _prefs?.setString('token', token);
+  }
+
+  // Get Token
+  static String getToken() {
+    return _prefs?.getString('token') ?? '';
   }
 
   // Clear All Data

@@ -71,4 +71,24 @@ class RegisterService {
       return {"error": "An error occurred: $e"};
     }
   }
+
+  Future<Map<String, dynamic>> getUserByPhone(
+      {required String phone, required String token}) async {
+    final url = Uri.parse("$baseUrl/api/public/users/phone/$phone");
+
+    try {
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {"error": "User not found: ${response.body}"};
+      }
+    } catch (e) {
+      return {"error": "An error occurred: $e"};
+    }
+  }
 }
