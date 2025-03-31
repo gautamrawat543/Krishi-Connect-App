@@ -91,4 +91,24 @@ class RegisterService {
       return {"error": "An error occurred: $e"};
     }
   }
+
+  Future<List<Map<String, dynamic>>> getBuyerRequest(
+      {required String token}) async {
+    final url = Uri.parse("$baseUrl/api/authenticated/buyer-requests");
+
+    try {
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return [];
+    }
+  }
 }

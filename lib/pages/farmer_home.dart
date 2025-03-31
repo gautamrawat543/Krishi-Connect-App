@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:krishi_connect_app/services/api/news_api.dart';
 import 'package:krishi_connect_app/data/company_listing.dart';
+import 'package:krishi_connect_app/services/api/register_api.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,6 +15,7 @@ class FarmerHome extends StatefulWidget {
 
 class _FarmerHomeState extends State<FarmerHome> {
   List<dynamic> newsArticles = [];
+  List<dynamic> companyListings = [];
   bool isLoading = false;
   int page = 1; // Track page number for pagination
 
@@ -21,6 +23,21 @@ class _FarmerHomeState extends State<FarmerHome> {
   void initState() {
     super.initState();
     loadNews();
+    loadCompanyListings();
+  }
+
+  RegisterService service = RegisterService();
+  Future<void> loadCompanyListings() async {
+    try {
+      final listings =
+          await service.getBuyerRequest(token: SharedPrefHelper.getToken());
+      setState(() {
+        // Ensure the UI updates after data fetch
+        companyListings = listings;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> loadNews() async {
@@ -106,9 +123,9 @@ class _FarmerHomeState extends State<FarmerHome> {
                       SizedBox(
                         height: height * 0.3,
                         child: ListView.builder(
-                            itemCount: sampleListings.length,
+                            itemCount: companyListings.length,
                             itemBuilder: (context, index) {
-                              return listingCard(width, sampleListings[index]);
+                              return listingCard(width, companyListings[index]);
                             }),
                       ),
                     ],
@@ -244,7 +261,7 @@ class _FarmerHomeState extends State<FarmerHome> {
     );
   }
 
-  Widget listingCard(double width, CompanyListing listing) {
+  Widget listingCard(double width, dynamic listing) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       padding: EdgeInsets.all(5),
@@ -266,7 +283,8 @@ class _FarmerHomeState extends State<FarmerHome> {
                     'C.Name',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Text(listing.companyName, style: TextStyle(fontSize: 15)),
+                  Text(listing["businessId"].toString(),
+                      style: TextStyle(fontSize: 15)),
                 ],
               ),
               Column(
@@ -275,7 +293,7 @@ class _FarmerHomeState extends State<FarmerHome> {
                     'Product',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Text(listing.product, style: TextStyle(fontSize: 15)),
+                  Text(listing["category"], style: TextStyle(fontSize: 15)),
                 ],
               ),
               Column(
@@ -284,7 +302,10 @@ class _FarmerHomeState extends State<FarmerHome> {
                     'Quantity',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Text(listing.quantity.toString(),
+                  Text(
+                      listing["requiredQuantity"].toString() +
+                          " " +
+                          listing["unit"],
                       style: TextStyle(fontSize: 15)),
                 ],
               ),
@@ -339,7 +360,7 @@ class _FarmerHomeState extends State<FarmerHome> {
     );
   }
 
-  void showListingDetails(BuildContext context, CompanyListing listing) {
+  void showListingDetails(BuildContext context, dynamic listing) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -356,16 +377,17 @@ class _FarmerHomeState extends State<FarmerHome> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Company: ${listing.companyName}',
+              Text('Company: ${listing["businessId"].toString()}',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               SizedBox(height: 8),
-              Text('Product: ${listing.product}',
+              Text('Product: ${listing["category"]}',
                   style: TextStyle(fontSize: 16)),
-              Text('Quantity: ${listing.quantity.toString()}',
+              Text(
+                  'Quantity: ${listing["requiredQuantity"].toString()} ${listing["unit"]}',
                   style: TextStyle(fontSize: 16)),
-              Text('Price: ${listing.price.toString()}',
+              Text('Price: ${listing["maxPrice"].toString()}',
                   style: TextStyle(fontSize: 16)),
-              Text('Description: ${listing.description}',
+              Text('Description: ${listing["description"]}',
                   style: TextStyle(fontSize: 16)),
               SizedBox(height: 16),
               ElevatedButton(
