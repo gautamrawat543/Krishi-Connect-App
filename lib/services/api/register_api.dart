@@ -111,4 +111,26 @@ class RegisterService {
       return [];
     }
   }
+
+
+   Future<List<Map<String, dynamic>>> getFarmer(
+      {required String token}) async {
+    final url = Uri.parse("$baseUrl/api/public/users/role/FARMER");
+
+    try {
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return [];
+    }
+  }
+
 }

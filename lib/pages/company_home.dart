@@ -4,10 +4,38 @@ import 'package:flutter/widgets.dart';
 import 'package:krishi_connect_app/data/company_listing.dart';
 import 'package:krishi_connect_app/data/farmer_data.dart';
 import 'package:krishi_connect_app/pages/search_page.dart';
+import 'package:krishi_connect_app/services/api/register_api.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
-class CompanyHome extends StatelessWidget {
+class CompanyHome extends StatefulWidget {
   const CompanyHome({super.key});
+
+  @override
+  State<CompanyHome> createState() => _CompanyHomeState();
+}
+
+class _CompanyHomeState extends State<CompanyHome> {
+  List<dynamic> farmers = [];
+
+@override
+  void initState() {
+    super.initState();
+    loadFarmers();
+  }
+
+  RegisterService service = RegisterService();
+  Future<void> loadFarmers() async {
+    try {
+      final listings =
+          await service.getFarmer(token: SharedPrefHelper.getToken());
+      setState(() {
+        // Ensure the UI updates after data fetch
+        farmers = listings;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +120,7 @@ class CompanyHome extends StatelessWidget {
     );
   }
 
-  Widget searchCard(Farmer farmer) {
+  Widget searchCard(dynamic farmer) {
     return Container(
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(5),
@@ -122,7 +150,7 @@ class CompanyHome extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    farmer.name,
+                    farmer['name'],
                     style: TextStyle(
                       fontSize: 15,
                     ),
@@ -138,7 +166,7 @@ class CompanyHome extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    farmer.number,
+                    farmer['phone'],
                     style: TextStyle(
                       fontSize: 15,
                     ),
@@ -154,7 +182,7 @@ class CompanyHome extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    farmer.state,
+                    farmer['location'],
                     style: TextStyle(
                       fontSize: 15,
                     ),
@@ -170,7 +198,7 @@ class CompanyHome extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    farmer.crop,
+                    farmer['role'],
                     style: TextStyle(
                       fontSize: 15,
                     ),
