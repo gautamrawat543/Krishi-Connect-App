@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:krishi_connect_app/data/company_listing.dart';
 import 'package:krishi_connect_app/data/farmer_data.dart';
+import 'package:krishi_connect_app/pages/create_listing.dart';
 import 'package:krishi_connect_app/pages/search_page.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class CompanyHome extends StatefulWidget {
@@ -95,10 +97,13 @@ class _CompanyHomeState extends State<CompanyHome> {
                       fontSize: 25,
                     ),
                   ),
-                  Icon(
-                    Icons.add_circle_outline_rounded,
-                    color: Colors.green,
-                    size: 30,
+                  GestureDetector(
+                    onTap: () => NavigationHelper.push(context, CreateListing()),
+                    child: Icon(
+                      Icons.add_circle_outline_rounded,
+                      color: Colors.green,
+                      size: 30,
+                    ),
                   ),
                 ],
               ),

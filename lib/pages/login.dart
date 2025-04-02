@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:krishi_connect_app/main_screen.dart';
+import 'package:krishi_connect_app/pages/registeration.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class LoginPage extends StatefulWidget {
@@ -47,6 +49,8 @@ class _LoginPageState extends State<LoginPage> {
       SharedPrefHelper.setToken(token);
       SharedPrefHelper.setUserrole(userDetail["role"]);
       SharedPrefHelper.setUsername(userDetail["name"]);
+      SharedPrefHelper.setUserId(userDetail["userId"].toString());
+      SharedPrefHelper.setLocation(userDetail["location"]);
 
       // Navigate to MainScreen
       Navigator.pushAndRemoveUntil(
@@ -185,6 +189,27 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       textAlign: TextAlign.center,
                     ),
+            ),
+          ),
+          SizedBox(height: 20),
+          GestureDetector(
+            onTap: () {
+              NavigationHelper.push(context, Registeration());
+            },
+            child: Text.rich(
+              TextSpan(
+                text: 'Doesn\'t have an account? ',
+                children: [
+                  TextSpan(
+                    text: 'Register Here',
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:krishi_connect_app/pages/login.dart';
 import 'package:krishi_connect_app/services/api/location_api.dart';
 import 'package:krishi_connect_app/main_screen.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
@@ -59,15 +60,6 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  // void completeRegistration(BuildContext context) async {
-  //   await SharedPrefHelper.setRegistered(true);
-  //   await SharedPrefHelper.setUsername(widget.name);
-  //   Navigator.pushReplacement(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => MainScreen()),
-  //   );
-  // }
-
   bool isRegistered = false;
   void registerNewUser() async {
     setState(() {
@@ -96,16 +88,12 @@ class _ProfileState extends State<Profile> {
       setState(() {
         isRegistered = false;
       });
-      // Save registration state
-      await SharedPrefHelper.setRegistered(true);
-      await SharedPrefHelper.setUsername(response["name"]);
-      await SharedPrefHelper.setUserrole(response["role"]);
 
-      // Navigate to MainScreen
+      // Navigate to LoginPage
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => MainScreen(),
+          builder: (context) => LoginPage(),
         ),
         (route) => false,
       );

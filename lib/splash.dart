@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:krishi_connect_app/main_screen.dart';
+import 'package:krishi_connect_app/pages/login.dart';
 import 'package:krishi_connect_app/pages/registeration.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -26,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Registeration()),
+          MaterialPageRoute(builder: (context) => LoginPage()),
         );
       }
     });

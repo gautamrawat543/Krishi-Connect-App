@@ -112,9 +112,7 @@ class RegisterService {
     }
   }
 
-
-   Future<List<Map<String, dynamic>>> getFarmer(
-      {required String token}) async {
+  Future<List<Map<String, dynamic>>> getFarmer({required String token}) async {
     final url = Uri.parse("$baseUrl/api/public/users/role/FARMER");
 
     try {
@@ -133,4 +131,48 @@ class RegisterService {
     }
   }
 
+  Future<Map<String, dynamic>> createBuyerRequest({
+    required int businessId,
+    required String title,
+    required String description,
+    required String category,
+    required String unit,
+    required String location,
+    required int requiredQuantity,
+    required double maxPrice,
+    required String token,
+  }) async {
+    final url = Uri.parse("$baseUrl/api/authenticated/buyer-requests");
+
+    final Map<String, dynamic> requestBody = {
+      "businessId": businessId,
+      "title": title,
+      "description": description,
+      "category": category,
+      "requiredQuantity": requiredQuantity,
+      "unit": unit,
+      "maxPrice": maxPrice,
+      "location": location
+    };
+    print(requestBody);
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(requestBody),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        print(response.body);
+        return jsonDecode(response.body);
+      } else {
+        return {"error": "Failed to create buyer listing: ${response.body}"};
+      }
+    } catch (e) {
+      return {"error": "An error occurred: $e"};
+    }
+  }
 }
