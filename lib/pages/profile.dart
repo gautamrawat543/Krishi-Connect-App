@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:krishi_connect_app/pages/login.dart';
-import 'package:krishi_connect_app/services/api/location_api.dart';
 import 'package:krishi_connect_app/main_screen.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
