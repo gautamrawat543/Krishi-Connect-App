@@ -46,7 +46,7 @@ class _ProfileState extends State<Profile> {
 
     setState(() => _isLoading = true);
 
-    final locationData = await ApiService.getLocationFromPincode(pincode);
+    final locationData = await RegisterService.getLocationFromPincode(pincode);
 
     setState(() {
       _isLoading = false;

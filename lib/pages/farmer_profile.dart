@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:krishi_connect_app/pages/login.dart';
 import 'package:krishi_connect_app/pages/registeration.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -140,7 +141,7 @@ class FarmerProfile extends StatelessWidget {
                   // Navigate to Registration Page and remove all previous routes
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => Registeration()),
+                    MaterialPageRoute(builder: (context) => LoginPage()),
                     (route) =>
                         false, // This removes all previous screens from the stack
                   );

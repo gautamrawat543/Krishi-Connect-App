@@ -175,4 +175,32 @@ class RegisterService {
       return {"error": "An error occurred: $e"};
     }
   }
+
+  static Future<Map<String, String>?> getLocationFromPincode(
+      String pincode) async {
+    final Uri url = Uri.parse('$baseUrl/api/pincode/$pincode');
+
+    try {
+      final response = await http.get(url);
+
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (responseData['Status'] == 'Success') {
+          List<dynamic> postOffices = responseData['PostOffice'];
+          if (postOffices.isNotEmpty) {
+            return {
+              'Name': postOffices[0]['Name'],
+              'State': postOffices[0]['State'],
+            };
+          }
+        }
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    return null;
+  }
 }
