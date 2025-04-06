@@ -38,6 +38,7 @@ dependencies:
   url_launcher: ^6.3.1
   flutter_launcher_icons: ^0.14.3
   shared_preferences: ^2.2.3
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,9 @@ flutter:
   assets:
     - assets/images/farm1.jpg
     - assets/images/farm2.jpg
+    - assets/images/splash_img.jpg
+    - assets/images/login_img.jpg
+    - assets/images/image.svg
     - assets/
   #   - images/a_dot_ham.jpeg
 

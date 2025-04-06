@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:krishi_connect_app/pages/login.dart';
 import 'package:krishi_connect_app/pages/profile.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
@@ -20,6 +23,7 @@ class _RegisterationState extends State<Registeration> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _submitForm() {
+    print(_selectedRole);
     if (_formKey.currentState!.validate()) {
       NavigationHelper.push(
         context,
@@ -40,136 +44,139 @@ class _RegisterationState extends State<Registeration> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
+      backgroundColor: AppTextStyles.appColor,
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/farm2.jpg',
-                fit: BoxFit.cover,
+              SvgPicture.asset(
+                "assets/images/image.svg",
+                width: width * 0.3,
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 20, bottom: 20),
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.green, width: 4),
+              Text(
+                'KrishiConnect',
+                style: TextStyle(
+                  color: Color.fromRGBO(29, 145, 67, 1),
+                  fontSize: 36,
                 ),
-                child: Text(
-                  'Register on Krishi-Connect',
-                  style: TextStyle(
-                    fontSize: 20,
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: SizedBox(
+                  width: width * 0.9,
+                  height: 70,
+                  child: TextFormField(
+                    controller: _nameController,
+                    cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.white, width: 2),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.white, width: 2),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.white, width: 2),
+                      ),
+                      labelText: 'Full Name',
+                      labelStyle: TextStyle(
+                        color: Color.fromRGBO(0, 0, 0, 0.5),
+                        fontSize: 20,
+                      ),
+                      floatingLabelStyle: TextStyle(
+                        color: Color.fromRGBO(0, 0, 0, 0.5),
+                        fontSize: 20,
+                      ),
+                      focusColor: Color.fromRGBO(0, 0, 0, 0.5),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter a name";
+                      } else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+                        return "Enter a valid name (only letters)";
+                      }
+                      return null;
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'^[a-zA-Z\s]+$')),
+                    ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Enter name:',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
-                    SizedBox(
-                      width: width * 0.5,
-                      height: 70,
-                      child: TextFormField(
-                        controller: _nameController,
-                        cursorColor: Colors.green,
-                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Name',
-                          floatingLabelStyle: TextStyle(color: Colors.green),
-                          focusColor: Colors.green,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.green, width: 2),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.green, width: 2),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 10),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please enter a name";
-                          } else if (!RegExp(r'^[a-zA-Z\s]+$')
-                              .hasMatch(value)) {
-                            return "Enter a valid name (only letters)";
-                          }
-                          return null;
-                        },
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                              RegExp(r'^[a-zA-Z\s]+$')),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              SizedBox(
+                height: 10,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Enter number:',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
-                    SizedBox(
-                      width: width * 0.5,
-                      height: 70,
-                      child: TextFormField(
-                        controller: _numberController,
-                        keyboardType: TextInputType.number,
-                        cursorColor: Colors.green,
-                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Number',
-                          floatingLabelStyle: TextStyle(color: Colors.green),
-                          focusColor: Colors.green,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.green, width: 2),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.green, width: 2),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 10),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please enter a number";
-                          } else if (value.length != 10 ||
-                              !RegExp(r'^\d{10}$').hasMatch(value)) {
-                            return "Enter a valid 10-digit number";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
                 ),
+                child: SizedBox(
+                  width: width * 0.9,
+                  height: 70,
+                  child: TextFormField(
+                    controller: _numberController,
+                    keyboardType: TextInputType.number,
+                    cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.white, width: 2),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.white, width: 2),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderSide: BorderSide(color: Colors.white, width: 2),
+                      ),
+                      labelText: 'Phone Number',
+                      labelStyle: TextStyle(
+                          color: Color.fromRGBO(0, 0, 0, 0.5), fontSize: 20),
+                      floatingLabelStyle: TextStyle(
+                        color: Color.fromRGBO(0, 0, 0, 0.5),
+                      ),
+                      focusColor: Color.fromRGBO(0, 0, 0, 0.5),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter a number";
+                      } else if (value.length != 10 ||
+                          !RegExp(r'^\d{10}$').hasMatch(value)) {
+                        return "Enter a valid 10-digit number";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
@@ -178,74 +185,108 @@ class _RegisterationState extends State<Registeration> {
                   child: Text(
                     'Register as:',
                     style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      fontSize: 16,
+                      color: Color.fromRGBO(0, 0, 0, 0.5),
                     ),
                   ),
                 ),
               ),
-              ListTile(
-                title: const Text('Farmer'),
-                leading: Radio<String>(
-                  activeColor: Colors.green,
-                  value: 'Farmer',
-                  groupValue: _selectedRole,
-                  onChanged: (String? value) {
-                    setState(() {
-                      _selectedRole = value!;
-                    });
-                  },
-                ),
+              SizedBox(
+                height: 10,
               ),
-              ListTile(
-                title: const Text('Company'),
-                leading: Radio<String>(
-                  activeColor: Colors.green,
-                  value: 'Business',
-                  groupValue: _selectedRole,
-                  onChanged: (String? value) {
-                    setState(() {
-                      _selectedRole = value!;
-                    });
-                  },
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedRole = 'Farmer';
+                      });
+                    },
+                    child: Container(
+                      height: height * 0.05,
+                      width: width * 0.38,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromRGBO(107, 142, 35, 1),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'FARMER',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedRole = 'Business';
+                      });
+                    },
+                    child: Container(
+                      height: height * 0.05,
+                      width: width * 0.38,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromRGBO(139, 69, 19, 1),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'BUSINESS',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 30,
               ),
               GestureDetector(
                 onTap: () => _submitForm(),
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   padding: const EdgeInsets.symmetric(vertical: 5),
-                  width: width * 0.5,
+                  width: width * 0.9,
+                  height: height * 0.055,
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: Color.fromRGBO(85, 107, 47, 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Text(
-                    'Continue',
-                    style: AppTextStyles.buttonTextStyle,
-                    textAlign: TextAlign.center,
+                  child: Center(
+                    child: Text(
+                      'Continue',
+                      style: AppTextStyles.buttonTextStyle,
+                    ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 50),
+              Text(
+                'Already have an account? ',
+                style: TextStyle(
+                  color: Color.fromRGBO(0, 0, 0, 0.5),
+                  fontSize: 18,
+                ),
+              ),
               GestureDetector(
                 onTap: () {
                   NavigationHelper.push(context, LoginPage());
                 },
-                child: Text.rich(
-                  TextSpan(
-                    text: 'Already have an account? ',
-                    children: [
-                      TextSpan(
-                        text: 'Login Here',
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
+                child: Text(
+                  'Login Here',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
                   ),
                 ),
               ),
