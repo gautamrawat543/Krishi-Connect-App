@@ -152,7 +152,8 @@ class RegisterService {
       "requiredQuantity": requiredQuantity,
       "unit": unit,
       "maxPrice": maxPrice,
-      "location": location
+      "location": location,
+      "status": "OPEN"
     };
     print(requestBody);
     try {
