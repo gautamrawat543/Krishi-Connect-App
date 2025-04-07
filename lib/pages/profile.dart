@@ -116,9 +116,12 @@ class _ProfileState extends State<Profile> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SvgPicture.asset(
-                  "assets/images/image.svg",
-                  width: width * 0.3,
+                SizedBox(
+                  height: 50,
+                ),
+                Image.asset(
+                  'assets/images/krishi_icon.png',
+                  width: width * 0.26,
                 ),
                 Text(
                   'KrishiConnect',

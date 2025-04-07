@@ -71,8 +71,9 @@ class _LoginPageState extends State<LoginPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(
-            'assets/images/image.svg',
+          Image.asset(
+            'assets/images/krishi_icon.png',
+            width: width * 0.35,
           ),
           Text(
             'KrishiConnect',

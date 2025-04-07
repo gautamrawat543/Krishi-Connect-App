@@ -52,12 +52,13 @@ class _RegisterationState extends State<Registeration> {
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(
-                "assets/images/image.svg",
-                width: width * 0.3,
+              SizedBox(
+                height: 110,
+              ),
+              Image.asset(
+                'assets/images/krishi_icon.png',
+                width: width * 0.35,
               ),
               Text(
                 'KrishiConnect',
@@ -208,7 +209,9 @@ class _RegisterationState extends State<Registeration> {
                       width: width * 0.38,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color.fromRGBO(107, 142, 35, 1),
+                        color: _selectedRole == 'Farmer'
+                            ? Color.fromRGBO(107, 142, 35, 1)
+                            : Color.fromRGBO(139, 69, 19, 1),
                       ),
                       child: Center(
                         child: Text(
@@ -232,7 +235,9 @@ class _RegisterationState extends State<Registeration> {
                       width: width * 0.38,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color.fromRGBO(139, 69, 19, 1),
+                        color: _selectedRole == 'Business'
+                            ? Color.fromRGBO(107, 142, 35, 1)
+                            : Color.fromRGBO(139, 69, 19, 1),
                       ),
                       child: Center(
                         child: Text(
