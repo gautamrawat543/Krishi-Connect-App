@@ -204,4 +204,27 @@ class RegisterService {
     }
     return null;
   }
+
+  Future<List<Map<String, dynamic>>> getBuyerRequestById({
+    required String token,
+    required String businessId,
+  }) async {
+    final url = Uri.parse(
+        "$baseUrl/api/authenticated/buyer-requests/business/$businessId");
+
+    try {
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return [];
+    }
+  }
 }

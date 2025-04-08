@@ -18,11 +18,15 @@ class CompanyHome extends StatefulWidget {
 
 class _CompanyHomeState extends State<CompanyHome> {
   List<dynamic> farmers = [];
+  bool isLoadingFarmers = true;
+  List<dynamic> companyListings = [];
+  bool isLoadingCompanyListings = true;
 
-@override
+  @override
   void initState() {
     super.initState();
     loadFarmers();
+    loadCompanyListings();
   }
 
   RegisterService service = RegisterService();
@@ -33,9 +37,31 @@ class _CompanyHomeState extends State<CompanyHome> {
       setState(() {
         // Ensure the UI updates after data fetch
         farmers = listings;
+        isLoadingFarmers = false;
       });
     } catch (e) {
       print(e);
+      setState(() {
+        isLoadingFarmers = false;
+      });
+    }
+  }
+
+  Future<void> loadCompanyListings() async {
+    try {
+      final listing = await service.getBuyerRequestById(
+          token: SharedPrefHelper.getToken(),
+          businessId: SharedPrefHelper.getUserId());
+      setState(() {
+        // Ensure the UI updates after data fetch
+        companyListings = listing;
+        isLoadingCompanyListings = false;
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        isLoadingCompanyListings = false;
+      });
     }
   }
 
@@ -74,16 +100,19 @@ class _CompanyHomeState extends State<CompanyHome> {
               ),
               SizedBox(
                 height: height * 0.2,
-                child: farmers.isEmpty
+                child: isLoadingFarmers
                     ? Center(
-                        child: Text('No Farmers Found'),
-                      )
-                    : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: farmers.length,
-                        itemBuilder: (context, index) {
-                          return searchCard(farmers[index]);
-                        }),
+                        child: CircularProgressIndicator(color: Colors.green))
+                    : farmers.isEmpty
+                        ? Center(
+                            child: Text('No Farmers Found'),
+                          )
+                        : ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: farmers.length,
+                            itemBuilder: (context, index) {
+                              return searchCard(farmers[index]);
+                            }),
               ),
               SizedBox(
                 height: 15,
@@ -98,7 +127,8 @@ class _CompanyHomeState extends State<CompanyHome> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => NavigationHelper.push(context, CreateListing()),
+                    onTap: () =>
+                        NavigationHelper.push(context, CreateListing()),
                     child: Icon(
                       Icons.add_circle_outline_rounded,
                       color: Colors.green,
@@ -112,11 +142,19 @@ class _CompanyHomeState extends State<CompanyHome> {
               ),
               SizedBox(
                 height: height * 0.5,
-                child: ListView.builder(
-                    itemCount: sampleListings.length,
-                    itemBuilder: (context, index) {
-                      return listingCard(width, sampleListings[index], context);
-                    }),
+                child: isLoadingCompanyListings
+                    ? Center(
+                        child: CircularProgressIndicator(color: Colors.green))
+                    : companyListings.isEmpty
+                        ? Center(
+                            child: Text('No Listings Found'),
+                          )
+                        : ListView.builder(
+                            itemCount: companyListings.length,
+                            itemBuilder: (context, index) {
+                              return listingCard(
+                                  width, companyListings[index], context);
+                            }),
               ),
             ],
           ),
@@ -217,8 +255,7 @@ class _CompanyHomeState extends State<CompanyHome> {
     );
   }
 
-  Widget listingCard(
-      double width, CompanyListing listing, BuildContext context) {
+  Widget listingCard(double width, dynamic listing, BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       padding: EdgeInsets.all(5),
@@ -240,7 +277,8 @@ class _CompanyHomeState extends State<CompanyHome> {
                     'C.Name',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Text(listing.companyName, style: TextStyle(fontSize: 15)),
+                  Text(listing['businessId'].toString(),
+                      style: TextStyle(fontSize: 15)),
                 ],
               ),
               Column(
@@ -249,7 +287,7 @@ class _CompanyHomeState extends State<CompanyHome> {
                     'Product',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Text(listing.product, style: TextStyle(fontSize: 15)),
+                  Text(listing['category'], style: TextStyle(fontSize: 15)),
                 ],
               ),
               Column(
@@ -258,7 +296,7 @@ class _CompanyHomeState extends State<CompanyHome> {
                     'Quantity',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Text(listing.quantity.toString(),
+                  Text(listing['requiredQuantity'].toString(),
                       style: TextStyle(fontSize: 15)),
                 ],
               ),
@@ -291,7 +329,7 @@ class _CompanyHomeState extends State<CompanyHome> {
     );
   }
 
-  void showListingDetails(BuildContext context, CompanyListing listing) {
+  void showListingDetails(BuildContext context, dynamic listing) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -308,16 +346,17 @@ class _CompanyHomeState extends State<CompanyHome> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Company: ${listing.companyName}',
+              Text('Company: ${listing['businessId'].toString()}',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               SizedBox(height: 8),
-              Text('Product: ${listing.product}',
+              Text('Product: ${listing['category']}',
                   style: TextStyle(fontSize: 16)),
-              Text('Quantity: ${listing.quantity.toString()}',
+              Text(
+                  'Quantity: ${listing['requiredQuantity'].toString()} ${listing['unit']}',
                   style: TextStyle(fontSize: 16)),
-              Text('Price: ${listing.price.toString()}',
+              Text('Price: ${listing['maxPrice'].toString()}',
                   style: TextStyle(fontSize: 16)),
-              Text('Description: ${listing.description}',
+              Text('Description: ${listing['description']}',
                   style: TextStyle(fontSize: 16)),
               SizedBox(height: 16),
               ElevatedButton(
