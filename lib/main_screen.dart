@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:krishi_connect_app/pages/chat_screen.dart';
 import 'package:krishi_connect_app/pages/company_home.dart';
 import 'package:krishi_connect_app/pages/farmer_home.dart';
 import 'package:krishi_connect_app/pages/farmer_profile.dart';
@@ -13,7 +14,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 1; // Default page is Home
+  int _selectedIndex = 0; // Default page is Home
   List<Widget> _pages = [];
 
   @override
@@ -23,13 +24,15 @@ class _MainScreenState extends State<MainScreen> {
     // List of pages to switch between
     _pages = SharedPrefHelper.getUserrole() == 'FARMER'
         ? [
-            const SearchPage(),
             const FarmerHome(),
+            const SearchPage(),
+            const ChatScreen(),
             const FarmerProfile(),
           ]
         : [
-            const SearchPage(),
             const CompanyHome(),
+            const SearchPage(),
+            const ChatScreen(),
             const FarmerProfile(),
           ];
   }
@@ -48,15 +51,19 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor: Colors.green, // Highlight selected tab
-        unselectedItemColor: Colors.grey,
+        unselectedItemColor: Color.fromRGBO(107, 142, 35, 1),
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.mail),
+            label: 'Mail',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message_rounded),
+            label: 'Message',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
