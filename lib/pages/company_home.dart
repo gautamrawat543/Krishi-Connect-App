@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:krishi_connect_app/data/company_listing.dart';
 import 'package:krishi_connect_app/data/farmer_data.dart';
+import 'package:krishi_connect_app/data/produce_data.dart';
+import 'package:krishi_connect_app/pages/buyer_listing.dart';
 import 'package:krishi_connect_app/pages/create_listing.dart';
 import 'package:krishi_connect_app/pages/search_page.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
@@ -21,6 +24,8 @@ class _CompanyHomeState extends State<CompanyHome> {
   bool isLoadingFarmers = true;
   List<dynamic> companyListings = [];
   bool isLoadingCompanyListings = true;
+
+  String isSelected = 'All';
 
   @override
   void initState() {
@@ -71,51 +76,109 @@ class _CompanyHomeState extends State<CompanyHome> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: Text(
-          'Hello ${SharedPrefHelper.getUsername().toUpperCase()}',
-          style: TextStyle(
-            color: Colors.white,
-          ),
+        backgroundColor: Color.fromRGBO(107, 142, 35, 1),
+        leading: Icon(
+          Icons.menu,
+          color: Colors.white,
         ),
-        centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 5,
-        ),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 15,
+                height: 30,
               ),
               Text(
-                'Farmer\'s OnBoarded',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+                'Welcome back\n${SharedPrefHelper.getUsername().toUpperCase()}!',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               SizedBox(
-                height: 5,
+                height: 20,
+              ),
+              searchBox(),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Available Produce',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      'See All>',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromRGBO(107, 142, 35, 1)),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
-                height: height * 0.2,
-                child: isLoadingFarmers
-                    ? Center(
-                        child: CircularProgressIndicator(color: Colors.green))
-                    : farmers.isEmpty
-                        ? Center(
-                            child: Text('No Farmers Found'),
-                          )
-                        : ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: farmers.length,
-                            itemBuilder: (context, index) {
-                              return searchCard(farmers[index]);
-                            }),
+                height: 6,
+              ),
+              Divider(thickness: 2, color: Color.fromRGBO(107, 142, 35, 1)),
+              SizedBox(
+                height: 8,
+              ),
+              //available produce listing
+              SizedBox(
+                height: height * 0.28,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: produceList.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: availableProduceListing(
+                        width,
+                        produceList[index],
+                      ),
+                    );
+                  },
+                ),
               ),
               SizedBox(
-                height: 15,
+                height: 40,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Create a Request',
+                    style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w600,
+                        color: Color.fromRGBO(0, 0, 0, 0.75)),
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        NavigationHelper.push(context, CreateListing()),
+                    child: Icon(
+                      Icons.add_circle_outline_rounded,
+                      color: Color.fromRGBO(0, 0, 0, 0.75),
+                      size: 50,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 25,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,20 +186,140 @@ class _CompanyHomeState extends State<CompanyHome> {
                   Text(
                     'My Listings',
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   GestureDetector(
-                    onTap: () =>
-                        NavigationHelper.push(context, CreateListing()),
-                    child: Icon(
-                      Icons.add_circle_outline_rounded,
-                      color: Colors.green,
-                      size: 30,
+                    onTap: () {
+                      NavigationHelper.push(
+                          context,
+                          BuyerListing(
+                            companyListings: companyListings,
+                          ));
+                    },
+                    child: Text(
+                      'See All>',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromRGBO(107, 142, 35, 1)),
                     ),
                   ),
                 ],
               ),
+              SizedBox(
+                height: 6,
+              ),
+              Divider(thickness: 2, color: Color.fromRGBO(107, 142, 35, 1)),
+              SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isSelected = 'All';
+                      });
+                    },
+                    child: Container(
+                      width: 80,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: isSelected == 'All'
+                            ? Color.fromRGBO(0, 0, 0, 0.75)
+                            : Color.fromRGBO(0, 0, 0, 0.3),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'All',
+                          style: TextStyle(
+                              color: isSelected == 'All'
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isSelected = 'Open';
+                      });
+                    },
+                    child: Container(
+                      width: 80,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: isSelected == 'Open'
+                            ? Color.fromRGBO(0, 0, 0, 0.75)
+                            : Color.fromRGBO(0, 0, 0, 0.3),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Open',
+                          style: TextStyle(
+                              color: isSelected == 'Open'
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isSelected = 'Closed';
+                      });
+                    },
+                    child: Container(
+                      width: 80,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: isSelected == 'Closed'
+                            ? Color.fromRGBO(0, 0, 0, 0.75)
+                            : Color.fromRGBO(0, 0, 0, 0.3),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Closed',
+                          style: TextStyle(
+                              color: isSelected == 'Closed'
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              // SizedBox(
+              //   height: height * 0.2,
+              //   child: isLoadingFarmers
+              //       ? Center(
+              //           child: CircularProgressIndicator(color: Colors.green))
+              //       : farmers.isEmpty
+              //           ? Center(
+              //               child: Text('No Farmers Found'),
+              //             )
+              //           : ListView.builder(
+              //               scrollDirection: Axis.horizontal,
+              //               itemCount: farmers.length,
+              //               itemBuilder: (context, index) {
+              //                 return searchCard(farmers[index]);
+              //               }),
+              // ),
               SizedBox(
                 height: 15,
               ),
@@ -153,7 +336,9 @@ class _CompanyHomeState extends State<CompanyHome> {
                             itemCount: companyListings.length,
                             itemBuilder: (context, index) {
                               return listingCard(
-                                  width, companyListings[index], context);
+                                width,
+                                companyListings[index],
+                              );
                             }),
               ),
             ],
@@ -255,73 +440,146 @@ class _CompanyHomeState extends State<CompanyHome> {
     );
   }
 
-  Widget listingCard(double width, dynamic listing, BuildContext context) {
+  // Widget listingCard(double width, dynamic listing, BuildContext context) {
+  //   return Container(
+  //     margin: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+  //     padding: EdgeInsets.all(5),
+  //     decoration: BoxDecoration(
+  //       border: Border.all(
+  //         color: Colors.green,
+  //         width: 2,
+  //       ),
+  //     ),
+  //     width: width,
+  //     child: Column(
+  //       children: [
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Column(
+  //               children: [
+  //                 Text(
+  //                   'C.Name',
+  //                   style: TextStyle(fontSize: 18),
+  //                 ),
+  //                 Text(listing['businessId'].toString(),
+  //                     style: TextStyle(fontSize: 15)),
+  //               ],
+  //             ),
+  //             Column(
+  //               children: [
+  //                 Text(
+  //                   'Product',
+  //                   style: TextStyle(fontSize: 18),
+  //                 ),
+  //                 Text(listing['category'], style: TextStyle(fontSize: 15)),
+  //               ],
+  //             ),
+  //             Column(
+  //               children: [
+  //                 Text(
+  //                   'Quantity',
+  //                   style: TextStyle(fontSize: 18),
+  //                 ),
+  //                 Text(listing['requiredQuantity'].toString(),
+  //                     style: TextStyle(fontSize: 15)),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             GestureDetector(
+  //               onTap: () => showListingDetails(context, listing),
+  //               child: Container(
+  //                   margin: EdgeInsets.all(5),
+  //                   padding: EdgeInsets.all(5),
+  //                   decoration: BoxDecoration(
+  //                       border: Border.all(color: Colors.green, width: 2),
+  //                       color: Colors.green),
+  //                   child: Text('Show Details')),
+  //             ),
+  //             Container(
+  //                 margin: EdgeInsets.all(5),
+  //                 padding: EdgeInsets.all(5),
+  //                 decoration: BoxDecoration(
+  //                     border: Border.all(color: Colors.green, width: 2),
+  //                     color: Colors.green),
+  //                 child: Text('Delete')),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  Widget listingCard(double width, dynamic listing) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-      padding: EdgeInsets.all(5),
+      margin: EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.green,
-          width: 2,
-        ),
-      ),
+          borderRadius: BorderRadius.circular(10),
+          color: Color.fromRGBO(255, 242, 242, 1),
+          boxShadow: const [
+            BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.25),
+              blurRadius: 4,
+              offset: Offset(0, 4),
+            ),
+          ]),
       width: width,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    'C.Name',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Text(listing['businessId'].toString(),
-                      style: TextStyle(fontSize: 15)),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(
-                    'Product',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Text(listing['category'], style: TextStyle(fontSize: 15)),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(
-                    'Quantity',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Text(listing['requiredQuantity'].toString(),
-                      style: TextStyle(fontSize: 15)),
-                ],
-              ),
-            ],
+          Text(
+            'Title: ${listing['title']}',
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
           ),
+          Text(
+            'Company Name: ${listing['businessName']}',
+            style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: Color.fromRGBO(0, 0, 0, 0.75)),
+          ),
+          Text(
+            'Required Qty: ${'${listing['requiredQuantity']} ' + listing['unit']}',
+            style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: Color.fromRGBO(0, 0, 0, 0.75)),
+          ),
+          Text(
+            'Price Offered: ${listing['maxPrice'].toString()}',
+            style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: Color.fromRGBO(0, 0, 0, 0.75)),
+          ),
+          SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () => showListingDetails(context, listing),
-                child: Container(
-                    margin: EdgeInsets.all(5),
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.green, width: 2),
-                        color: Colors.green),
-                    child: Text('Show Details')),
+              Text(
+                listing['location'],
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 13,
+                    color: Color.fromRGBO(0, 0, 0, 0.75)),
               ),
-              Container(
-                  margin: EdgeInsets.all(5),
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green, width: 2),
-                      color: Colors.green),
-                  child: Text('Delete')),
+              GestureDetector(
+                onTap: () {
+                  showListingDetails(context, listing);
+                },
+                child: Text(
+                  'About>',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 13,
+                      color: Color.fromRGBO(107, 142, 35, 1)),
+                ),
+              ),
             ],
           ),
         ],
@@ -346,31 +604,200 @@ class _CompanyHomeState extends State<CompanyHome> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Company: ${listing['businessId'].toString()}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
-              Text('Product: ${listing['category']}',
-                  style: TextStyle(fontSize: 16)),
               Text(
-                  'Quantity: ${listing['requiredQuantity'].toString()} ${listing['unit']}',
-                  style: TextStyle(fontSize: 16)),
-              Text('Price: ${listing['maxPrice'].toString()}',
-                  style: TextStyle(fontSize: 16)),
-              Text('Description: ${listing['description']}',
-                  style: TextStyle(fontSize: 16)),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  'Delete',
-                  style: TextStyle(color: Colors.white),
+                'Request Id: #${listing["requestId"].toString()}',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                'Title: ${listing["title"]}',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+              Row(
+                children: [
+                  Text(
+                      'Business Name: : ${listing["businessName"].toString()} |',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromRGBO(0, 0, 0, 0.75))),
+                  Text(' click for Info',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(48, 1, 255, 0.75),
+                      )),
+                ],
+              ),
+              Text('Description: ${listing["description"]}',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(0, 0, 0, 0.75))),
+              Text('Category: ${listing["category"]}',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(0, 0, 0, 0.75))),
+              Text(
+                  'Required QTY: ${listing["requiredQuantity"].toString()}, ${listing["unit"]}',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(0, 0, 0, 0.75))),
+              Text('Price Offered: ₹ ${listing["maxPrice"].toString()}',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(0, 0, 0, 0.75))),
+              Text('Location:  ${listing["location"]}',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(0, 0, 0, 0.75))),
+              SizedBox(height: 10),
+              Text('Created at:',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(0, 0, 0, 0.75))),
+              Text(
+                  DateFormat("d MMMM y, h:mm a")
+                      .format(DateTime.parse(listing["createdAt"])),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromRGBO(0, 0, 0, 0.75))),
+              SizedBox(height: 25),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Connect with Buyer',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromRGBO(107, 142, 35, 1)),
                 ),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget searchBox() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Color.fromRGBO(107, 142, 35, 1), width: 1.5),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: "Search by crop, quantity, location",
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          Icon(
+            Icons.search,
+            color: Colors.green,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget availableProduceListing(
+    double width,
+    ProduceItem listing,
+  ) {
+    return Container(
+      width: width * 0.4,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white,
+          boxShadow: const [
+            BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.25),
+              blurRadius: 4,
+              offset: Offset(0, 4),
+            ),
+          ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(5),
+              ),
+              child: Image.asset(
+                'assets/images/Banner.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 5,
+            ),
+            child: Text(listing.name,
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 5,
+            ),
+            child: Text('Price: ₹ ${listing.price.toString()}',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 5,
+            ),
+            child: Text('Available QTY: ${listing.quantity.toString()}',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 5,
+            ),
+            child: Text('Farmer: ${listing.farmer}',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 5,
+            ),
+            child: Text(listing.location,
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+          ),
+          Container(
+            width: width,
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(5),
+                bottomRight: Radius.circular(5),
+              ),
+              color: Color.fromRGBO(107, 112, 92, 1),
+            ),
+            child: Center(
+              child: Text(
+                'Request to Buy',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

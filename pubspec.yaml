@@ -69,6 +69,7 @@ flutter:
     - assets/images/splash_img.jpg
     - assets/images/login_img.jpg
     - assets/images/krishi_icon.png
+    - assets/images/Banner.jpg
     - assets/
   #   - images/a_dot_ham.jpeg
 
