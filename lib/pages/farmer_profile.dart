@@ -83,10 +83,10 @@ class _FarmerProfileState extends State<FarmerProfile> {
                     SizedBox(
                       height: 15,
                     ),
-                    buildCard(farmerData['role']),
-                    SizedBox(
-                      height: 15,
-                    ),
+                    // buildCard(farmerData['role']),
+                    // SizedBox(
+                    //   height: 15,
+                    // ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: Padding(
@@ -130,9 +130,10 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.logout,
+                            Image.asset(
+                              'assets/images/logout.png',
                               color: Colors.white,
+                              height: 20,
                             ),
                             Text(
                               'LogOut',
