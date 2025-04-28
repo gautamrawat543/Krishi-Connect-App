@@ -26,13 +26,13 @@ class _MainScreenState extends State<MainScreen> {
     _pages = SharedPrefHelper.getUserrole() == 'FARMER'
         ? [
             const FarmerHome(),
-            const SearchPageFarmer(),
+            const SearchPageFarmer(), //kuch mat karna
             const ChatScreen(),
             const FarmerProfile(),
           ]
         : [
             const CompanyHome(),
-            const SearchPage(),
+            const SearchPage(), //kuch mat karna
             const ChatScreen(),
             const FarmerProfile(),
           ];

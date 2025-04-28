@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:krishi_connect_app/pages/edit_listing.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
@@ -21,10 +19,10 @@ class _BuyerListingState extends State<BuyerListing> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(107, 142, 35, 1),
+        backgroundColor: const Color.fromRGBO(107, 142, 35, 1),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new_rounded),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
           color: Colors.white,
         ),
       ),
@@ -33,34 +31,35 @@ class _BuyerListingState extends State<BuyerListing> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Text(
+              const Text(
                 'Buyer Listings',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 6,
               ),
-              Divider(thickness: 2, color: Color.fromRGBO(107, 142, 35, 1)),
-              SizedBox(
+              const Divider(
+                  thickness: 2, color: Color.fromRGBO(107, 142, 35, 1)),
+              const SizedBox(
                 height: 8,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Expanded(child: searchBox()),
-                  Icon(
+                  const Icon(
                     Icons.filter_list_alt,
                     color: Color.fromRGBO(107, 142, 35, 1),
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               SizedBox(
@@ -81,13 +80,14 @@ class _BuyerListingState extends State<BuyerListing> {
 
   Widget searchBox() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: Color.fromRGBO(107, 142, 35, 1), width: 1.5),
+        border: Border.all(
+            color: const Color.fromRGBO(107, 142, 35, 1), width: 1.5),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Row(
+      child: const Row(
         children: [
           Expanded(
             child: TextField(
@@ -108,11 +108,11 @@ class _BuyerListingState extends State<BuyerListing> {
 
   Widget listingCard(double width, dynamic listing) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 6),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Color.fromRGBO(255, 242, 242, 1),
+          color: const Color.fromRGBO(255, 242, 242, 1),
           boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.25),
@@ -126,36 +126,36 @@ class _BuyerListingState extends State<BuyerListing> {
         children: [
           Text(
             'Title: ${listing['title']}',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
           ),
           Text(
             'Company Name: ${listing['businessName']}',
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
             'Required Qty: ${'${listing['requiredQuantity']} ' + listing['unit']}',
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
             'Price Offered: ${listing['maxPrice'].toString()}',
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 listing['location'],
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 13,
                     color: Color.fromRGBO(0, 0, 0, 0.75)),
@@ -168,7 +168,7 @@ class _BuyerListingState extends State<BuyerListing> {
                         listing: listing,
                       ));
                 },
-                child: Text(
+                child: const Text(
                   'Edit>',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -186,14 +186,14 @@ class _BuyerListingState extends State<BuyerListing> {
   void showListingDetails(BuildContext context, dynamic listing) {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
         return Container(
           width: double.infinity,
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: SingleChildScrollView(
@@ -203,18 +203,20 @@ class _BuyerListingState extends State<BuyerListing> {
               children: [
                 Text(
                   'Request Id: #${listing["requestId"].toString()}',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500),
                 ),
                 Text(
                   'Title: ${listing["title"]}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 Text('Business Name: : ${listing["businessName"].toString()}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
+                const Text(
                   ' click for Info',
                   style: TextStyle(
                     fontSize: 18,
@@ -223,33 +225,33 @@ class _BuyerListingState extends State<BuyerListing> {
                   ),
                 ),
                 Text('Description: ${listing["description"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text('Category: ${listing["category"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text(
                     'Required QTY: ${listing["requiredQuantity"].toString()}, ${listing["unit"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text('Price Offered: ₹ ${listing["maxPrice"].toString()}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text('Location:  ${listing["location"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 10),
-                Text('Created at:',
+                const SizedBox(height: 10),
+                const Text('Created at:',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -257,21 +259,21 @@ class _BuyerListingState extends State<BuyerListing> {
                 Text(
                     DateFormat("d MMMM y, h:mm a")
                         .format(DateTime.parse(listing["createdAt"])),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 25),
+                const SizedBox(height: 25),
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Text(
+                    child: const Text(
                       'Connect with Buyer',
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(107, 142, 35, 1)),
+                        backgroundColor: const Color.fromRGBO(107, 142, 35, 1)),
                   ),
                 ),
               ],

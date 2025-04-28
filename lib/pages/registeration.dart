@@ -47,7 +47,7 @@ class _RegisterationState extends State<Registeration> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: AppTextStyles.appColor,
+      backgroundColor: AppColors.appColor,
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -62,10 +62,7 @@ class _RegisterationState extends State<Registeration> {
               ),
               Text(
                 'KrishiConnect',
-                style: TextStyle(
-                  color: Color.fromRGBO(29, 145, 67, 1),
-                  fontSize: 36,
-                ),
+                style: AppTextStyles.krishiHeading,
               ),
               SizedBox(
                 height: 30,

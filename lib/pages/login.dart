@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: AppTextStyles.appColor,
+      backgroundColor: AppColors.appColor,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -82,10 +82,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Text(
               'KrishiConnect',
-              style: TextStyle(
-                color: Color.fromRGBO(29, 145, 67, 1),
-                fontSize: 36,
-              ),
+              style: AppTextStyles.krishiHeading,
             ),
             SizedBox(
               height: 30,

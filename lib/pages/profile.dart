@@ -132,7 +132,7 @@ class _ProfileState extends State<Profile> {
     return SafeArea(
       top: true,
       child: Scaffold(
-        backgroundColor: AppTextStyles.appColor,
+        backgroundColor: AppColors.appColor,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: SingleChildScrollView(

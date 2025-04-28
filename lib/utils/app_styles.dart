@@ -9,5 +9,12 @@ class AppTextStyles {
     color: Colors.white,
   );
 
+  static const TextStyle krishiHeading = TextStyle(
+    color: Color.fromRGBO(29, 145, 67, 1),
+    fontSize: 36,
+  );
+}
+
+class AppColors {
   static const Color appColor = Color.fromRGBO(242, 239, 228, 0.93);
 }
