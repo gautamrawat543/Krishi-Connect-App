@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:krishi_connect_app/main_screen.dart';
+import 'package:krishi_connect_app/pages/login.dart';
 import 'package:krishi_connect_app/pages/registeration.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -26,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Registeration()),
+          MaterialPageRoute(builder: (context) => LoginPage()),
         );
       }
     });
@@ -37,42 +39,48 @@ class _SplashScreenState extends State<SplashScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Stack(
-        children: [
-          const Image(
-            image: AssetImage('assets/images/farm1.jpg'),
-            height: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          Positioned(
-            top: height * 0.6,
-            left: width * 0.05,
-            child: const Text(
-              'Krishi-Connect',
-              style: TextStyle(
-                fontSize: 50,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Positioned(
-            top: height * 0.7,
-            width: width * 0.75,
-            left: width * 0.16,
-            child: const Text(
-              'Bridging the gap between Farmers and Company',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-            ),
-          ),
-        ],
+      body: Center(
+        child: Image.asset(
+          'assets/images/splash_img.jpg',
+          width: width * 0.3,
+        ),
       ),
+      // body: Stack(
+      //   children: [
+      //     const Image(
+      //       image: AssetImage('assets/images/farm1.jpg'),
+      //       height: double.infinity,
+      //       fit: BoxFit.cover,
+      //     ),
+      //     Positioned(
+      //       top: height * 0.6,
+      //       left: width * 0.05,
+      //       child: const Text(
+      //         'Krishi-Connect',
+      //         style: TextStyle(
+      //           fontSize: 50,
+      //           fontWeight: FontWeight.bold,
+      //           color: Colors.white,
+      //         ),
+      //       ),
+      //     ),
+      //     Positioned(
+      //       top: height * 0.7,
+      //       width: width * 0.75,
+      //       left: width * 0.16,
+      //       child: const Text(
+      //         'Bridging the gap between Farmers and Company',
+      //         style: TextStyle(
+      //           fontSize: 20,
+      //           fontWeight: FontWeight.bold,
+      //           color: Colors.white,
+      //         ),
+      //         textAlign: TextAlign.center,
+      //         maxLines: 2,
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

@@ -48,6 +48,26 @@ class SharedPrefHelper {
     return _prefs?.getString('token') ?? '';
   }
 
+  // Save userId
+  static Future<void> setUserId(String userId) async {
+    await _prefs?.setString('userId', userId);
+  }
+
+  // Get userId
+  static String getUserId() {
+    return _prefs?.getString('userId') ?? '';
+  }
+
+  // Save Location
+  static Future<void> setLocation(String location) async {
+    await _prefs?.setString('location', location);
+  }
+
+  // Get Location
+  static String getLocation() {
+    return _prefs?.getString('location') ?? '';
+  }
+
   // Clear All Data
   static Future<void> clearAll() async {
     await _prefs?.clear();
