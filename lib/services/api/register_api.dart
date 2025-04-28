@@ -71,4 +71,253 @@ class RegisterService {
       return {"error": "An error occurred: $e"};
     }
   }
+
+  Future<Map<String, dynamic>> getUserByPhone(
+      {required String phone, required String token}) async {
+    final url = Uri.parse("$baseUrl/api/public/users/phone/$phone");
+
+    try {
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {"error": "User not found: ${response.body}"};
+      }
+    } catch (e) {
+      return {"error": "An error occurred: $e"};
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getBuyerRequest(
+      {required String token}) async {
+    final url = Uri.parse("$baseUrl/api/authenticated/buyer-requests");
+
+    try {
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getFarmer({required String token}) async {
+    final url = Uri.parse("$baseUrl/api/public/users/role/FARMER");
+
+    try {
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> createBuyerRequest({
+    required int businessId,
+    required String title,
+    required String description,
+    required String category,
+    required String unit,
+    required String location,
+    required int requiredQuantity,
+    required double maxPrice,
+    required String token,
+  }) async {
+    final url = Uri.parse("$baseUrl/api/authenticated/buyer-requests");
+
+    final Map<String, dynamic> requestBody = {
+      "businessId": businessId,
+      "title": title,
+      "description": description,
+      "category": category,
+      "requiredQuantity": requiredQuantity,
+      "unit": unit,
+      "maxPrice": maxPrice,
+      "location": location,
+      "status": "OPEN"
+    };
+    print(requestBody);
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(requestBody),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        print(response.body);
+        return jsonDecode(response.body);
+      } else {
+        return {"error": "Failed to create buyer listing: ${response.body}"};
+      }
+    } catch (e) {
+      return {"error": "An error occurred: $e"};
+    }
+  }
+
+  static Future<Map<String, String>?> getLocationFromPincode(
+      String pincode) async {
+    final Uri url = Uri.parse('$baseUrl/api/pincode/$pincode');
+
+    try {
+      final response = await http.get(url);
+
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        if (responseData['Status'] == 'Success') {
+          List<dynamic> postOffices = responseData['PostOffice'];
+          if (postOffices.isNotEmpty) {
+            return {
+              'Name': postOffices[0]['Name'],
+              'State': postOffices[0]['State'],
+            };
+          }
+        }
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    return null;
+  }
+
+  Future<List<Map<String, dynamic>>> getBuyerRequestById({
+    required String token,
+    required String businessId,
+  }) async {
+    final url = Uri.parse(
+        "$baseUrl/api/authenticated/buyer-requests/business/$businessId");
+
+    try {
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserProfile(
+      {required String token, required String userId}) async {
+    final url = Uri.parse("$baseUrl/api/public/users/id/$userId");
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {"error": "Failed to fetch user profile: ${response.body}"};
+      }
+    } catch (e) {
+      return {"error": "An error occurred: $e"};
+    }
+  }
+
+  Future<Map<String, dynamic>> updateBuyerRequest({
+    required int requestId,
+    required int businessId,
+    required String title,
+    required String description,
+    required String category,
+    required String unit,
+    required String location,
+    required int requiredQuantity,
+    required double maxPrice,
+    required String token,
+  }) async {
+    final url = Uri.parse("$baseUrl/api/authenticated/buyer-requests");
+
+    final Map<String, dynamic> requestBody = {
+      "requestId": requestId,
+      "businessId": businessId,
+      "title": title,
+      "description": description,
+      "category": category,
+      "requiredQuantity": requiredQuantity,
+      "unit": unit,
+      "maxPrice": maxPrice,
+      "location": location,
+      "status": "OPEN",
+    };
+
+    try {
+      final response = await http.put(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(requestBody),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("Update successful: ${response.body}");
+        return jsonDecode(response.body);
+      } else {
+        print("Update failed: ${response.body}");
+        return {"error": "Failed to update buyer request: ${response.body}"};
+      }
+    } catch (e) {
+      return {"error": "An error occurred: $e"};
+    }
+  }
+
+
+  Future<List<Map<String, dynamic>>> getUserByRole({required String token,required String role}) async {
+  final url = Uri.parse("$baseUrl/api/public/users/role/$role");
+
+  try {
+    final response = await http.get(url, headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+    } else {
+      return [];
+    }
+  } catch (e) {
+    return [];
+  }
+}
+
 }

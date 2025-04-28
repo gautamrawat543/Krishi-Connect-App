@@ -35,7 +35,37 @@ class SharedPrefHelper {
 
   // Get Userrole
   static String getUserrole() {
-    return _prefs?.getString('userrole') ?? 'Farmer';
+    return _prefs?.getString('userrole') ?? 'FARMER';
+  }
+
+  // Save Token
+  static Future<void> setToken(String token) async {
+    await _prefs?.setString('token', token);
+  }
+
+  // Get Token
+  static String getToken() {
+    return _prefs?.getString('token') ?? '';
+  }
+
+  // Save userId
+  static Future<void> setUserId(String userId) async {
+    await _prefs?.setString('userId', userId);
+  }
+
+  // Get userId
+  static String getUserId() {
+    return _prefs?.getString('userId') ?? '';
+  }
+
+  // Save Location
+  static Future<void> setLocation(String location) async {
+    await _prefs?.setString('location', location);
+  }
+
+  // Get Location
+  static String getLocation() {
+    return _prefs?.getString('location') ?? '';
   }
 
   // Clear All Data

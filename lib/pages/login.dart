@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:krishi_connect_app/main_screen.dart';
+import 'package:krishi_connect_app/pages/registeration.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart';
+import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _numberController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordHidden = true;
 
   bool isLoading = false;
   void _submitForm() async {
@@ -40,7 +46,15 @@ class _LoginPageState extends State<LoginPage> {
       // Assuming response contains user role
       String token = response["token"];
       print(token);
+      Map<String, dynamic> userDetail = await service.getUserByPhone(
+          phone: _numberController.text, token: token);
+      print(userDetail);
       SharedPrefHelper.setRegistered(true);
+      SharedPrefHelper.setToken(token);
+      SharedPrefHelper.setUserrole(userDetail["role"]);
+      SharedPrefHelper.setUsername(userDetail["name"]);
+      SharedPrefHelper.setUserId(userDetail["userId"].toString());
+      SharedPrefHelper.setLocation(userDetail["location"]);
 
       // Navigate to MainScreen
       Navigator.pushAndRemoveUntil(
@@ -54,134 +68,218 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
-      body: Column(
-        children: [
-          Text('Krishi-Connect Login'),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Enter number:',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                  ),
-                ),
-                SizedBox(
-                  width: width * 0.5,
-                  height: 70,
-                  child: TextFormField(
-                    controller: _numberController,
-                    keyboardType: TextInputType.number,
-                    cursorColor: Colors.green,
-                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Number',
-                      floatingLabelStyle: TextStyle(color: Colors.green),
-                      focusColor: Colors.green,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.green, width: 2),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.green, width: 2),
-                      ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter a number";
-                      } else if (value.length != 10 ||
-                          !RegExp(r'^\d{10}$').hasMatch(value)) {
-                        return "Enter a valid 10-digit number";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ],
+      backgroundColor: AppColors.appColor,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 100,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Enter Password:',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                  ),
-                ),
-                SizedBox(
-                  width: width * 0.5,
-                  height: 70,
-                  child: TextFormField(
-                    controller: _passwordController,
-                    cursorColor: Colors.green,
-                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
-                      floatingLabelStyle: TextStyle(color: Colors.green),
-                      focusColor: Colors.green,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.green, width: 2),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.green, width: 2),
-                      ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter a name";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ],
+            Image.asset(
+              'assets/images/krishi_icon.png',
+              width: width * 0.35,
             ),
-          ),
-          GestureDetector(
-            onTap: () => isLoading ? null : _submitForm(),
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              width: width * 0.5,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(10),
+            Text(
+              'KrishiConnect',
+              style: AppTextStyles.krishiHeading,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
               ),
-              child: isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : const Text(
-                      'Continue',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
+              child: SizedBox(
+                width: width * 0.9,
+                height: 70,
+                child: TextFormField(
+                  controller: _numberController,
+                  keyboardType: TextInputType.number,
+                  cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                  decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(color: Colors.white, width: 2),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(color: Colors.white, width: 2),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(color: Colors.white, width: 2),
+                    ),
+                    labelText: 'Phone Number',
+                    labelStyle: TextStyle(
+                      color: Color.fromRGBO(0, 0, 0, 0.5),
+                      fontSize: 20,
+                    ),
+                    floatingLabelStyle: TextStyle(
+                      color: Color.fromRGBO(0, 0, 0, 0.5),
+                      fontSize: 20,
+                    ),
+                    focusColor: Color.fromRGBO(0, 0, 0, 0.5),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter a number";
+                    } else if (value.length != 10 ||
+                        !RegExp(r'^\d{10}$').hasMatch(value)) {
+                      return "Enter a valid 10-digit number";
+                    }
+                    return null;
+                  },
+                ),
+              ),
             ),
-          ),
-        ],
+            SizedBox(
+              height: 10,
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              child: SizedBox(
+                width: width * 0.9,
+                height: 70,
+                child: TextFormField(
+                  controller: _passwordController,
+                  obscureText: _isPasswordHidden,
+                  cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(color: Colors.white, width: 2),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(color: Colors.white, width: 2),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(color: Colors.white, width: 2),
+                    ),
+                    labelText: 'Password',
+                    labelStyle: TextStyle(
+                      color: Color.fromRGBO(0, 0, 0, 0.5),
+                      fontSize: 20,
+                    ),
+                    floatingLabelStyle: TextStyle(
+                      color: Color.fromRGBO(0, 0, 0, 0.5),
+                    ),
+                    focusColor: Color.fromRGBO(0, 0, 0, 0.5),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordHidden
+                            ? Icons.remove_red_eye_outlined
+                            : Icons.visibility_off_outlined,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordHidden = !_isPasswordHidden;
+                        });
+                      },
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter a name";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            GestureDetector(
+              onTap: () => isLoading ? null : _submitForm(),
+              child: Container(
+                // margin: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                width: width * 0.9,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(85, 107, 47, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+              ),
+            ),
+            SizedBox(height: 50),
+            Text(
+              'Don\'t have an account? ',
+              style: TextStyle(
+                color: Color.fromRGBO(0, 0, 0, 0.5),
+                fontSize: 18,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                NavigationHelper.push(context, Registeration());
+              },
+              child: Text(
+                'SignUp Here',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     NavigationHelper.push(context, Registeration());
+            //   },
+            //   child: Text.rich(
+            //     TextSpan(
+            //       text: 'Don\'t have an account? ',
+            //       style: TextStyle(
+            //         color: Color.fromRGBO(0, 0, 0, 0.5),
+            //         fontSize: 16,
+            //       ),
+            //       children: [
+            //         TextSpan(
+            //           text: 'Register Here',
+            //           style: TextStyle(
+            //             color: Colors.green,
+            //             fontWeight: FontWeight.bold,
+            //             fontSize: 16,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }
