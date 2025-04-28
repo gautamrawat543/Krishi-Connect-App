@@ -2,19 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:krishi_connect_app/pages/edit_listing.dart';
-import 'package:krishi_connect_app/utils/navigation_helper.dart';
 
-class BuyerListing extends StatefulWidget {
-  BuyerListing({super.key, required this.companyListings});
+class FarmerBuyerListing extends StatefulWidget {
+  FarmerBuyerListing({super.key, required this.listing});
 
-  List<dynamic> companyListings = [];
+  final dynamic listing;
 
   @override
-  State<BuyerListing> createState() => _BuyerListingState();
+  State<FarmerBuyerListing> createState() => _FarmerBuyerListingState();
 }
 
-class _BuyerListingState extends State<BuyerListing> {
+class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -66,9 +64,9 @@ class _BuyerListingState extends State<BuyerListing> {
               SizedBox(
                 height: height * 0.7,
                 child: ListView.builder(
-                  itemCount: widget.companyListings.length,
+                  itemCount: widget.listing.length,
                   itemBuilder: (context, index) {
-                    return listingCard(width, widget.companyListings[index]);
+                    return listingCard(width, widget.listing[index]);
                   },
                 ),
               ),
@@ -162,14 +160,10 @@ class _BuyerListingState extends State<BuyerListing> {
               ),
               GestureDetector(
                 onTap: () {
-                  NavigationHelper.push(
-                      context,
-                      EditListing(
-                        listing: listing,
-                      ));
+                  showListingDetails(context, listing);
                 },
                 child: Text(
-                  'Edit>',
+                  'About>',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 13,
@@ -206,7 +200,7 @@ class _BuyerListingState extends State<BuyerListing> {
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  'Title: ${listing["title"]}',
+                  'Title: ${listing["title"].toString()}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 Text('Business Name: : ${listing["businessName"].toString()}',
@@ -222,18 +216,18 @@ class _BuyerListingState extends State<BuyerListing> {
                     color: Color.fromRGBO(48, 1, 255, 0.75),
                   ),
                 ),
-                Text('Description: ${listing["description"]}',
+                Text('Description: ${listing["description"].toString()}',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Category: ${listing["category"]}',
+                Text('Category: ${listing["category"].toString()}',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text(
-                    'Required QTY: ${listing["requiredQuantity"].toString()}, ${listing["unit"]}',
+                    'Required QTY: ${listing["requiredQuantity"].toString()}, ${listing["unit"].toString()}',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -243,7 +237,7 @@ class _BuyerListingState extends State<BuyerListing> {
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Location:  ${listing["location"]}',
+                Text('Location:  ${listing["location"].toString()}',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -254,13 +248,14 @@ class _BuyerListingState extends State<BuyerListing> {
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
-                    DateFormat("d MMMM y, h:mm a")
-                        .format(DateTime.parse(listing["createdAt"])),
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                if (listing["createdAt"].toString() != "null")
+                  Text(
+                      DateFormat("d MMMM y, h:mm a").format(
+                          DateTime.parse(listing["createdAt"].toString())),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color.fromRGBO(0, 0, 0, 0.75))),
                 SizedBox(height: 25),
                 Align(
                   alignment: Alignment.centerRight,

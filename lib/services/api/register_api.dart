@@ -228,18 +228,16 @@ class RegisterService {
     }
   }
 
-
-   Future<Map<String, dynamic>> getUserProfile({
-    required String token,
-    required String userId
-  }) async {
+  Future<Map<String, dynamic>> getUserProfile(
+      {required String token, required String userId}) async {
     final url = Uri.parse("$baseUrl/api/public/users/id/$userId");
 
     try {
       final response = await http.get(
         url,
-        headers: {"Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
         },
       );
 
@@ -253,5 +251,73 @@ class RegisterService {
     }
   }
 
+  Future<Map<String, dynamic>> updateBuyerRequest({
+    required int requestId,
+    required int businessId,
+    required String title,
+    required String description,
+    required String category,
+    required String unit,
+    required String location,
+    required int requiredQuantity,
+    required double maxPrice,
+    required String token,
+  }) async {
+    final url = Uri.parse("$baseUrl/api/authenticated/buyer-requests");
+
+    final Map<String, dynamic> requestBody = {
+      "requestId": requestId,
+      "businessId": businessId,
+      "title": title,
+      "description": description,
+      "category": category,
+      "requiredQuantity": requiredQuantity,
+      "unit": unit,
+      "maxPrice": maxPrice,
+      "location": location,
+      "status": "OPEN",
+    };
+
+    try {
+      final response = await http.put(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(requestBody),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("Update successful: ${response.body}");
+        return jsonDecode(response.body);
+      } else {
+        print("Update failed: ${response.body}");
+        return {"error": "Failed to update buyer request: ${response.body}"};
+      }
+    } catch (e) {
+      return {"error": "An error occurred: $e"};
+    }
+  }
+
+
+  Future<List<Map<String, dynamic>>> getUserByRole({required String token,required String role}) async {
+  final url = Uri.parse("$baseUrl/api/public/users/role/$role");
+
+  try {
+    final response = await http.get(url, headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+    } else {
+      return [];
+    }
+  } catch (e) {
+    return [];
+  }
+}
 
 }

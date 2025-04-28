@@ -7,7 +7,8 @@ import 'package:krishi_connect_app/data/farmer_data.dart';
 import 'package:krishi_connect_app/data/produce_data.dart';
 import 'package:krishi_connect_app/pages/buyer_listing.dart';
 import 'package:krishi_connect_app/pages/create_listing.dart';
-import 'package:krishi_connect_app/pages/search_page.dart';
+import 'package:krishi_connect_app/pages/edit_listing.dart';
+import 'package:krishi_connect_app/pages/search_page_business.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
@@ -61,6 +62,7 @@ class _CompanyHomeState extends State<CompanyHome> {
         // Ensure the UI updates after data fetch
         companyListings = listing;
         isLoadingCompanyListings = false;
+        print(companyListings);
       });
     } catch (e) {
       print(e);
@@ -138,7 +140,7 @@ class _CompanyHomeState extends State<CompanyHome> {
               ),
               //available produce listing
               SizedBox(
-                height: height * 0.28,
+                height: height * 0.4,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: produceList.length,
@@ -162,7 +164,7 @@ class _CompanyHomeState extends State<CompanyHome> {
                   Text(
                     'Create a Request',
                     style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 28,
                         fontWeight: FontWeight.w600,
                         color: Color.fromRGBO(0, 0, 0, 0.75)),
                   ),
@@ -172,7 +174,7 @@ class _CompanyHomeState extends State<CompanyHome> {
                     child: Icon(
                       Icons.add_circle_outline_rounded,
                       color: Color.fromRGBO(0, 0, 0, 0.75),
-                      size: 50,
+                      size: 45,
                     ),
                   ),
                 ],
@@ -333,7 +335,9 @@ class _CompanyHomeState extends State<CompanyHome> {
                             child: Text('No Listings Found'),
                           )
                         : ListView.builder(
-                            itemCount: companyListings.length,
+                            itemCount: companyListings.length > 5
+                                ? 5
+                                : companyListings.length,
                             itemBuilder: (context, index) {
                               return listingCard(
                                 width,
@@ -570,10 +574,14 @@ class _CompanyHomeState extends State<CompanyHome> {
               ),
               GestureDetector(
                 onTap: () {
-                  showListingDetails(context, listing);
+                  NavigationHelper.push(
+                      context,
+                      EditListing(
+                        listing: listing,
+                      ));
                 },
                 child: Text(
-                  'About>',
+                  'Edit>',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 13,
@@ -600,87 +608,86 @@ class _CompanyHomeState extends State<CompanyHome> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Request Id: #${listing["requestId"].toString()}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-              ),
-              Text(
-                'Title: ${listing["title"]}',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-              Row(
-                children: [
-                  Text(
-                      'Business Name: : ${listing["businessName"].toString()} |',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromRGBO(0, 0, 0, 0.75))),
-                  Text(' click for Info',
-                      style: TextStyle(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Request Id: #${listing["requestId"].toString()}',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                ),
+                Text(
+                  'Title: ${listing["title"]}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                ),
+                Text('Business Name: : ${listing["businessName"].toString()}',
+                    style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(48, 1, 255, 0.75),
-                      )),
-                ],
-              ),
-              Text('Description: ${listing["description"]}',
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                Text(
+                  ' click for Info',
                   style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(0, 0, 0, 0.75))),
-              Text('Category: ${listing["category"]}',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(0, 0, 0, 0.75))),
-              Text(
-                  'Required QTY: ${listing["requiredQuantity"].toString()}, ${listing["unit"]}',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(0, 0, 0, 0.75))),
-              Text('Price Offered: ₹ ${listing["maxPrice"].toString()}',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(0, 0, 0, 0.75))),
-              Text('Location:  ${listing["location"]}',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(0, 0, 0, 0.75))),
-              SizedBox(height: 10),
-              Text('Created at:',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(0, 0, 0, 0.75))),
-              Text(
-                  DateFormat("d MMMM y, h:mm a")
-                      .format(DateTime.parse(listing["createdAt"])),
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromRGBO(0, 0, 0, 0.75))),
-              SizedBox(height: 25),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Connect with Buyer',
-                    style: TextStyle(color: Colors.white),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromRGBO(48, 1, 255, 0.75),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(107, 142, 35, 1)),
                 ),
-              ),
-            ],
+                Text('Description: ${listing["description"]}',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                Text('Category: ${listing["category"]}',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                Text(
+                    'Required QTY: ${listing["requiredQuantity"].toString()}, ${listing["unit"]}',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                Text('Price Offered: ₹ ${listing["maxPrice"].toString()}',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                Text('Location:  ${listing["location"]}',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                SizedBox(height: 10),
+                Text('Created at:',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                Text(
+                    DateFormat("d MMMM y, h:mm a")
+                        .format(DateTime.parse(listing["createdAt"])),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                SizedBox(height: 25),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Connect with Buyer',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromRGBO(107, 142, 35, 1)),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -719,7 +726,7 @@ class _CompanyHomeState extends State<CompanyHome> {
     ProduceItem listing,
   ) {
     return Container(
-      width: width * 0.4,
+      width: width * 0.5,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
           color: Colors.white,
@@ -735,8 +742,8 @@ class _CompanyHomeState extends State<CompanyHome> {
         children: [
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(5),
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
               ),
               child: Image.asset(
                 'assets/images/Banner.jpg',
@@ -773,8 +780,8 @@ class _CompanyHomeState extends State<CompanyHome> {
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 5,
+            padding: const EdgeInsets.only(
+              left: 5,
             ),
             child: Text(listing.location,
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),

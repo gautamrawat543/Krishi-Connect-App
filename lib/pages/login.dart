@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _numberController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordHidden = true;
 
   bool isLoading = false;
   void _submitForm() async {
@@ -68,91 +69,96 @@ class _LoginPageState extends State<LoginPage> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppTextStyles.appColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/krishi_icon.png',
-            width: width * 0.35,
-          ),
-          Text(
-            'KrishiConnect',
-            style: TextStyle(
-              color: Color.fromRGBO(29, 145, 67, 1),
-              fontSize: 36,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 100,
             ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
+            Image.asset(
+              'assets/images/krishi_icon.png',
+              width: width * 0.35,
             ),
-            child: SizedBox(
-              width: width * 0.9,
-              height: 70,
-              child: TextFormField(
-                controller: _numberController,
-                keyboardType: TextInputType.number,
-                cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
-                onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    borderSide: BorderSide(color: Colors.white, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    borderSide: BorderSide(color: Colors.white, width: 2),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    borderSide: BorderSide(color: Colors.white, width: 2),
-                  ),
-                  labelText: 'Phone Number',
-                  labelStyle: TextStyle(
-                    color: Color.fromRGBO(0, 0, 0, 0.5),
-                    fontSize: 20,
-                  ),
-                  floatingLabelStyle: TextStyle(
-                    color: Color.fromRGBO(0, 0, 0, 0.5),
-                    fontSize: 20,
-                  ),
-                  focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter a number";
-                  } else if (value.length != 10 ||
-                      !RegExp(r'^\d{10}$').hasMatch(value)) {
-                    return "Enter a valid 10-digit number";
-                  }
-                  return null;
-                },
+            Text(
+              'KrishiConnect',
+              style: TextStyle(
+                color: Color.fromRGBO(29, 145, 67, 1),
+                fontSize: 36,
               ),
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
+            SizedBox(
+              height: 30,
             ),
-            child: SizedBox(
-              width: width * 0.9,
-              height: 70,
-              child: TextFormField(
-                controller: _passwordController,
-                cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
-                onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                decoration: const InputDecoration(
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              child: SizedBox(
+                width: width * 0.9,
+                height: 70,
+                child: TextFormField(
+                  controller: _numberController,
+                  keyboardType: TextInputType.number,
+                  cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                  decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(color: Colors.white, width: 2),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(color: Colors.white, width: 2),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderSide: BorderSide(color: Colors.white, width: 2),
+                    ),
+                    labelText: 'Phone Number',
+                    labelStyle: TextStyle(
+                      color: Color.fromRGBO(0, 0, 0, 0.5),
+                      fontSize: 20,
+                    ),
+                    floatingLabelStyle: TextStyle(
+                      color: Color.fromRGBO(0, 0, 0, 0.5),
+                      fontSize: 20,
+                    ),
+                    focusColor: Color.fromRGBO(0, 0, 0, 0.5),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter a number";
+                    } else if (value.length != 10 ||
+                        !RegExp(r'^\d{10}$').hasMatch(value)) {
+                      return "Enter a valid 10-digit number";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
+              child: SizedBox(
+                width: width * 0.9,
+                height: 70,
+                child: TextFormField(
+                  controller: _passwordController,
+                  obscureText: _isPasswordHidden,
+                  cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                  decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -178,92 +184,105 @@ class _LoginPageState extends State<LoginPage> {
                     focusColor: Color.fromRGBO(0, 0, 0, 0.5),
                     contentPadding:
                         EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                    suffixIcon: Icon(Icons.remove_red_eye_outlined)),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter a name";
-                  }
-                  return null;
-                },
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          GestureDetector(
-            onTap: () => isLoading ? null : _submitForm(),
-            child: Container(
-              // margin: const EdgeInsets.symmetric(vertical: 10),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              width: width * 0.9,
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(85, 107, 47, 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordHidden
+                            ? Icons.remove_red_eye_outlined
+                            : Icons.visibility_off_outlined,
                       ),
-                    )
-                  : const Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordHidden = !_isPasswordHidden;
+                        });
+                      },
                     ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter a name";
+                    }
+                    return null;
+                  },
+                ),
+              ),
             ),
-          ),
-          SizedBox(height: 50),
-          Text(
-            'Don\'t have an account? ',
-            style: TextStyle(
-              color: Color.fromRGBO(0, 0, 0, 0.5),
-              fontSize: 18,
+            SizedBox(
+              height: 30,
             ),
-          ),
-          GestureDetector(
-            onTap: () {
-              NavigationHelper.push(context, Registeration());
-            },
-            child: Text(
-              'SignUp Here',
+            GestureDetector(
+              onTap: () => isLoading ? null : _submitForm(),
+              child: Container(
+                // margin: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                width: width * 0.9,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(85, 107, 47, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+              ),
+            ),
+            SizedBox(height: 50),
+            Text(
+              'Don\'t have an account? ',
               style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
+                color: Color.fromRGBO(0, 0, 0, 0.5),
                 fontSize: 18,
               ),
             ),
-          ),
-          // GestureDetector(
-          //   onTap: () {
-          //     NavigationHelper.push(context, Registeration());
-          //   },
-          //   child: Text.rich(
-          //     TextSpan(
-          //       text: 'Don\'t have an account? ',
-          //       style: TextStyle(
-          //         color: Color.fromRGBO(0, 0, 0, 0.5),
-          //         fontSize: 16,
-          //       ),
-          //       children: [
-          //         TextSpan(
-          //           text: 'Register Here',
-          //           style: TextStyle(
-          //             color: Colors.green,
-          //             fontWeight: FontWeight.bold,
-          //             fontSize: 16,
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-        ],
+            GestureDetector(
+              onTap: () {
+                NavigationHelper.push(context, Registeration());
+              },
+              child: Text(
+                'SignUp Here',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     NavigationHelper.push(context, Registeration());
+            //   },
+            //   child: Text.rich(
+            //     TextSpan(
+            //       text: 'Don\'t have an account? ',
+            //       style: TextStyle(
+            //         color: Color.fromRGBO(0, 0, 0, 0.5),
+            //         fontSize: 16,
+            //       ),
+            //       children: [
+            //         TextSpan(
+            //           text: 'Register Here',
+            //           style: TextStyle(
+            //             color: Colors.green,
+            //             fontWeight: FontWeight.bold,
+            //             fontSize: 16,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }

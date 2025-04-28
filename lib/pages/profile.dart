@@ -26,10 +26,13 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final TextEditingController _pincodeController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordController1 = TextEditingController();
+  final TextEditingController _passwordController2 = TextEditingController();
+
   String _state = 'N/A';
   String _city = 'N/A';
   bool _isLoading = false;
+  bool _isPasswordHidden = true;
 
   bool isValidEmail(String email) {
     return RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
@@ -73,7 +76,7 @@ class _ProfileState extends State<Profile> {
       name: widget.name,
       email: _emailController.text,
       phone: widget.number,
-      password: _passwordController.text,
+      password: _passwordController2.text,
       role: widget.role,
       location: _city,
       profilePicture: "https://example.com/profile.jpg",
@@ -81,6 +84,21 @@ class _ProfileState extends State<Profile> {
 
     if (response.containsKey("error")) {
       print("Error: ${response['error']}");
+      String errorMessage = response['error'].toString();
+      if (errorMessage.contains("users.phone")) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Phone number already exists!")),
+        );
+      } else if (errorMessage.contains("users.email")) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Email already exists!")),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text("Registration failed. Please try again.")),
+        );
+      }
       setState(() {
         isRegistered = false;
       });
@@ -90,6 +108,10 @@ class _ProfileState extends State<Profile> {
       setState(() {
         isRegistered = false;
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Registration successfully. Please Login.")),
+      );
 
       // Navigate to LoginPage
       Navigator.pushAndRemoveUntil(
@@ -250,9 +272,11 @@ class _ProfileState extends State<Profile> {
                         'State: $_state',
                         style: TextStyle(fontSize: 16),
                       ),
-                      Text(
-                        'City: $_city',
-                        style: TextStyle(fontSize: 16),
+                      Expanded(
+                        child: Text(
+                          ' City: $_city',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
                     ],
                   ),
@@ -300,7 +324,8 @@ class _ProfileState extends State<Profile> {
                   width: width * 0.9,
                   height: 50,
                   child: TextFormField(
-                    controller: _passwordController,
+                    keyboardType: TextInputType.visiblePassword,
+                    controller: _passwordController1,
                     cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
                     decoration: const InputDecoration(
@@ -335,10 +360,12 @@ class _ProfileState extends State<Profile> {
                   width: width * 0.9,
                   height: 50,
                   child: TextFormField(
-                    controller: _passwordController,
+                    controller: _passwordController2,
+                    obscureText: _isPasswordHidden,
+                    keyboardType: TextInputType.visiblePassword,
                     cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
@@ -359,7 +386,18 @@ class _ProfileState extends State<Profile> {
                       floatingLabelStyle:
                           TextStyle(color: Color.fromRGBO(0, 0, 0, 0.5)),
                       focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                      suffixIcon: Icon(Icons.remove_red_eye_outlined),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordHidden
+                              ? Icons.remove_red_eye_outlined
+                              : Icons.visibility_off_outlined,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordHidden = !_isPasswordHidden;
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -370,7 +408,7 @@ class _ProfileState extends State<Profile> {
                   onTap: () async {
                     if (_pincodeController.text.isEmpty ||
                         _emailController.text.isEmpty ||
-                        _passwordController.text.isEmpty ||
+                        _passwordController2.text.isEmpty ||
                         _state == 'N/A' ||
                         _city == 'N/A' ||
                         _state == 'Not Found' ||
@@ -384,6 +422,12 @@ class _ProfileState extends State<Profile> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                             content: Text("Please enter a valid email")),
+                      );
+                      return;
+                    } else if (_passwordController1.text !=
+                        _passwordController2.text) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Passwords do not match")),
                       );
                       return;
                     } else {

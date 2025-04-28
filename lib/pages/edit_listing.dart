@@ -6,19 +6,32 @@ import 'package:krishi_connect_app/services/api/register_api.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
-class CreateListing extends StatefulWidget {
-  const CreateListing({super.key});
+class EditListing extends StatefulWidget {
+  const EditListing({required this.listing, super.key});
+
+  final dynamic listing;
 
   @override
-  State<CreateListing> createState() => _CreateListingState();
+  State<EditListing> createState() => _EditListingState();
 }
 
-class _CreateListingState extends State<CreateListing> {
+class _EditListingState extends State<EditListing> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _requiredQuantityController =
       TextEditingController();
   final TextEditingController _maxPriceController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.listing['title'];
+    _descriptionController.text = widget.listing['description'];
+    _requiredQuantityController.text = widget.listing['requiredQuantity'].toString();
+    _maxPriceController.text = widget.listing['maxPrice'].toString();
+    _selectedCategory = widget.listing['category'];
+    _selectedUnit = widget.listing['unit'];
+  }
 
   String _selectedCategory = 'GRAINS';
   String _selectedUnit = 'KG';
@@ -52,7 +65,8 @@ class _CreateListingState extends State<CreateListing> {
     });
 
     try {
-      final response = await apiService.createBuyerRequest(
+      final response = await apiService.updateBuyerRequest(
+        requestId: widget.listing['requestId'],
         businessId: int.tryParse(SharedPrefHelper.getUserId()) ?? 0,
         title: _titleController.text,
         description: _descriptionController.text,
@@ -67,7 +81,7 @@ class _CreateListingState extends State<CreateListing> {
       if (response.containsKey('error')) {
         _showSnackBar(response['error'], isError: true);
       } else {
-        _showSnackBar("Listing created successfully!", isError: false);
+        _showSnackBar("Listing Updated Successfully!", isError: false);
         NavigationHelper.pushReplacement(context, MainScreen());
       }
     } catch (e) {

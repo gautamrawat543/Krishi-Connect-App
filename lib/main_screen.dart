@@ -3,7 +3,8 @@ import 'package:krishi_connect_app/pages/chat_screen.dart';
 import 'package:krishi_connect_app/pages/company_home.dart';
 import 'package:krishi_connect_app/pages/farmer_home.dart';
 import 'package:krishi_connect_app/pages/farmer_profile.dart';
-import 'package:krishi_connect_app/pages/search_page.dart';
+import 'package:krishi_connect_app/pages/search_page_business.dart';
+import 'package:krishi_connect_app/pages/search_page_farmer.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class MainScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
     _pages = SharedPrefHelper.getUserrole() == 'FARMER'
         ? [
             const FarmerHome(),
-            const SearchPage(),
+            const SearchPageFarmer(),
             const ChatScreen(),
             const FarmerProfile(),
           ]
@@ -58,8 +59,8 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.mail),
-            label: 'Mail',
+            icon: Icon(Icons.search),
+            label: 'Search',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.message_rounded),
