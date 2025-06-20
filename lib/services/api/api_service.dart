@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
 
-class RegisterService {
+class ApiService {
   static const String baseUrl = "https://krishi-connect-app.onrender.com";
 
   // Future<Map<String, dynamic>> registerUser({

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:krishi_connect_app/data/farmer_data.dart';
-import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class SearchPageFarmer extends StatefulWidget {
@@ -60,7 +60,7 @@ class _SearchPageFarmerState extends State<SearchPageFarmer> {
     });
   }
 
-  RegisterService service = RegisterService();
+  ApiService service = ApiService();
 
   List<dynamic> buyerListings = [];
   bool isLoadingBuyerListings = true;

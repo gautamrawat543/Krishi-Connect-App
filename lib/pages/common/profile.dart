@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:krishi_connect_app/pages/login.dart';
+import 'package:krishi_connect_app/pages/common/login.dart';
 import 'package:krishi_connect_app/main_screen.dart';
-import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -54,7 +54,7 @@ class _ProfileState extends State<Profile> {
 
     setState(() => _isLoading = true);
 
-    final locationData = await RegisterService.getLocationFromPincode(pincode);
+    final locationData = await ApiService.getLocationFromPincode(pincode);
 
     setState(() {
       _isLoading = false;
@@ -73,7 +73,7 @@ class _ProfileState extends State<Profile> {
     setState(() {
       isRegistered = true;
     });
-    RegisterService apiService = RegisterService();
+    ApiService apiService = ApiService();
 
     var response = await apiService.registerUserWithImage(
       name: widget.name,

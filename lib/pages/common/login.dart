@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:krishi_connect_app/main_screen.dart';
-import 'package:krishi_connect_app/pages/registeration.dart';
-import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/pages/common/registeration.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       isLoading = true;
     });
-    RegisterService service = RegisterService();
+    ApiService service = ApiService();
     Map<String, dynamic> response = await service.loginUser(
         phone: _numberController.text, password: _passwordController.text);
     setState(() {

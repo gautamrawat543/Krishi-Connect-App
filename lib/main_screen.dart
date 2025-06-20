@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:krishi_connect_app/pages/chat_screen.dart';
-import 'package:krishi_connect_app/pages/company_home.dart';
-import 'package:krishi_connect_app/pages/farmer_home.dart';
-import 'package:krishi_connect_app/pages/farmer_profile.dart';
-import 'package:krishi_connect_app/pages/search_page_business.dart';
-import 'package:krishi_connect_app/pages/search_page_farmer.dart';
+import 'package:krishi_connect_app/pages/common/chat_screen.dart';
+import 'package:krishi_connect_app/pages/business/company_home.dart';
+import 'package:krishi_connect_app/pages/farmer/farmer_home.dart';
+import 'package:krishi_connect_app/pages/common/farmer_profile.dart';
+import 'package:krishi_connect_app/pages/business/search_page_business.dart';
+import 'package:krishi_connect_app/pages/farmer/search_page_farmer.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class MainScreen extends StatefulWidget {
@@ -26,13 +26,13 @@ class _MainScreenState extends State<MainScreen> {
     _pages = SharedPrefHelper.getUserrole() == 'FARMER'
         ? [
             const FarmerHome(),
-            const SearchPageFarmer(), //kuch mat karna
+            const SearchPageFarmer(),
             const ChatScreen(),
             const FarmerProfile(),
           ]
         : [
             const CompanyHome(),
-            const SearchPage(), //kuch mat karna
+            const SearchPageBusiness(),
             const ChatScreen(),
             const FarmerProfile(),
           ];

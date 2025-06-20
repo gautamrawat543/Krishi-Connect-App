@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:krishi_connect_app/main_screen.dart';
-import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -38,7 +38,7 @@ class _FarmerListingState extends State<FarmerListing> {
   final List<String> units = ['KG', 'QUINTAL', 'TON', 'LITRE', 'DOZEN', 'UNIT'];
   final List<String> statusList = ['AVAILABLE', 'SOLD'];
 
-  final RegisterService apiService = RegisterService();
+  final ApiService apiService = ApiService();
 
   bool _isLoading = false;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:krishi_connect_app/pages/chat_message.dart';
-import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/pages/common/chat_message.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -12,7 +12,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  RegisterService service = RegisterService();
+  ApiService service = ApiService();
   List<dynamic> conversations = [];
   bool isLoading = false;
 

@@ -8,8 +8,8 @@ import 'package:krishi_connect_app/data/produce_data.dart';
 import 'package:krishi_connect_app/pages/buyer_listing.dart';
 import 'package:krishi_connect_app/pages/create_listing.dart';
 import 'package:krishi_connect_app/pages/edit_listing.dart';
-import 'package:krishi_connect_app/pages/search_page_business.dart';
-import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/pages/business/search_page_business.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
@@ -39,7 +39,7 @@ class _CompanyHomeState extends State<CompanyHome> {
     loadProduce();
   }
 
-  RegisterService service = RegisterService();
+  ApiService service = ApiService();
 
   Future<void> loadProduce() async {
     try {

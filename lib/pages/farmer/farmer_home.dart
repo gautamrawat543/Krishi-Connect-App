@@ -9,7 +9,7 @@ import 'package:krishi_connect_app/pages/farmer_buyer_listing.dart';
 import 'package:krishi_connect_app/pages/farmer_listing.dart';
 import 'package:krishi_connect_app/services/api/news_api.dart';
 import 'package:krishi_connect_app/data/company_listing.dart';
-import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
@@ -40,7 +40,7 @@ class _FarmerHomeState extends State<FarmerHome> {
 
   List<dynamic> buyerListings = [];
   bool isLoadingBuyerListings = true;
-  RegisterService service = RegisterService();
+  ApiService service = ApiService();
 
   Future<void> loadBuyerListings() async {
     try {

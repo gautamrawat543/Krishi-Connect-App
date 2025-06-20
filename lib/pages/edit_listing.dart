@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:krishi_connect_app/main_screen.dart';
-import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
@@ -60,7 +60,7 @@ class _EditListingState extends State<EditListing> {
 
   bool _isLoading = false;
 
-  RegisterService apiService = RegisterService();
+  ApiService apiService = ApiService();
   Future<void> _submitForm() async {
     setState(() {
       _isLoading = true;

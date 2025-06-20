@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:krishi_connect_app/data/farmer_data.dart';
-import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+class SearchPageBusiness extends StatefulWidget {
+  const SearchPageBusiness({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<SearchPageBusiness> createState() => _SearchPageBusinessState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageBusinessState extends State<SearchPageBusiness> {
   List<Map<String, dynamic>> farmers = [];
   bool isLoading = true;
 
@@ -57,7 +57,7 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
-  RegisterService service = RegisterService();
+  ApiService service = ApiService();
 
   Future<void> fetchFarmers() async {
     final token = SharedPrefHelper.getToken();

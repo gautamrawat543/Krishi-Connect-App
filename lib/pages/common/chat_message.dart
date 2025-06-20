@@ -289,7 +289,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 
@@ -310,7 +310,7 @@ class ChatMessage extends StatefulWidget {
 }
 
 class _ChatMessageState extends State<ChatMessage> {
-  RegisterService service = RegisterService();
+  ApiService service = ApiService();
   final TextEditingController _messageController = TextEditingController();
   late StompClient stompClient;
 
