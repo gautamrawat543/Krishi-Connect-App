@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:krishi_connect_app/pages/login.dart';
-import 'package:krishi_connect_app/pages/registeration.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart'; 
 
 class FarmerProfile extends StatefulWidget {
   const FarmerProfile({super.key});
@@ -18,12 +16,12 @@ class _FarmerProfileState extends State<FarmerProfile> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadFarmerProfile();
   }
 
   RegisterService apiService = RegisterService();
+
   Future<void> loadFarmerProfile() async {
     try {
       final data = await apiService.getUserProfile(
@@ -43,89 +41,65 @@ class _FarmerProfileState extends State<FarmerProfile> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'My Profile',
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
-          backgroundColor: Color.fromRGBO(107, 142, 35, 1),
+          backgroundColor: AppColors.primaryGreenDark,
         ),
         body: farmerData.isEmpty
-            ? Center(child: CircularProgressIndicator(color: Colors.green))
+            ? const Center(child: CircularProgressIndicator(color: Colors.green))
             : SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: 60,
-                    ),
+                    const SizedBox(height: 60),
                     Container(
                       height: 160,
                       width: 160,
-                      margin: EdgeInsets.only(right: 10),
+                      margin: const EdgeInsets.only(right: 10),
                       child: Image.asset(
                         'assets/app_icon.png',
                         fit: BoxFit.cover,
                       ),
                     ),
-                    SizedBox(
-                      height: 30,
-                    ),
+                    const SizedBox(height: 30),
                     buildCard(farmerData['name']),
-                    SizedBox(
-                      height: 15,
-                    ),
+                    const SizedBox(height: 15),
                     buildCard('+91 ${farmerData['phone']}'),
-                    SizedBox(
-                      height: 15,
-                    ),
+                    const SizedBox(height: 15),
                     buildCard(farmerData['email']),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    // buildCard(farmerData['role']),
-                    // SizedBox(
-                    //   height: 15,
-                    // ),
+                    const SizedBox(height: 15),
                     Align(
                       alignment: Alignment.centerRight,
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Text(
                           farmerData['location'],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromRGBO(0, 0, 0, 0.75),
-                          ),
+                          style: AppTextStyles.cardSubText,
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 15,
-                    ),
+                    const SizedBox(height: 15),
                     buildCard('Edit Password'),
-                    SizedBox(
-                      height: 40,
-                    ),
+                    const SizedBox(height: 40),
                     GestureDetector(
                       onTap: () async {
                         await SharedPrefHelper.clearAll();
-                        // Navigate to Registration Page and remove all previous routes
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                          (route) =>
-                              false, // This removes all previous screens from the stack
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                          (route) => false,
                         );
                       },
                       child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20),
-                        padding: EdgeInsets.symmetric(vertical: 15),
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromRGBO(85, 107, 47, 1),
+                          color: AppColors.primaryGreen,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -135,22 +109,17 @@ class _FarmerProfileState extends State<FarmerProfile> {
                               color: Colors.white,
                               height: 20,
                             ),
-                            Text(
+                            const SizedBox(width: 10),
+                            const Text(
                               'LogOut',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                              ),
+                              style: AppTextStyles.buttonTextStyle,
                               textAlign: TextAlign.center,
                             ),
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 40,
-                    ),
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),
@@ -160,25 +129,22 @@ class _FarmerProfileState extends State<FarmerProfile> {
 
   Widget buildCard(String text) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 18),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color.fromRGBO(228, 225, 215, 1),
+        color: AppColors.appColor,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             text,
-            style: TextStyle(
-                fontSize: 20,
-                color: Color.fromRGBO(0, 0, 0, 0.5),
-                fontWeight: FontWeight.w400),
+            style: AppTextStyles.labelStyle,
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.edit_outlined,
               color: Color.fromRGBO(0, 0, 0, 0.6),
             ),

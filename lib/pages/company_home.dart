@@ -1,17 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:krishi_connect_app/data/company_listing.dart';
-import 'package:krishi_connect_app/data/farmer_data.dart';
 import 'package:krishi_connect_app/data/produce_data.dart';
 import 'package:krishi_connect_app/pages/buyer_listing.dart';
 import 'package:krishi_connect_app/pages/create_listing.dart';
 import 'package:krishi_connect_app/pages/edit_listing.dart';
-import 'package:krishi_connect_app/pages/search_page_business.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart';
+import 'package:krishi_connect_app/utils/common_search_box.dart';
+
 
 class CompanyHome extends StatefulWidget {
   const CompanyHome({super.key});
@@ -25,8 +23,8 @@ class _CompanyHomeState extends State<CompanyHome> {
   bool isLoadingFarmers = true;
   List<dynamic> companyListings = [];
   bool isLoadingCompanyListings = true;
-
   String isSelected = 'All';
+  final RegisterService service = RegisterService();
 
   @override
   void initState() {
@@ -35,13 +33,10 @@ class _CompanyHomeState extends State<CompanyHome> {
     loadCompanyListings();
   }
 
-  RegisterService service = RegisterService();
   Future<void> loadFarmers() async {
     try {
-      final listings =
-          await service.getFarmer(token: SharedPrefHelper.getToken());
+      final listings = await service.getFarmer(token: SharedPrefHelper.getToken());
       setState(() {
-        // Ensure the UI updates after data fetch
         farmers = listings;
         isLoadingFarmers = false;
       });
@@ -56,13 +51,12 @@ class _CompanyHomeState extends State<CompanyHome> {
   Future<void> loadCompanyListings() async {
     try {
       final listing = await service.getBuyerRequestById(
-          token: SharedPrefHelper.getToken(),
-          businessId: SharedPrefHelper.getUserId());
+        token: SharedPrefHelper.getToken(),
+        businessId: SharedPrefHelper.getUserId(),
+      );
       setState(() {
-        // Ensure the UI updates after data fetch
         companyListings = listing;
         isLoadingCompanyListings = false;
-        print(companyListings);
       });
     } catch (e) {
       print(e);
@@ -74,734 +68,214 @@ class _CompanyHomeState extends State<CompanyHome> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(107, 142, 35, 1),
-        leading: Icon(
-          Icons.menu,
-          color: Colors.white,
-        ),
+        backgroundColor: AppColors.primaryGreenDark,
+        leading: const Icon(Icons.menu, color: Colors.white),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 30,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 30),
+            Text(
+              'Welcome back\n${SharedPrefHelper.getUsername().toUpperCase()}!',
+              style: AppTextStyles.welcomeHeading,
+            ),
+            const SizedBox(height: 20),
+            _searchBox(),
+            const SizedBox(height: 20),
+            _sectionHeader('Available Produce'),
+            const Divider(thickness: 2, color: AppColors.primaryGreenDark),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: height * 0.4,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: produceList.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: _availableProduceListing(width, produceList[index]),
+                  );
+                },
               ),
-              Text(
-                'Welcome back\n${SharedPrefHelper.getUsername().toUpperCase()}!',
+            ),
+            const SizedBox(height: 40),
+            _titleRow('Create a Request', Icons.add_circle_outline_rounded, () {
+              NavigationHelper.push(context, const CreateListing());
+            }),
+            const SizedBox(height: 25),
+            _sectionHeader('My Listings', showAll: true, onTap: () {
+              NavigationHelper.push(
+                context,
+                BuyerListing(companyListings: companyListings),
+              );
+            }),
+            const Divider(thickness: 2, color: AppColors.primaryGreenDark),
+            const SizedBox(height: 16),
+            _filterChips(),
+            const SizedBox(height: 15),
+            SizedBox(
+              height: height * 0.5,
+              child: isLoadingCompanyListings
+                  ? const Center(child: CircularProgressIndicator(color: Colors.green))
+                  : companyListings.isEmpty
+                      ? const Center(child: Text('No Listings Found'))
+                      : ListView.builder(
+                          itemCount: companyListings.length > 5 ? 5 : companyListings.length,
+                          itemBuilder: (context, index) => _listingCard(width, companyListings[index]),
+                        ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _sectionHeader(String title, {bool showAll = false, VoidCallback? onTap}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: AppTextStyles.pageHeading),
+        if (showAll)
+          GestureDetector(
+            onTap: onTap,
+            child: const Text('See All>', style: AppTextStyles.linkStyle),
+          ),
+      ],
+    );
+  }
+
+  Widget _titleRow(String title, IconData icon, VoidCallback onTap) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: AppTextStyles.pageHeading.copyWith(fontSize: 28)),
+        GestureDetector(
+          onTap: onTap,
+          child: Icon(icon, color: AppColors.labelColor, size: 45),
+        ),
+      ],
+    );
+  }
+
+  Widget _searchBox() {
+  return const CommonSearchBox(hintText: "Search by crop, quantity, location");
+}
+
+  Widget _filterChips() {
+    List<String> filters = ['All', 'Open', 'Closed'];
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: filters.map((filter) {
+        bool selected = isSelected == filter;
+        return GestureDetector(
+          onTap: () => setState(() => isSelected = filter),
+          child: Container(
+            width: 80,
+            height: 30,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: selected ? Colors.black.withOpacity(0.75) : Colors.black.withOpacity(0.3),
+            ),
+            child: Center(
+              child: Text(
+                filter,
                 style: TextStyle(
-                  fontSize: 30,
+                  color: selected ? Colors.white : Colors.black,
+                  fontSize: 15,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              searchBox(),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Available Produce',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Text(
-                      'See All>',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromRGBO(107, 142, 35, 1)),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Divider(thickness: 2, color: Color.fromRGBO(107, 142, 35, 1)),
-              SizedBox(
-                height: 8,
-              ),
-              //available produce listing
-              SizedBox(
-                height: height * 0.4,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: produceList.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: availableProduceListing(
-                        width,
-                        produceList[index],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Create a Request',
-                    style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                        color: Color.fromRGBO(0, 0, 0, 0.75)),
-                  ),
-                  GestureDetector(
-                    onTap: () =>
-                        NavigationHelper.push(context, CreateListing()),
-                    child: Icon(
-                      Icons.add_circle_outline_rounded,
-                      color: Color.fromRGBO(0, 0, 0, 0.75),
-                      size: 45,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'My Listings',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      NavigationHelper.push(
-                          context,
-                          BuyerListing(
-                            companyListings: companyListings,
-                          ));
-                    },
-                    child: Text(
-                      'See All>',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromRGBO(107, 142, 35, 1)),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Divider(thickness: 2, color: Color.fromRGBO(107, 142, 35, 1)),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isSelected = 'All';
-                      });
-                    },
-                    child: Container(
-                      width: 80,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: isSelected == 'All'
-                            ? Color.fromRGBO(0, 0, 0, 0.75)
-                            : Color.fromRGBO(0, 0, 0, 0.3),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'All',
-                          style: TextStyle(
-                              color: isSelected == 'All'
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isSelected = 'Open';
-                      });
-                    },
-                    child: Container(
-                      width: 80,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: isSelected == 'Open'
-                            ? Color.fromRGBO(0, 0, 0, 0.75)
-                            : Color.fromRGBO(0, 0, 0, 0.3),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Open',
-                          style: TextStyle(
-                              color: isSelected == 'Open'
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isSelected = 'Closed';
-                      });
-                    },
-                    child: Container(
-                      width: 80,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: isSelected == 'Closed'
-                            ? Color.fromRGBO(0, 0, 0, 0.75)
-                            : Color.fromRGBO(0, 0, 0, 0.3),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Closed',
-                          style: TextStyle(
-                              color: isSelected == 'Closed'
-                                  ? Colors.white
-                                  : Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              // SizedBox(
-              //   height: height * 0.2,
-              //   child: isLoadingFarmers
-              //       ? Center(
-              //           child: CircularProgressIndicator(color: Colors.green))
-              //       : farmers.isEmpty
-              //           ? Center(
-              //               child: Text('No Farmers Found'),
-              //             )
-              //           : ListView.builder(
-              //               scrollDirection: Axis.horizontal,
-              //               itemCount: farmers.length,
-              //               itemBuilder: (context, index) {
-              //                 return searchCard(farmers[index]);
-              //               }),
-              // ),
-              SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                height: height * 0.5,
-                child: isLoadingCompanyListings
-                    ? Center(
-                        child: CircularProgressIndicator(color: Colors.green))
-                    : companyListings.isEmpty
-                        ? Center(
-                            child: Text('No Listings Found'),
-                          )
-                        : ListView.builder(
-                            itemCount: companyListings.length > 5
-                                ? 5
-                                : companyListings.length,
-                            itemBuilder: (context, index) {
-                              return listingCard(
-                                width,
-                                companyListings[index],
-                              );
-                            }),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget searchCard(dynamic farmer) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.green, width: 2),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 90,
-            margin: EdgeInsets.only(right: 10),
-            child: Image.asset(
-              'assets/app_icon.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    'Name:\t',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    farmer['name'],
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    'Number:\t',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    farmer['phone'],
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    'State:\t',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    farmer['location'],
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    'Crop:\t',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    farmer['role'],
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Widget listingCard(double width, dynamic listing, BuildContext context) {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-  //     padding: EdgeInsets.all(5),
-  //     decoration: BoxDecoration(
-  //       border: Border.all(
-  //         color: Colors.green,
-  //         width: 2,
-  //       ),
-  //     ),
-  //     width: width,
-  //     child: Column(
-  //       children: [
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Column(
-  //               children: [
-  //                 Text(
-  //                   'C.Name',
-  //                   style: TextStyle(fontSize: 18),
-  //                 ),
-  //                 Text(listing['businessId'].toString(),
-  //                     style: TextStyle(fontSize: 15)),
-  //               ],
-  //             ),
-  //             Column(
-  //               children: [
-  //                 Text(
-  //                   'Product',
-  //                   style: TextStyle(fontSize: 18),
-  //                 ),
-  //                 Text(listing['category'], style: TextStyle(fontSize: 15)),
-  //               ],
-  //             ),
-  //             Column(
-  //               children: [
-  //                 Text(
-  //                   'Quantity',
-  //                   style: TextStyle(fontSize: 18),
-  //                 ),
-  //                 Text(listing['requiredQuantity'].toString(),
-  //                     style: TextStyle(fontSize: 15)),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             GestureDetector(
-  //               onTap: () => showListingDetails(context, listing),
-  //               child: Container(
-  //                   margin: EdgeInsets.all(5),
-  //                   padding: EdgeInsets.all(5),
-  //                   decoration: BoxDecoration(
-  //                       border: Border.all(color: Colors.green, width: 2),
-  //                       color: Colors.green),
-  //                   child: Text('Show Details')),
-  //             ),
-  //             Container(
-  //                 margin: EdgeInsets.all(5),
-  //                 padding: EdgeInsets.all(5),
-  //                 decoration: BoxDecoration(
-  //                     border: Border.all(color: Colors.green, width: 2),
-  //                     color: Colors.green),
-  //                 child: Text('Delete')),
-  //           ],
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  Widget listingCard(double width, dynamic listing) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 6),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Color.fromRGBO(255, 242, 242, 1),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.25),
-              blurRadius: 4,
-              offset: Offset(0, 4),
-            ),
-          ]),
-      width: width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Title: ${listing['title']}',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-          ),
-          Text(
-            'Company Name: ${listing['businessName']}',
-            style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: Color.fromRGBO(0, 0, 0, 0.75)),
-          ),
-          Text(
-            'Required Qty: ${'${listing['requiredQuantity']} ' + listing['unit']}',
-            style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: Color.fromRGBO(0, 0, 0, 0.75)),
-          ),
-          Text(
-            'Price Offered: ${listing['maxPrice'].toString()}',
-            style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: Color.fromRGBO(0, 0, 0, 0.75)),
-          ),
-          SizedBox(height: 5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                listing['location'],
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
-                    color: Color.fromRGBO(0, 0, 0, 0.75)),
-              ),
-              GestureDetector(
-                onTap: () {
-                  NavigationHelper.push(
-                      context,
-                      EditListing(
-                        listing: listing,
-                      ));
-                },
-                child: Text(
-                  'Edit>',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 13,
-                      color: Color.fromRGBO(107, 142, 35, 1)),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  void showListingDetails(BuildContext context, dynamic listing) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Request Id: #${listing["requestId"].toString()}',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  'Title: ${listing["title"]}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                ),
-                Text('Business Name: : ${listing["businessName"].toString()}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
-                  ' click for Info',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(48, 1, 255, 0.75),
-                  ),
-                ),
-                Text('Description: ${listing["description"]}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Category: ${listing["category"]}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
-                    'Required QTY: ${listing["requiredQuantity"].toString()}, ${listing["unit"]}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Price Offered: ₹ ${listing["maxPrice"].toString()}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Location:  ${listing["location"]}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 10),
-                Text('Created at:',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
-                    DateFormat("d MMMM y, h:mm a")
-                        .format(DateTime.parse(listing["createdAt"])),
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 25),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Connect with Buyer',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(107, 142, 35, 1)),
-                  ),
-                ),
-              ],
             ),
           ),
         );
-      },
+      }).toList(),
     );
   }
 
-  Widget searchBox() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Color.fromRGBO(107, 142, 35, 1), width: 1.5),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "Search by crop, quantity, location",
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          Icon(
-            Icons.search,
-            color: Colors.green,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget availableProduceListing(
-    double width,
-    ProduceItem listing,
-  ) {
+  Widget _availableProduceListing(double width, ProduceItem item) {
     return Container(
       width: width * 0.5,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.25),
-              blurRadius: 4,
-              offset: Offset(0, 4),
-            ),
-          ]),
+      decoration: cardBoxDecoration.copyWith(color: Colors.white),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
-              ),
-              child: Image.asset(
-                'assets/images/Banner.jpg',
-                fit: BoxFit.cover,
-              ),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              child: Image.asset('assets/images/Banner.jpg', fit: BoxFit.cover),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 5,
-            ),
-            child: Text(listing.name,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text(item.name, style: AppTextStyles.cardTitle),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 5,
-            ),
-            child: Text('Price: ₹ ${listing.price.toString()}',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text('Price: ₹ ${item.price}', style: AppTextStyles.cardSubText),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 5,
-            ),
-            child: Text('Available QTY: ${listing.quantity.toString()}',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text('Available QTY: ${item.quantity}', style: AppTextStyles.cardSubText),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 5,
-            ),
-            child: Text('Farmer: ${listing.farmer}',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text('Farmer: ${item.farmer}', style: AppTextStyles.cardSubText),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              left: 5,
-            ),
-            child: Text(listing.location,
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+            padding: const EdgeInsets.only(left: 5),
+            child: Text(item.location, style: AppTextStyles.cardSubText),
           ),
           Container(
             width: width,
             height: 40,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(107, 112, 92, 1),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(5),
                 bottomRight: Radius.circular(5),
               ),
-              color: Color.fromRGBO(107, 112, 92, 1),
             ),
-            child: Center(
-              child: Text(
-                'Request to Buy',
-                style: TextStyle(color: Colors.white),
+            child: const Center(
+              child: Text('Request to Buy', style: AppTextStyles.buttonTextStyle),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _listingCard(double width, dynamic listing) {
+    return Container(
+      width: width,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      decoration: cardBoxDecoration,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Title: ${listing['title']}', style: AppTextStyles.cardTitle),
+          Text('Company Name: ${listing['businessName']}', style: AppTextStyles.cardSubText),
+          Text('Required Qty: ${listing['requiredQuantity']} ${listing['unit']}', style: AppTextStyles.cardSubText),
+          Text('Price Offered: ${listing['maxPrice']}', style: AppTextStyles.cardSubText),
+          const SizedBox(height: 5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(listing['location'], style: AppTextStyles.smallLabel),
+              GestureDetector(
+                onTap: () {
+                  NavigationHelper.push(context, EditListing(listing: listing));
+                },
+                child: const Text('Edit>', style: AppTextStyles.linkStyle),
               ),
-            ),
+            ],
           )
         ],
       ),
