@@ -10,6 +10,7 @@ import 'package:krishi_connect_app/pages/farmer_listing.dart';
 import 'package:krishi_connect_app/services/api/news_api.dart';
 import 'package:krishi_connect_app/data/company_listing.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -106,7 +107,7 @@ class _FarmerHomeState extends State<FarmerHome> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(107, 142, 35, 1),
+          backgroundColor: AppColors.primaryGreenDark,
           leading: Icon(
             Icons.menu,
             color: Colors.white,
@@ -145,52 +146,22 @@ class _FarmerHomeState extends State<FarmerHome> {
                         ),
                         Text(
                           'Welcome back\n${SharedPrefHelper.getUsername().toUpperCase()}!',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: AppTextStyles.welcomeHeading,
                         ),
                         SizedBox(
                           height: 20,
                         ),
-                        searchBox(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Buyer Listings',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                NavigationHelper.push(
-                                    context,
-                                    FarmerBuyerListing(
-                                      listing: companyListings,
-                                    ));
-                              },
-                              child: Text(
-                                'See All>',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color.fromRGBO(107, 142, 35, 1)),
-                              ),
-                            ),
-                          ],
-                        ),
+                        sectionHeader('Buyer Listings', onTap: () {
+                          NavigationHelper.push(
+                            context,
+                            FarmerBuyerListing(listing: companyListings),
+                          );
+                        }),
                         SizedBox(
                           height: 6,
                         ),
                         Divider(
-                            thickness: 2,
-                            color: Color.fromRGBO(107, 142, 35, 1)),
+                            thickness: 2, color: AppColors.primaryGreenDark),
                         SizedBox(
                           height: 8,
                         ),
@@ -206,8 +177,8 @@ class _FarmerHomeState extends State<FarmerHome> {
                               : companyListings.isEmpty
                                   ? Center(
                                       child: Text(
-                                          'No buyer listings available right now.'),
-                                    )
+                                          'No buyer listings available right now.',
+                                          style: AppTextStyles.noDataText))
                                   : ListView.builder(
                                       itemCount: companyListings.length > 5
                                           ? 5
@@ -221,37 +192,18 @@ class _FarmerHomeState extends State<FarmerHome> {
                         SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Explore more about Farming ',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            // Text(
-                            //   'See All>',
-                            //   style: TextStyle(
-                            //       fontSize: 12,
-                            //       fontWeight: FontWeight.w400,
-                            //       color: Color.fromRGBO(107, 142, 35, 1)),
-                            // ),
-                          ],
-                        ),
+                        sectionHeader('Explore more about Farming'),
                         SizedBox(
                           height: 6,
                         ),
                         Divider(
-                            thickness: 2,
-                            color: Color.fromRGBO(107, 142, 35, 1)),
+                            thickness: 2, color: AppColors.primaryGreenDark),
                         SizedBox(
                           height: 8,
                         ),
                         newsCard(height, width),
                         SizedBox(
-                          height: 40,
+                          height: 20,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -353,137 +305,78 @@ class _FarmerHomeState extends State<FarmerHome> {
       height: height * 0.3,
       width: width,
       child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: newsArticles.length,
-          itemBuilder: (context, index) {
-            final article = newsArticles[index];
-            return GestureDetector(
-              onTap: () {
-                // Open the article URL
-                launchURL(article['url']);
-              },
-              child: Container(
-                width: width * 0.8,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                margin: const EdgeInsets.only(right: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (article['urlToImage'] != null)
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                        child: Image.network(
-                          article['urlToImage'] ?? '',
+        scrollDirection: Axis.horizontal,
+        itemCount: newsArticles.length,
+        itemBuilder: (context, index) {
+          final article = newsArticles[index];
+          return GestureDetector(
+            onTap: () => launchURL(article['url']),
+            child: Container(
+              width: width * 0.8,
+              margin: const EdgeInsets.only(right: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (article['urlToImage'] != null)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        article['urlToImage'],
+                        height: height * 0.2,
+                        width: width,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
                           height: height * 0.2,
                           width: width,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              height: height * 0.2,
-                              width: width,
-                              color: Colors.grey[300], // Placeholder background
-                              child: Icon(Icons.broken_image,
-                                  color: Colors.grey[600]), // Error icon
-                            );
-                          },
+                          color: Colors.grey[300],
+                          child:
+                              Icon(Icons.broken_image, color: Colors.grey[600]),
                         ),
                       ),
-                    SizedBox(height: 10),
-                    Text(
-                      article['title'] ?? '',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
                     ),
-                    Text(
-                      article['description'] ?? '',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromRGBO(0, 0, 0, 0.5)),
+                  const SizedBox(height: 10),
+                  Text(article['title'] ?? '',
+                      style: AppTextStyles.cardTitle,
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+                      overflow: TextOverflow.ellipsis),
+                  Text(article['description'] ?? '',
+                      style: AppTextStyles.cardSubText,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis),
+                ],
               ),
-            );
-          }),
+            ),
+          );
+        },
+      ),
     );
   }
 
   Widget listingCard(double width, dynamic listing) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 6),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Color.fromRGBO(255, 242, 242, 1),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.25),
-              blurRadius: 4,
-              offset: Offset(0, 4),
-            ),
-          ]),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      decoration: cardBoxDecoration,
       width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Title: ${listing['title']}', style: AppTextStyles.cardTitle),
+          Text('Company Name: ${listing['businessName']}',
+              style: AppTextStyles.cardSubText),
           Text(
-            'Title: ${listing['title']}',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-          ),
-          Text(
-            'Company Name: ${listing['businessName']}',
-            style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: Color.fromRGBO(0, 0, 0, 0.75)),
-          ),
-          Text(
-            'Required Qty: ${'${listing['requiredQuantity']} ' + listing['unit']}',
-            style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: Color.fromRGBO(0, 0, 0, 0.75)),
-          ),
-          Text(
-            'Price Offered: ${listing['maxPrice'].toString()}',
-            style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: Color.fromRGBO(0, 0, 0, 0.75)),
-          ),
-          SizedBox(height: 5),
+              'Required Qty: ${listing['requiredQuantity']} ${listing['unit']}',
+              style: AppTextStyles.cardSubText),
+          Text('Price Offered: ${listing['maxPrice']}',
+              style: AppTextStyles.cardSubText),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                listing['location'],
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
-                    color: Color.fromRGBO(0, 0, 0, 0.75)),
-              ),
+              Text(listing['location'], style: AppTextStyles.smallLabel),
               GestureDetector(
-                onTap: () {
-                  showListingDetails(context, listing);
-                },
-                child: Text(
-                  'About>',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 13,
-                      color: Color.fromRGBO(107, 142, 35, 1)),
-                ),
+                onTap: () => showListingDetails(context, listing),
+                child: const Text('About>', style: AppTextStyles.linkStyle),
               ),
             ],
           ),
@@ -492,108 +385,71 @@ class _FarmerHomeState extends State<FarmerHome> {
     );
   }
 
+  Widget sectionHeader(String title, {VoidCallback? onTap}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: AppTextStyles.pageHeading),
+        if (onTap != null)
+          GestureDetector(
+            onTap: onTap,
+            child: const Text('See All>', style: AppTextStyles.linkStyle),
+          ),
+      ],
+    );
+  }
+
   void showListingDetails(BuildContext context, dynamic listing) {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (context) => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Request Id: #${listing["requestId"]}',
+                  style: AppTextStyles.cardSubText),
+              Text('Title: ${listing["title"]}',
+                  style: AppTextStyles.modalTitle),
+              Text('Business Name: ${listing["businessName"]}',
+                  style: AppTextStyles.modalLabel),
+              const Text(' click for Info', style: AppTextStyles.modalInfoLink),
+              Text('Description: ${listing["description"]}',
+                  style: AppTextStyles.modalLabel),
+              Text('Category: ${listing["category"]}',
+                  style: AppTextStyles.modalLabel),
+              Text(
+                  'Required QTY: ${listing["requiredQuantity"]}, ${listing["unit"]}',
+                  style: AppTextStyles.modalLabel),
+              Text('Price Offered: ₹ ${listing["maxPrice"]}',
+                  style: AppTextStyles.modalLabel),
+              Text('Location:  ${listing["location"]}',
+                  style: AppTextStyles.modalLabel),
+              const SizedBox(height: 10),
+              const Text('Created at:', style: AppTextStyles.modalLabel),
+              Text(
+                  DateFormat("d MMMM y, h:mm a")
+                      .format(DateTime.parse(listing["createdAt"])),
+                  style: AppTextStyles.modalLabel),
+              const SizedBox(height: 25),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryGreenDark),
+                  child: const Text('Connect with Buyer',
+                      style: AppTextStyles.buttonTextStyle),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      builder: (context) {
-        return Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Request Id: #${listing["requestId"].toString()}',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  'Title: ${listing["title"]}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                ),
-                Text('Business Name: : ${listing["businessName"].toString()}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
-                  ' click for Info',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(48, 1, 255, 0.75),
-                  ),
-                ),
-                Text('Description: ${listing["description"]}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Category: ${listing["category"]}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
-                    'Required QTY: ${listing["requiredQuantity"].toString()}, ${listing["unit"]}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Price Offered: ₹ ${listing["maxPrice"].toString()}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Location:  ${listing["location"]}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 10),
-                Text('Created at:',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
-                    DateFormat("d MMMM y, h:mm a")
-                        .format(DateTime.parse(listing["createdAt"])),
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 25),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await service.startConversation(
-                          senderId: int.parse(SharedPrefHelper.getUserId()),
-                          receiverId: listing['businessId'],
-                          buyerRequestId: listing['requestId'],
-                          token: SharedPrefHelper.getToken());
-                    },
-                    child: Text(
-                      'Connect with Buyer',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(107, 142, 35, 1)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -693,33 +549,6 @@ class _FarmerHomeState extends State<FarmerHome> {
           ),
         );
       },
-    );
-  }
-
-  Widget searchBox() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Color.fromRGBO(107, 142, 35, 1), width: 1.5),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "What are you growing today?",
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          Icon(
-            Icons.search,
-            color: Colors.green,
-          ),
-        ],
-      ),
     );
   }
 

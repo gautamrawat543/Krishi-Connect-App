@@ -54,7 +54,7 @@ class _RegisterationState extends State<Registeration> {
           child: Column(
             children: [
               SizedBox(
-                height: 110,
+                height: 60,
               ),
               Image.asset(
                 'assets/images/krishi_icon.png',
@@ -76,36 +76,9 @@ class _RegisterationState extends State<Registeration> {
                   height: 70,
                   child: TextFormField(
                     controller: _nameController,
-                    cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                    cursorColor: AppColors.labelColor,
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      labelText: 'Full Name',
-                      labelStyle: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 0.5),
-                        fontSize: 20,
-                      ),
-                      floatingLabelStyle: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 0.5),
-                        fontSize: 20,
-                      ),
-                      focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                    ),
+                    decoration: customInputDecoration('Full Name'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter a name";
@@ -134,33 +107,9 @@ class _RegisterationState extends State<Registeration> {
                   child: TextFormField(
                     controller: _numberController,
                     keyboardType: TextInputType.number,
-                    cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                    cursorColor: AppColors.labelColor,
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      labelText: 'Phone Number',
-                      labelStyle: TextStyle(
-                          color: Color.fromRGBO(0, 0, 0, 0.5), fontSize: 20),
-                      floatingLabelStyle: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 0.5),
-                      ),
-                      focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                    ),
+                    decoration: customInputDecoration('Phone Number'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter a number";
@@ -180,13 +129,8 @@ class _RegisterationState extends State<Registeration> {
                 padding: const EdgeInsets.only(left: 10),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Register as:',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color.fromRGBO(0, 0, 0, 0.5),
-                    ),
-                  ),
+                  child: Text('Register as:',
+                      style: AppTextStyles.bottomText.copyWith(fontSize: 16)),
                 ),
               ),
               SizedBox(
@@ -195,58 +139,8 @@ class _RegisterationState extends State<Registeration> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedRole = 'Farmer';
-                      });
-                    },
-                    child: Container(
-                      height: height * 0.05,
-                      width: width * 0.38,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: _selectedRole == 'Farmer'
-                            ? Color.fromRGBO(107, 142, 35, 1)
-                            : Color.fromRGBO(139, 69, 19, 1),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'FARMER',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedRole = 'Business';
-                      });
-                    },
-                    child: Container(
-                      height: height * 0.05,
-                      width: width * 0.38,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: _selectedRole == 'Business'
-                            ? Color.fromRGBO(107, 142, 35, 1)
-                            : Color.fromRGBO(139, 69, 19, 1),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'BUSINESS',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  _roleButton(context, width, height, 'Farmer'),
+                  _roleButton(context, width, height, 'Business'),
                 ],
               ),
               SizedBox(
@@ -260,7 +154,7 @@ class _RegisterationState extends State<Registeration> {
                   width: width * 0.9,
                   height: height * 0.055,
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(85, 107, 47, 1),
+                    color: AppColors.primaryGreen,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -271,28 +165,38 @@ class _RegisterationState extends State<Registeration> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
-              Text(
-                'Already have an account? ',
-                style: TextStyle(
-                  color: Color.fromRGBO(0, 0, 0, 0.5),
-                  fontSize: 18,
-                ),
-              ),
+              SizedBox(height: 40),
+              Text('Already have an account? ',
+                  style: AppTextStyles.bottomText),
               GestureDetector(
                 onTap: () {
                   NavigationHelper.push(context, LoginPage());
                 },
-                child: Text(
-                  'Login Here',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                  ),
-                ),
+                child: Text('Login Here', style: AppTextStyles.linkText),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _roleButton(
+      BuildContext context, double width, double height, String role) {
+    final isSelected = _selectedRole == role;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedRole = role),
+      child: Container(
+        height: height * 0.05,
+        width: width * 0.38,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: isSelected ? AppColors.primaryGreen : AppColors.red,
+        ),
+        child: Center(
+          child: Text(
+            role.toUpperCase(),
+            style: const TextStyle(color: Colors.white, fontSize: 16),
           ),
         ),
       ),

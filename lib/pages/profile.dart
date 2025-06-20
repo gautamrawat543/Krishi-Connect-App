@@ -83,7 +83,6 @@ class _ProfileState extends State<Profile> {
       role: widget.role,
       location: _city,
       profilePicFile: _selectedImage,
-      // profilePicture: "https://example.com/profile.jpg",
     );
 
     if (response.containsKey("error")) {
@@ -158,30 +157,18 @@ class _ProfileState extends State<Profile> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
                 Image.asset(
                   'assets/images/krishi_icon.png',
                   width: width * 0.26,
                 ),
-                Text(
-                  'KrishiConnect',
-                  style: TextStyle(
-                    color: Color.fromRGBO(29, 145, 67, 1),
-                    fontSize: 36,
-                  ),
-                ),
+                Text('KrishiConnect', style: AppTextStyles.krishiHeading),
                 SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
-                Text(
-                  'Complete Profile as ${widget.role}',
-                  style: TextStyle(
-                    color: Color.fromRGBO(29, 145, 67, 1),
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                Text('Complete Profile as ${widget.role}',
+                    style: AppTextStyles.subHeadingStyle),
                 SizedBox(
                   height: 30,
                 ),
@@ -214,24 +201,16 @@ class _ProfileState extends State<Profile> {
                   padding: const EdgeInsets.only(left: 12),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Name: ${widget.name}',
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
+                    child: Text('Name: ${widget.name}',
+                        style: AppTextStyles.infoTextStyle),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 12),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Phone Num: ${widget.number}',
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                    ),
+                    child: Text('Phone Num: ${widget.number}',
+                        style: AppTextStyles.infoTextStyle),
                   ),
                 ),
                 SizedBox(
@@ -243,52 +222,18 @@ class _ProfileState extends State<Profile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: width * 0.52,
-                        height: height * 0.055,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          controller: _pincodeController,
-                          cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
-                          onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                          decoration: const InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2),
-                            ),
-                            labelText: 'Pin code',
-                            labelStyle: TextStyle(
-                                color: Color.fromRGBO(0, 0, 0, 0.5),
-                                fontSize: 18),
-                            floatingLabelStyle:
-                                TextStyle(color: Color.fromRGBO(0, 0, 0, 0.5)),
-                            focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                          ),
-                        ),
-                      ),
+                          width: width * 0.52,
+                          height: height * 0.055,
+                          child: _buildTextField(_pincodeController, 'Pin code',
+                              TextInputType.number)),
                       GestureDetector(
                         onTap: _fetchLocationDetails,
                         child: Container(
-                          height: height * 0.055,
+                          height: 50,
                           width: width * 0.3,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: Color.fromRGBO(107, 142, 35, 1),
+                            color: AppColors.primaryGreenDark,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: _isLoading
@@ -309,20 +254,10 @@ class _ProfileState extends State<Profile> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'State: $_state',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Expanded(
-                        child: Text(
-                          ' City: $_city',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ],
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('State: $_state \nCity: $_city',
+                        style: AppTextStyles.infoTextStyle),
                   ),
                 ),
                 SizedBox(
@@ -331,35 +266,8 @@ class _ProfileState extends State<Profile> {
                 SizedBox(
                   width: width * 0.92,
                   height: 50,
-                  child: TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    controller: _emailController,
-                    cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
-                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      labelText: 'Email',
-                      labelStyle: TextStyle(
-                          color: Color.fromRGBO(0, 0, 0, 0.5), fontSize: 18),
-                      floatingLabelStyle: TextStyle(
-                        color: Color.fromRGBO(0, 0, 0, 0.5),
-                      ),
-                      focusColor: Colors.green,
-                    ),
-                  ),
+                  child: _buildTextField(
+                      _emailController, 'Email', TextInputType.emailAddress),
                 ),
                 SizedBox(
                   height: 15,
@@ -367,35 +275,9 @@ class _ProfileState extends State<Profile> {
                 SizedBox(
                   width: width * 0.9,
                   height: 50,
-                  child: TextFormField(
-                    keyboardType: TextInputType.visiblePassword,
-                    controller: _passwordController1,
-                    cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
-                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      labelText: 'Password',
-                      labelStyle: TextStyle(
-                          color: Color.fromRGBO(0, 0, 0, 0.5), fontSize: 18),
-                      floatingLabelStyle:
-                          TextStyle(color: Color.fromRGBO(0, 0, 0, 0.5)),
-                      focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                      suffixIcon: Icon(Icons.remove_red_eye_outlined),
-                    ),
-                  ),
+                  child: _buildTextField(_passwordController1, 'Password',
+                      TextInputType.visiblePassword,
+                      obscure: true),
                 ),
                 SizedBox(
                   height: 15,
@@ -403,87 +285,30 @@ class _ProfileState extends State<Profile> {
                 SizedBox(
                   width: width * 0.9,
                   height: 50,
-                  child: TextFormField(
-                    controller: _passwordController2,
-                    obscureText: _isPasswordHidden,
-                    keyboardType: TextInputType.visiblePassword,
-                    cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
-                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white, width: 2),
-                      ),
-                      labelText: 'Confirm Password',
-                      labelStyle: TextStyle(
-                          color: Color.fromRGBO(0, 0, 0, 0.5), fontSize: 18),
-                      floatingLabelStyle:
-                          TextStyle(color: Color.fromRGBO(0, 0, 0, 0.5)),
-                      focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                      suffixIcon: IconButton(
+                  child: _buildTextField(_passwordController2,
+                      'Confirm Password', TextInputType.visiblePassword,
+                      obscure: _isPasswordHidden,
+                      suffix: IconButton(
                         icon: Icon(
                           _isPasswordHidden
                               ? Icons.remove_red_eye_outlined
                               : Icons.visibility_off_outlined,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _isPasswordHidden = !_isPasswordHidden;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
+                        onPressed: () => setState(
+                            () => _isPasswordHidden = !_isPasswordHidden),
+                      )),
                 ),
                 SizedBox(
                   height: 30,
                 ),
                 GestureDetector(
-                  onTap: () async {
-                    if (_pincodeController.text.isEmpty ||
-                        _emailController.text.isEmpty ||
-                        _passwordController2.text.isEmpty ||
-                        _state == 'N/A' ||
-                        _city == 'N/A' ||
-                        _state == 'Not Found' ||
-                        _city == 'Not Found') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text(
-                                "Please fill in all details before proceeding")),
-                      );
-                    } else if (!isValidEmail(_emailController.text)) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text("Please enter a valid email")),
-                      );
-                      return;
-                    } else if (_passwordController1.text !=
-                        _passwordController2.text) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Passwords do not match")),
-                      );
-                      return;
-                    } else {
-                      registerNewUser();
-                    }
-                  },
+                  onTap: _validateAndRegister,
                   child: Container(
                     alignment: Alignment.center,
                     height: 50,
                     width: width * 0.9,
                     decoration: BoxDecoration(
-                      color: Color.fromRGBO(85, 107, 47, 1),
+                      color: AppColors.primaryGreen,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: isRegistered
@@ -510,13 +335,13 @@ class _ProfileState extends State<Profile> {
                         Icon(
                           Icons.arrow_back_ios_new_rounded,
                           size: 18,
-                          color: Color.fromRGBO(0, 0, 0, 0.5),
+                          color: Colors.black45,
                         ),
                         Text(
                           'Go Back',
                           style: TextStyle(
-                            color: Color.fromRGBO(0, 0, 0, 0.5),
-                            fontSize: 20,
+                            color: Colors.black45,
+                            fontSize: 18,
                           ),
                         )
                       ],
@@ -529,5 +354,49 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+  }
+
+  Widget _buildTextField(
+      TextEditingController controller, String label, TextInputType type,
+      {bool obscure = false, Widget? suffix}) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: type,
+      obscureText: obscure,
+      cursorColor: Colors.black45,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.black45, fontSize: 18),
+        filled: true,
+        fillColor: Colors.white,
+        suffixIcon: suffix,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        focusedBorder:
+            OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        enabledBorder:
+            OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+  }
+
+  void _validateAndRegister() {
+    if (_pincodeController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController2.text.isEmpty ||
+        _state == 'N/A' ||
+        _city == 'N/A' ||
+        _state == 'Not Found' ||
+        _city == 'Not Found') {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Please fill in all details before proceeding")));
+    } else if (!isValidEmail(_emailController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please enter a valid email")));
+    } else if (_passwordController1.text != _passwordController2.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Passwords do not match")));
+    } else {
+      registerNewUser();
+    }
   }
 }

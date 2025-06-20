@@ -97,36 +97,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: TextFormField(
                   controller: _numberController,
                   keyboardType: TextInputType.number,
-                  cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                  cursorColor: AppColors.labelColor,
                   onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                  decoration: const InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    labelText: 'Phone Number',
-                    labelStyle: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 0.5),
-                      fontSize: 20,
-                    ),
-                    floatingLabelStyle: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 0.5),
-                      fontSize: 20,
-                    ),
-                    focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                  ),
+                  decoration: customInputDecoration("Phone Number"),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter a number";
@@ -142,7 +115,6 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 10,
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -153,34 +125,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: TextFormField(
                   controller: _passwordController,
                   obscureText: _isPasswordHidden,
-                  cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                  cursorColor: AppColors.labelColor,
                   onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    labelText: 'Password',
-                    labelStyle: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 0.5),
-                      fontSize: 20,
-                    ),
-                    floatingLabelStyle: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 0.5),
-                    ),
-                    focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  decoration: customInputDecoration(
+                    "Password",
                     suffixIcon: IconButton(
                       icon: Icon(
                         _isPasswordHidden
@@ -196,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter a name";
+                      return "Please enter a password";
                     }
                     return null;
                   },
@@ -209,11 +157,10 @@ class _LoginPageState extends State<LoginPage> {
             GestureDetector(
               onTap: () => isLoading ? null : _submitForm(),
               child: Container(
-                // margin: const EdgeInsets.symmetric(vertical: 10),
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 width: width * 0.9,
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(85, 107, 47, 1),
+                  color: AppColors.primaryGreen,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: isLoading
@@ -224,60 +171,19 @@ class _LoginPageState extends State<LoginPage> {
                       )
                     : const Text(
                         'Login',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: AppTextStyles.buttonTextStyle,
                         textAlign: TextAlign.center,
                       ),
               ),
             ),
             SizedBox(height: 50),
-            Text(
-              'Don\'t have an account? ',
-              style: TextStyle(
-                color: Color.fromRGBO(0, 0, 0, 0.5),
-                fontSize: 18,
-              ),
-            ),
+            Text('Don\'t have an account? ', style: AppTextStyles.bottomText),
             GestureDetector(
               onTap: () {
                 NavigationHelper.push(context, Registeration());
               },
-              child: Text(
-                'SignUp Here',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                ),
-              ),
+              child: Text('SignUp Here', style: AppTextStyles.linkText),
             ),
-            // GestureDetector(
-            //   onTap: () {
-            //     NavigationHelper.push(context, Registeration());
-            //   },
-            //   child: Text.rich(
-            //     TextSpan(
-            //       text: 'Don\'t have an account? ',
-            //       style: TextStyle(
-            //         color: Color.fromRGBO(0, 0, 0, 0.5),
-            //         fontSize: 16,
-            //       ),
-            //       children: [
-            //         TextSpan(
-            //           text: 'Register Here',
-            //           style: TextStyle(
-            //             color: Colors.green,
-            //             fontWeight: FontWeight.bold,
-            //             fontSize: 16,
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:krishi_connect_app/main_screen.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -27,7 +28,8 @@ class _EditListingState extends State<EditListing> {
     super.initState();
     _titleController.text = widget.listing['title'];
     _descriptionController.text = widget.listing['description'];
-    _requiredQuantityController.text = widget.listing['requiredQuantity'].toString();
+    _requiredQuantityController.text =
+        widget.listing['requiredQuantity'].toString();
     _maxPriceController.text = widget.listing['maxPrice'].toString();
     _selectedCategory = widget.listing['category'];
     _selectedUnit = widget.listing['unit'];
@@ -107,7 +109,7 @@ class _EditListingState extends State<EditListing> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(107, 142, 35, 1),
+        backgroundColor: AppColors.primaryGreenDark,
         automaticallyImplyLeading: false,
       ),
       body: Padding(
@@ -116,49 +118,18 @@ class _EditListingState extends State<EditListing> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Bulk Purchase Request',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              const Text('Edit Purchase Request',
+                  style: AppTextStyles.pageHeading),
               SizedBox(height: 20),
-              Text(
-                'Title',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(0, 0, 0, 0.3)),
-              ),
-              SizedBox(height: 4),
-              buildTextField('eg: Bulk Purchase of Tomatoes', _titleController,
+              _buildLabel('Title'),
+              _buildTextField('eg: Bulk Purchase of Tomatoes', _titleController,
                   TextInputType.text),
-              SizedBox(height: 8),
-              Text(
-                'Description',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(0, 0, 0, 0.3)),
-              ),
-              SizedBox(height: 4),
-              buildTextField('eg: Looking for high quality tomatoes in bulk',
+              _buildLabel('Description'),
+              _buildTextField('eg: Looking for high quality tomatoes in bulk',
                   _descriptionController, TextInputType.text),
-              SizedBox(height: 8),
-              Text(
-                'Category',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(0, 0, 0, 0.3)),
-              ),
-              SizedBox(height: 4),
-              buildDropdownField('Category', categories, _selectedCategory,
-                  (value) {
-                setState(() {
-                  _selectedCategory = value!;
-                });
+              _buildLabel('Category'),
+              _buildDropdownField(categories, _selectedCategory, (value) {
+                setState(() => _selectedCategory = value!);
               }),
               SizedBox(height: 8),
               Row(children: [
@@ -166,15 +137,8 @@ class _EditListingState extends State<EditListing> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Required Quantity',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromRGBO(0, 0, 0, 0.3)),
-                        ),
-                        SizedBox(height: 4),
-                        buildTextField('eg: 500', _requiredQuantityController,
+                        _buildLabel('Required Quantity'),
+                        _buildTextField('eg: 500', _requiredQuantityController,
                             TextInputType.number),
                       ]),
                 ),
@@ -183,43 +147,25 @@ class _EditListingState extends State<EditListing> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Unit',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromRGBO(0, 0, 0, 0.3)),
-                        ),
-                        SizedBox(height: 4),
-                        buildDropdownField('Unit', units, _selectedUnit,
-                            (value) {
-                          setState(() {
-                            _selectedUnit = value!;
-                          });
+                        _buildLabel('Unit'),
+                        _buildDropdownField(units, _selectedUnit, (value) {
+                          setState(() => _selectedUnit = value!);
                         }),
                       ]),
                 ),
               ]),
               SizedBox(height: 8),
-              Text(
-                'Max Price',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(0, 0, 0, 0.3)),
-              ),
-              SizedBox(height: 4),
-              buildTextField(
+              _buildLabel('Max Price'),
+              _buildTextField(
                   'eg: 1600', _maxPriceController, TextInputType.number),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () => _submitForm(),
                 child: Container(
-                  // margin: const EdgeInsets.symmetric(vertical: 10),
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   width: width * 0.9,
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(85, 107, 47, 1),
+                    color: AppColors.primaryGreen,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: _isLoading
@@ -229,12 +175,8 @@ class _EditListingState extends State<EditListing> {
                           ),
                         )
                       : const Text(
-                          'Create Listing',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                          'Update Listing',
+                          style: AppTextStyles.buttonTextStyle,
                           textAlign: TextAlign.center,
                         ),
                 ),
@@ -246,39 +188,38 @@ class _EditListingState extends State<EditListing> {
     );
   }
 
-  Widget buildTextField(String label, TextEditingController controller,
+  Widget _buildTextField(String label, TextEditingController controller,
       TextInputType keyboardType) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: TextStyle(fontSize: 14),
-          border: const OutlineInputBorder(),
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-        ),
+        decoration: customInputDecoration(label),
       ),
     );
   }
 
-  Widget buildDropdownField(String label, List<String> items,
-      String selectedValue, ValueChanged<String?> onChanged) {
+  Widget _buildDropdownField(List<String> items, String selectedValue,
+      ValueChanged<String?> onChanged) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: DropdownButtonFormField<String>(
         value: selectedValue,
         isExpanded: true,
-        decoration: InputDecoration(
-          labelText: label,
-          border: const OutlineInputBorder(),
-        ),
+        decoration: customInputDecoration(''),
         items: items
             .map((item) => DropdownMenuItem(value: item, child: Text(item)))
             .toList(),
         onChanged: onChanged,
       ),
+    );
+  }
+
+  Widget _buildLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4.0),
+      child: Text(text, style: AppTextStyles.labelStyle),
     );
   }
 }

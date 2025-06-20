@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:krishi_connect_app/pages/login.dart';
 import 'package:krishi_connect_app/pages/registeration.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class FarmerProfile extends StatefulWidget {
@@ -48,7 +49,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
-          backgroundColor: Color.fromRGBO(107, 142, 35, 1),
+          backgroundColor: AppColors.primaryGreenDark,
         ),
         body: farmerData.isEmpty
             ? Center(child: CircularProgressIndicator(color: Colors.green))
@@ -83,21 +84,13 @@ class _FarmerProfileState extends State<FarmerProfile> {
                     SizedBox(
                       height: 15,
                     ),
-                    // buildCard(farmerData['role']),
-                    // SizedBox(
-                    //   height: 15,
-                    // ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Text(
                           farmerData['location'],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromRGBO(0, 0, 0, 0.75),
-                          ),
+                          style: AppTextStyles.cardSubText,
                         ),
                       ),
                     ),
@@ -125,7 +118,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromRGBO(85, 107, 47, 1),
+                          color: AppColors.primaryGreen,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -137,11 +130,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                             ),
                             Text(
                               'LogOut',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
-                              ),
+                              style: AppTextStyles.buttonTextStyle,
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -160,25 +149,22 @@ class _FarmerProfileState extends State<FarmerProfile> {
 
   Widget buildCard(String text) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 18),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Color.fromRGBO(228, 225, 215, 1),
+        color: AppColors.appColor,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             text,
-            style: TextStyle(
-                fontSize: 20,
-                color: Color.fromRGBO(0, 0, 0, 0.5),
-                fontWeight: FontWeight.w400),
+            style: AppTextStyles.labelStyle,
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.edit_outlined,
               color: Color.fromRGBO(0, 0, 0, 0.6),
             ),

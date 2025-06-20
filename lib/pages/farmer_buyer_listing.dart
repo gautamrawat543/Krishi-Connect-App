@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart';
 
 class FarmerBuyerListing extends StatefulWidget {
   FarmerBuyerListing({super.key, required this.listing});
@@ -19,7 +20,7 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(107, 142, 35, 1),
+        backgroundColor: AppColors.primaryGreenDark,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: Icon(Icons.arrow_back_ios_new_rounded),
@@ -31,33 +32,10 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Buyer Listings',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              SizedBox(
-                height: 6,
-              ),
-              Divider(thickness: 2, color: Color.fromRGBO(107, 142, 35, 1)),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(child: searchBox()),
-                  Icon(
-                    Icons.filter_list_alt,
-                    color: Color.fromRGBO(107, 142, 35, 1),
-                  )
-                ],
-              ),
+              const SizedBox(height: 20),
+              const Text('Buyer Listings', style: AppTextStyles.pageHeading),
+              const SizedBox(height: 6),
+              const Divider(thickness: 2, color: AppColors.primaryGreenDark),
               SizedBox(
                 height: 20,
               ),
@@ -77,98 +55,31 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
     );
   }
 
-  Widget searchBox() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Color.fromRGBO(107, 142, 35, 1), width: 1.5),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: "What are you growing today?",
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          Icon(
-            Icons.search,
-            color: Colors.green,
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget listingCard(double width, dynamic listing) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 6),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Color.fromRGBO(255, 242, 242, 1),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.25),
-              blurRadius: 4,
-              offset: Offset(0, 4),
-            ),
-          ]),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(12),
+      decoration: cardBoxDecoration,
       width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Title: ${listing['title']}', style: AppTextStyles.cardTitle),
+          Text('Company Name: ${listing['businessName']}',
+              style: AppTextStyles.cardSubText),
           Text(
-            'Title: ${listing['title']}',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-          ),
-          Text(
-            'Company Name: ${listing['businessName']}',
-            style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: Color.fromRGBO(0, 0, 0, 0.75)),
-          ),
-          Text(
-            'Required Qty: ${'${listing['requiredQuantity']} ' + listing['unit']}',
-            style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: Color.fromRGBO(0, 0, 0, 0.75)),
-          ),
-          Text(
-            'Price Offered: ${listing['maxPrice'].toString()}',
-            style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                color: Color.fromRGBO(0, 0, 0, 0.75)),
-          ),
-          SizedBox(height: 5),
+              'Required Qty: ${listing['requiredQuantity']} ${listing['unit']}',
+              style: AppTextStyles.cardSubText),
+          Text('Price Offered: ₹ ${listing['maxPrice']}',
+              style: AppTextStyles.cardSubText),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                listing['location'],
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
-                    color: Color.fromRGBO(0, 0, 0, 0.75)),
-              ),
+              Text(listing['location'], style: AppTextStyles.smallLabel),
               GestureDetector(
-                onTap: () {
-                  showListingDetails(context, listing);
-                },
-                child: Text(
-                  'About>',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 13,
-                      color: Color.fromRGBO(107, 142, 35, 1)),
-                ),
+                onTap: () => showListingDetails(context, listing),
+                child: const Text('About>', style: AppTextStyles.linkStyle),
               ),
             ],
           ),
@@ -180,93 +91,54 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
   void showListingDetails(BuildContext context, dynamic listing) {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
         return Container(
           width: double.infinity,
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
+          padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text('Request Id: #${listing["requestId"]}',
+                    style: AppTextStyles.modalLabel),
+                Text('Title: ${listing["title"]}',
+                    style: AppTextStyles.modalTitle),
+                Text('Business Name: ${listing["businessName"]}',
+                    style: AppTextStyles.modalLabel),
+                const Text(' click for Info',
+                    style: AppTextStyles.modalInfoLink),
+                Text('Description: ${listing["description"]}',
+                    style: AppTextStyles.modalLabel),
+                Text('Category: ${listing["category"]}',
+                    style: AppTextStyles.modalLabel),
                 Text(
-                  'Request Id: #${listing["requestId"].toString()}',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  'Title: ${listing["title"].toString()}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                ),
-                Text('Business Name: : ${listing["businessName"].toString()}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
-                  ' click for Info',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(48, 1, 255, 0.75),
-                  ),
-                ),
-                Text('Description: ${listing["description"].toString()}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Category: ${listing["category"].toString()}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
-                    'Required QTY: ${listing["requiredQuantity"].toString()}, ${listing["unit"].toString()}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Price Offered: ₹ ${listing["maxPrice"].toString()}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Location:  ${listing["location"].toString()}',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 10),
-                Text('Created at:',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                    'Required QTY: ${listing["requiredQuantity"]} ${listing["unit"]}',
+                    style: AppTextStyles.modalLabel),
+                Text('Price Offered: ₹ ${listing["maxPrice"]}',
+                    style: AppTextStyles.modalLabel),
+                Text('Location: ${listing["location"]}',
+                    style: AppTextStyles.modalLabel),
+                const SizedBox(height: 10),
+                const Text('Created at:', style: AppTextStyles.modalLabel),
                 if (listing["createdAt"].toString() != "null")
                   Text(
-                      DateFormat("d MMMM y, h:mm a").format(
-                          DateTime.parse(listing["createdAt"].toString())),
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 25),
+                    DateFormat("d MMMM y, h:mm a")
+                        .format(DateTime.parse(listing["createdAt"])),
+                    style: AppTextStyles.modalLabel,
+                  ),
+                const SizedBox(height: 25),
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Text(
-                      'Connect with Buyer',
-                      style: TextStyle(color: Colors.white),
-                    ),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(107, 142, 35, 1)),
+                      backgroundColor: AppColors.primaryGreenDark,
+                    ),
+                    child: const Text('Connect with Buyer',
+                        style: AppTextStyles.buttonTextStyle),
                   ),
                 ),
               ],
