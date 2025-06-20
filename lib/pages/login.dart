@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:krishi_connect_app/main_screen.dart';
 import 'package:krishi_connect_app/pages/registeration.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
@@ -9,7 +7,7 @@ import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -17,11 +15,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _numberController = TextEditingController();
-
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordHidden = true;
-
   bool isLoading = false;
+
   void _submitForm() async {
     if (_numberController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -29,26 +26,29 @@ class _LoginPageState extends State<LoginPage> {
       );
       return;
     }
-    setState(() {
-      isLoading = true;
-    });
+
+    setState(() => isLoading = true);
+
     RegisterService service = RegisterService();
     Map<String, dynamic> response = await service.loginUser(
-        phone: _numberController.text, password: _passwordController.text);
-    setState(() {
-      isLoading = false;
-    });
+      phone: _numberController.text,
+      password: _passwordController.text,
+    );
+
+    setState(() => isLoading = false);
+
     if (response.containsKey("error")) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(response["error"])),
       );
     } else {
-      // Assuming response contains user role
       String token = response["token"];
-      print(token);
       Map<String, dynamic> userDetail = await service.getUserByPhone(
-          phone: _numberController.text, token: token);
-      print(userDetail);
+        phone: _numberController.text,
+        token: token,
+      );
+
+      // Store in shared preferences
       SharedPrefHelper.setRegistered(true);
       SharedPrefHelper.setToken(token);
       SharedPrefHelper.setUserrole(userDetail["role"]);
@@ -56,82 +56,48 @@ class _LoginPageState extends State<LoginPage> {
       SharedPrefHelper.setUserId(userDetail["userId"].toString());
       SharedPrefHelper.setLocation(userDetail["location"]);
 
-      // Navigate to MainScreen
       Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
-          (route) => false);
+        context,
+        MaterialPageRoute(builder: (context) => const MainScreen()),
+        (route) => false,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: AppColors.appColor,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 100,
-            ),
+            const SizedBox(height: 100),
             Image.asset(
               'assets/images/krishi_icon.png',
               width: width * 0.35,
             ),
-            Text(
-              'KrishiConnect',
-              style: AppTextStyles.krishiHeading,
-            ),
-            SizedBox(
-              height: 30,
-            ),
+           const Text('KrishiConnect', style: AppTextStyles.krishiHeading),
+            const SizedBox(height: 30),
+
+            /// Phone Number Field
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SizedBox(
                 width: width * 0.9,
                 height: 70,
                 child: TextFormField(
                   controller: _numberController,
                   keyboardType: TextInputType.number,
-                  cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                  cursorColor: AppColors.labelColor,
                   onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                  decoration: const InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    labelText: 'Phone Number',
-                    labelStyle: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 0.5),
-                      fontSize: 20,
-                    ),
-                    floatingLabelStyle: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 0.5),
-                      fontSize: 20,
-                    ),
-                    focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                  ),
+                  decoration: customInputDecoration("Phone Number"),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter a number";
-                    } else if (value.length != 10 ||
-                        !RegExp(r'^\d{10}$').hasMatch(value)) {
+                    } else if (!RegExp(r'^\d{10}$').hasMatch(value)) {
                       return "Enter a valid 10-digit number";
                     }
                     return null;
@@ -139,48 +105,21 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
 
+            /// Password Field
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SizedBox(
                 width: width * 0.9,
                 height: 70,
                 child: TextFormField(
                   controller: _passwordController,
                   obscureText: _isPasswordHidden,
-                  cursorColor: Color.fromRGBO(0, 0, 0, 0.5),
+                  cursorColor: AppColors.labelColor,
                   onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      borderSide: BorderSide(color: Colors.white, width: 2),
-                    ),
-                    labelText: 'Password',
-                    labelStyle: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 0.5),
-                      fontSize: 20,
-                    ),
-                    floatingLabelStyle: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 0.5),
-                    ),
-                    focusColor: Color.fromRGBO(0, 0, 0, 0.5),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  decoration: customInputDecoration(
+                    "Password",
                     suffixIcon: IconButton(
                       icon: Icon(
                         _isPasswordHidden
@@ -196,88 +135,47 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Please enter a name";
+                      return "Please enter a password";
                     }
                     return null;
                   },
                 ),
               ),
             ),
-            SizedBox(
-              height: 30,
-            ),
+            const SizedBox(height: 30),
+
+            /// Login Button
             GestureDetector(
               onTap: () => isLoading ? null : _submitForm(),
               child: Container(
-                // margin: const EdgeInsets.symmetric(vertical: 10),
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 width: width * 0.9,
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(85, 107, 47, 1),
+                  color: AppColors.primaryGreen,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: isLoading
                     ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
+                        child: CircularProgressIndicator(color: Colors.white),
                       )
                     : const Text(
                         'Login',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: AppTextStyles.buttonTextStyle,
                         textAlign: TextAlign.center,
                       ),
               ),
             ),
-            SizedBox(height: 50),
-            Text(
-              'Don\'t have an account? ',
-              style: TextStyle(
-                color: Color.fromRGBO(0, 0, 0, 0.5),
-                fontSize: 18,
-              ),
-            ),
+
+            const SizedBox(height: 50),
+
+            /// Signup Prompt
+           const Text("Don't have an account?", style: AppTextStyles.bottomText),
             GestureDetector(
               onTap: () {
-                NavigationHelper.push(context, Registeration());
+                NavigationHelper.push(context, const Registeration());
               },
-              child: Text(
-                'SignUp Here',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                ),
-              ),
+              child: const Text("SignUp Here", style: AppTextStyles.linkText),
             ),
-            // GestureDetector(
-            //   onTap: () {
-            //     NavigationHelper.push(context, Registeration());
-            //   },
-            //   child: Text.rich(
-            //     TextSpan(
-            //       text: 'Don\'t have an account? ',
-            //       style: TextStyle(
-            //         color: Color.fromRGBO(0, 0, 0, 0.5),
-            //         fontSize: 16,
-            //       ),
-            //       children: [
-            //         TextSpan(
-            //           text: 'Register Here',
-            //           style: TextStyle(
-            //             color: Colors.green,
-            //             fontWeight: FontWeight.bold,
-            //             fontSize: 16,
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
