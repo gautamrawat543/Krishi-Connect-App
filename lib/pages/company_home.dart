@@ -25,6 +25,8 @@ class _CompanyHomeState extends State<CompanyHome> {
   bool isLoadingFarmers = true;
   List<dynamic> companyListings = [];
   bool isLoadingCompanyListings = true;
+  List<dynamic> produceListings = [];
+  bool isLoadingProduceListings = true;
 
   String isSelected = 'All';
 
@@ -33,9 +35,28 @@ class _CompanyHomeState extends State<CompanyHome> {
     super.initState();
     loadFarmers();
     loadCompanyListings();
+    loadProduce();
   }
 
   RegisterService service = RegisterService();
+
+  Future<void> loadProduce() async {
+    try {
+      final listings =
+          await service.getFarmerListing(token: SharedPrefHelper.getToken());
+      setState(() {
+        // Ensure the UI updates after data fetch
+        produceListings = listings;
+        isLoadingProduceListings = false;
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        isLoadingProduceListings = false;
+      });
+    }
+  }
+
   Future<void> loadFarmers() async {
     try {
       final listings =
@@ -62,7 +83,7 @@ class _CompanyHomeState extends State<CompanyHome> {
         // Ensure the UI updates after data fetch
         companyListings = listing;
         isLoadingCompanyListings = false;
-        print(companyListings);
+        print("companyListings : ${companyListings}");
       });
     } catch (e) {
       print(e);
@@ -105,10 +126,6 @@ class _CompanyHomeState extends State<CompanyHome> {
               SizedBox(
                 height: 20,
               ),
-              searchBox(),
-              SizedBox(
-                height: 20,
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -140,23 +157,23 @@ class _CompanyHomeState extends State<CompanyHome> {
               ),
               //available produce listing
               SizedBox(
-                height: height * 0.4,
+                height: height * 0.38,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: produceList.length,
+                  itemCount: produceListings.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: availableProduceListing(
                         width,
-                        produceList[index],
+                        produceListings[index],
                       ),
                     );
                   },
                 ),
               ),
               SizedBox(
-                height: 40,
+                height: 5,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -723,30 +740,30 @@ class _CompanyHomeState extends State<CompanyHome> {
 
   Widget availableProduceListing(
     double width,
-    ProduceItem listing,
+    dynamic listing,
   ) {
     return Container(
       width: width * 0.5,
+      margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.25),
-              blurRadius: 4,
-              offset: Offset(0, 4),
-            ),
-          ]),
+        borderRadius: BorderRadius.circular(5),
+        color: Colors.white,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
-              ),
-              child: Image.asset(
-                'assets/images/Banner.jpg',
+          ClipRRect(
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
+            ),
+            child: Image.network(
+              listing['imageUrl'],
+              fit: BoxFit.cover,
+              height: 100,
+              width: width,
+              errorBuilder: (context, error, stackTrace) => Image.asset(
+                'assets/app_icon.png',
+                height: 50,
                 fit: BoxFit.cover,
               ),
             ),
@@ -755,35 +772,36 @@ class _CompanyHomeState extends State<CompanyHome> {
             padding: const EdgeInsets.symmetric(
               horizontal: 5,
             ),
-            child: Text(listing.name,
+            child: Text(listing['title'],
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 5,
             ),
-            child: Text('Price: ₹ ${listing.price.toString()}',
+            child: Text('Price: ₹ ${listing['price'].toString()}',
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 5,
             ),
-            child: Text('Available QTY: ${listing.quantity.toString()}',
+            child: Text(
+                'Quantity: ${listing['quantity'].toString()} ${listing['unit']}',
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 5,
             ),
-            child: Text('Farmer: ${listing.farmer}',
+            child: Text('Farmer: ${listing['farmerName']}',
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.only(
               left: 5,
             ),
-            child: Text(listing.location,
+            child: Text(listing['location'],
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
           Container(
@@ -802,7 +820,7 @@ class _CompanyHomeState extends State<CompanyHome> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

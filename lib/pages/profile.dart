@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:krishi_connect_app/pages/login.dart';
 import 'package:krishi_connect_app/main_screen.dart';
 import 'package:krishi_connect_app/services/api/register_api.dart';
@@ -72,18 +75,21 @@ class _ProfileState extends State<Profile> {
     });
     RegisterService apiService = RegisterService();
 
-    var response = await apiService.registerUser(
+    var response = await apiService.registerUserWithImage(
       name: widget.name,
       email: _emailController.text,
       phone: widget.number,
       password: _passwordController2.text,
       role: widget.role,
       location: _city,
-      profilePicture: "https://example.com/profile.jpg",
+      profilePicFile: _selectedImage,
+      // profilePicture: "https://example.com/profile.jpg",
     );
 
     if (response.containsKey("error")) {
       print("Error: ${response['error']}");
+      print("Error response full: $response");
+
       String errorMessage = response['error'].toString();
       if (errorMessage.contains("users.phone")) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -121,6 +127,19 @@ class _ProfileState extends State<Profile> {
         ),
         (route) => false,
       );
+    }
+  }
+
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
     }
   }
 
@@ -164,7 +183,32 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20)),
+                    height: 200,
+                    width: 200,
+                    child: _selectedImage != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.file(
+                              _selectedImage!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Icon(
+                            Icons.camera_alt,
+                            size: 50,
+                          ),
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 12),
