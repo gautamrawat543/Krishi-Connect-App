@@ -1,6 +1,6 @@
 # 🌾 KrishiConnect – Empowering Farmers through Digital Contract Farming
 
-**KrishiConnect** is a digital contract farming platform built to connect **farmers**, **buyers**, and **agricultural advisors**. With real-time chat, secure authentication, and simple listing management, it enables farmers to reach markets directly, negotiate prices, and increase their income through transparent contracts.
+**KrishiConnect** is a digital contract farming platform built to connect **farmers**, **buyers**. With real-time chat, secure authentication, and simple listing management, it enables farmers to reach markets directly, negotiate prices, and increase their income through transparent contracts.
 
 Whether you're a farmer looking to showcase your produce or a buyer searching for reliable partners, KrishiConnect bridges the gap with technology.
 
@@ -22,8 +22,7 @@ Whether you're a farmer looking to showcase your produce or a buyer searching fo
 
 ### 🔹 Frontend (Flutter)
 - Flutter & Dart
-- `Provider` for state management
-- `http`, `image_picker`, `stomp_dart_client`, and `flutter_secure_storage`
+- `http`, `image_picker`, `shared_preference`
 
 ### 🔹 Backend (Spring Boot)
 - Java + Spring Boot
@@ -31,7 +30,6 @@ Whether you're a farmer looking to showcase your produce or a buyer searching fo
 - JWT authentication
 - WebSocket with STOMP for chat
 - RESTful API endpoints
-- Deployment on [Render](https://render.com)
 
 ---
 
@@ -43,21 +41,8 @@ Whether you're a farmer looking to showcase your produce or a buyer searching fo
 
 ---
 
-## 🧪 Sample API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/auth/login` | Login with credentials |
-| `POST` | `/api/listings` | Create produce listing |
-| `GET`  | `/api/listings` | Browse all listings |
-| `POST` | `/api/chat/send/{conversationId}` | Send a message |
-| `SUB`  | `/topic/conversations/{conversationId}` | Subscribe to messages |
-
----
-
 ## 🚀 Getting Started
 
-### 🔧 Backend Setup
+### 🔧 Frontend Setup
 ```bash
 git clone https://github.com/your-org/krishiconnect-backend.git
-cd krishiconnect-backend
