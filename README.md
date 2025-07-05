@@ -33,16 +33,8 @@ Whether you're a farmer looking to showcase your produce or a buyer searching fo
 
 ---
 
-## 🖼️ Screenshots *(Add your actual screenshots here)*
-
-| 🧑‍🌾 Farmer View | 🧑‍💼 Buyer View | 💬 Chat Interface |
-|------------------|------------------|-------------------|
-| ![Farmer](screenshots/farmer.png) | ![Buyer](screenshots/buyer.png) | ![Chat](screenshots/chat.png) |
-
----
-
 ## 🚀 Getting Started
 
 ### 🔧 Frontend Setup
 ```bash
-git clone https://github.com/your-org/krishiconnect-backend.git
+git clone https://github.com/gautamrawat543/Krishi-Connect-App.git
