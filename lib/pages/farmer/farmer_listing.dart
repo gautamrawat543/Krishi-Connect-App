@@ -51,9 +51,13 @@ class _FarmerListingState extends State<FarmerListing> {
     }
   }
 
-
-   Future<void> _submitForm() async {
+  Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) return;
+
+    if (imageFile == null) {
+      _showSnackBar("Please select an image", isError: true);
+      return;
+    }
 
     setState(() {
       _isLoading = true;

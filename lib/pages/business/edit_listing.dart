@@ -7,22 +7,40 @@ import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
-class CreateListing extends StatefulWidget {
-  const CreateListing({super.key});
+class EditListing extends StatefulWidget {
+  const EditListing({required this.listing, super.key});
+
+  final dynamic listing;
 
   @override
-  State<CreateListing> createState() => _CreateListingState();
+  State<EditListing> createState() => _EditListingState();
 }
 
-class _CreateListingState extends State<CreateListing> {
+class _EditListingState extends State<EditListing> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _requiredQuantityController =
       TextEditingController();
   final TextEditingController _maxPriceController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.listing['title'];
+    _descriptionController.text = widget.listing['description'];
+    _requiredQuantityController.text =
+        widget.listing['requiredQuantity'].toString();
+    _maxPriceController.text = widget.listing['maxPrice'].toString();
+    _selectedCategory = widget.listing['category'];
+    _selectedUnit = widget.listing['unit'];
+    _selectedStatus = widget.listing['status'] ?? 'OPEN';
+  }
+
   String _selectedCategory = 'GRAINS';
   String _selectedUnit = 'KG';
+  String _selectedStatus = 'OPEN';
+
+  final List<String> statusOptions = ['OPEN', 'CLOSED'];
 
   final List<String> categories = [
     'GRAINS',
@@ -53,7 +71,8 @@ class _CreateListingState extends State<CreateListing> {
     });
 
     try {
-      final response = await apiService.createBuyerRequest(
+      final response = await apiService.updateBuyerRequest(
+        requestId: widget.listing['requestId'],
         businessId: int.tryParse(SharedPrefHelper.getUserId()) ?? 0,
         title: _titleController.text,
         description: _descriptionController.text,
@@ -63,12 +82,13 @@ class _CreateListingState extends State<CreateListing> {
         requiredQuantity: int.tryParse(_requiredQuantityController.text) ?? 0,
         maxPrice: double.tryParse(_maxPriceController.text) ?? 0.0,
         token: SharedPrefHelper.getToken(),
+        status: _selectedStatus,
       );
 
       if (response.containsKey('error')) {
         _showSnackBar(response['error'], isError: true);
       } else {
-        _showSnackBar("Listing created successfully!", isError: false);
+        _showSnackBar("Listing Updated Successfully!", isError: false);
         NavigationHelper.pushReplacement(context, MainScreen());
       }
     } catch (e) {
@@ -103,20 +123,17 @@ class _CreateListingState extends State<CreateListing> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Bulk Purchase Request',
-                style: AppTextStyles.pageHeading,
-              ),
+              const Text('Edit Purchase Request',
+                  style: AppTextStyles.pageHeading),
               SizedBox(height: 20),
-              const SizedBox(height: 20),
               _buildLabel('Title'),
-              buildTextField('eg: Bulk Purchase of Tomatoes', _titleController,
+              _buildTextField('eg: Bulk Purchase of Tomatoes', _titleController,
                   TextInputType.text),
               _buildLabel('Description'),
-              buildTextField('eg: Looking for high quality tomatoes in bulk',
+              _buildTextField('eg: Looking for high quality tomatoes in bulk',
                   _descriptionController, TextInputType.text),
               _buildLabel('Category'),
-              buildDropdownField(categories, _selectedCategory, (value) {
+              _buildDropdownField(categories, _selectedCategory, (value) {
                 setState(() => _selectedCategory = value!);
               }),
               SizedBox(height: 8),
@@ -126,7 +143,7 @@ class _CreateListingState extends State<CreateListing> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildLabel('Required Quantity'),
-                        buildTextField('eg: 500', _requiredQuantityController,
+                        _buildTextField('eg: 500', _requiredQuantityController,
                             TextInputType.number),
                       ]),
                 ),
@@ -136,7 +153,7 @@ class _CreateListingState extends State<CreateListing> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildLabel('Unit'),
-                        buildDropdownField(units, _selectedUnit, (value) {
+                        _buildDropdownField(units, _selectedUnit, (value) {
                           setState(() => _selectedUnit = value!);
                         }),
                       ]),
@@ -144,8 +161,13 @@ class _CreateListingState extends State<CreateListing> {
               ]),
               SizedBox(height: 8),
               _buildLabel('Max Price'),
-              buildTextField(
+              _buildTextField(
                   'eg: 1600', _maxPriceController, TextInputType.number),
+              SizedBox(height: 8),
+              _buildLabel('Status'),
+              _buildDropdownField(statusOptions, _selectedStatus, (value) {
+                setState(() => _selectedStatus = value!);
+              }),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () => _submitForm(),
@@ -163,7 +185,7 @@ class _CreateListingState extends State<CreateListing> {
                           ),
                         )
                       : const Text(
-                          'Create Listing',
+                          'Update Listing',
                           style: AppTextStyles.buttonTextStyle,
                           textAlign: TextAlign.center,
                         ),
@@ -176,7 +198,7 @@ class _CreateListingState extends State<CreateListing> {
     );
   }
 
-  Widget buildTextField(String label, TextEditingController controller,
+  Widget _buildTextField(String label, TextEditingController controller,
       TextInputType keyboardType) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
@@ -188,7 +210,7 @@ class _CreateListingState extends State<CreateListing> {
     );
   }
 
-  Widget buildDropdownField(List<String> items, String selectedValue,
+  Widget _buildDropdownField(List<String> items, String selectedValue,
       ValueChanged<String?> onChanged) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
@@ -207,10 +229,7 @@ class _CreateListingState extends State<CreateListing> {
   Widget _buildLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4.0),
-      child: Text(
-        text,
-        style: AppTextStyles.labelStyle,
-      ),
+      child: Text(text, style: AppTextStyles.labelStyle),
     );
   }
 }

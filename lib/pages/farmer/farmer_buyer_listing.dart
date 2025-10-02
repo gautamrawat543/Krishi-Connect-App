@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
+import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class FarmerBuyerListing extends StatefulWidget {
   FarmerBuyerListing({super.key, required this.listing});
@@ -14,6 +16,8 @@ class FarmerBuyerListing extends StatefulWidget {
 }
 
 class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
+  ApiService service = ApiService();
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -133,7 +137,30 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      try {
+                        await service.startConversation(
+                            senderId: int.parse(SharedPrefHelper.getUserId()),
+                            receiverId: listing["businessId"],
+                            token: SharedPrefHelper.getToken(),
+                            buyerRequestId: listing["requestId"]);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Successfully connected with Buyer'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.toString()),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryGreenDark,
                     ),

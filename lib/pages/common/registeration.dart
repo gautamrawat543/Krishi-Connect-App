@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:krishi_connect_app/pages/common/login.dart';
-import 'package:krishi_connect_app/pages/common/profile.dart';
+import 'package:krishi_connect_app/pages/common/detail_register.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
@@ -27,7 +27,7 @@ class _RegisterationState extends State<Registeration> {
     if (_formKey.currentState!.validate()) {
       NavigationHelper.push(
         context,
-        Profile(
+        DetailRegister(
           name: _nameController.text,
           number: _numberController.text,
           role: _selectedRole,

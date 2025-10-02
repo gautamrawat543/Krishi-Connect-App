@@ -289,18 +289,22 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 
 class ChatMessage extends StatefulWidget {
-  final int requestid;
+  final String buyerRequestid;
+  final String listingid;
   final String name;
   final int convoId;
 
   const ChatMessage({
     super.key,
-    required this.requestid,
+    required this.buyerRequestid,
+    required this.listingid,
     required this.name,
     required this.convoId,
   });
@@ -322,6 +326,7 @@ class _ChatMessageState extends State<ChatMessage> {
   @override
   void initState() {
     super.initState();
+    print('${widget.listingid} ${widget.buyerRequestid}');
     fetchChatHistory();
     connectWebSocket();
     loadInfo();
@@ -401,16 +406,32 @@ class _ChatMessageState extends State<ChatMessage> {
     _messageController.clear();
   }
 
+  String id = '';
+
   Future<void> loadInfo() async {
     try {
-      final listing = await service.getBuyerRequestById2(
-        businessId: widget.requestid.toString(),
-        token: SharedPrefHelper.getToken(),
-      );
-      setState(() {
-        info = listing;
-        isLoading = false;
-      });
+      if (widget.buyerRequestid.contains('null')) {
+        final listing = await service.getFarmerListingById2(
+          listingId: widget.listingid.toString(),
+          token: SharedPrefHelper.getToken(),
+        );
+        setState(() {
+          info = listing;
+          isLoading = false;
+          id = widget.listingid.toString();
+        });
+      } else {
+        final listing = await service.getBuyerRequestById2(
+          businessId: widget.buyerRequestid.toString(),
+          token: SharedPrefHelper.getToken(),
+        );
+        setState(() {
+          info = listing;
+          isLoading = false;
+          id = widget.buyerRequestid.toString();
+        });
+      }
+
       print('✅ Info loaded: $info');
     } catch (e) {
       print('❌ Error loading info: $e');
@@ -432,7 +453,12 @@ class _ChatMessageState extends State<ChatMessage> {
     return Scaffold(
       appBar: AppBar(
         title: info != null
-            ? Text('${widget.name} | Id:#${info!['requestId'].toString()}')
+            ? GestureDetector(
+                onTap: () {
+                  showListingDetails(
+                      context, info, widget.buyerRequestid.contains('null'));
+                },
+                child: Text('${widget.name} | Id:#$id'))
             : const Text("Loading..."),
       ),
       body: isLoading
@@ -490,6 +516,63 @@ class _ChatMessageState extends State<ChatMessage> {
                 )
               ],
             ),
+    );
+  }
+
+  void showListingDetails(
+      BuildContext context, dynamic listing, bool isFarmer) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (context) => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              isFarmer
+                  ? Text('Listing Id: #${listing["listingId"]}',
+                      style: AppTextStyles.cardSubText)
+                  : Text('Request Id: #${listing["requestId"]}',
+                      style: AppTextStyles.cardSubText),
+              Text('Title: ${listing["title"]}',
+                  style: AppTextStyles.modalTitle),
+              isFarmer
+                  ? Text('Farmer Name: ${listing["farmerName"]}',
+                      style: AppTextStyles.modalLabel)
+                  : Text('Business Name: ${listing["businessName"]}',
+                      style: AppTextStyles.modalLabel),
+              const Text(' click for Info', style: AppTextStyles.modalInfoLink),
+              Text('Description: ${listing["description"]}',
+                  style: AppTextStyles.modalLabel),
+              Text('Category: ${listing["category"]}',
+                  style: AppTextStyles.modalLabel),
+              isFarmer
+                  ? Text('Quantity: ${listing["quantity"]} ${listing["unit"]}',
+                      style: AppTextStyles.modalLabel)
+                  : Text(
+                      'Required QTY: ${listing["requiredQuantity"]} ${listing["unit"]}',
+                      style: AppTextStyles.modalLabel),
+              isFarmer
+                  ? Text('Price Offered: ₹ ${listing["price"]}',
+                      style: AppTextStyles.modalLabel)
+                  : Text('Price Offered: ₹ ${listing["maxPrice"]}',
+                      style: AppTextStyles.modalLabel),
+              Text('Location:  ${listing["location"]}',
+                  style: AppTextStyles.modalLabel),
+              const SizedBox(height: 10),
+              const Text('Created at:', style: AppTextStyles.modalLabel),
+              Text(
+                  DateFormat("d MMMM y, h:mm a")
+                      .format(DateTime.parse(listing["createdAt"])),
+                  style: AppTextStyles.modalLabel),
+              const SizedBox(height: 25),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

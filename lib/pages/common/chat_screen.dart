@@ -64,7 +64,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ChatMessage(
-                                requestid: convo['buyerRequestId'],
+                                buyerRequestid:
+                                    convo['buyerRequestId'].toString(),
+                                listingid: convo['listingId'].toString(),
                                 name: convo['otherUserName'],
                                 convoId: convo['conversationId'],
                               )));

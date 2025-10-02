@@ -2,12 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:krishi_connect_app/data/company_listing.dart';
-import 'package:krishi_connect_app/data/farmer_data.dart';
-import 'package:krishi_connect_app/data/produce_data.dart';
-import 'package:krishi_connect_app/pages/buyer_listing.dart';
-import 'package:krishi_connect_app/pages/create_listing.dart';
-import 'package:krishi_connect_app/pages/edit_listing.dart';
+import 'package:krishi_connect_app/pages/business/buyer_listing.dart';
+import 'package:krishi_connect_app/pages/business/create_listing.dart';
+import 'package:krishi_connect_app/pages/business/edit_listing.dart';
 import 'package:krishi_connect_app/pages/business/search_page_business.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
@@ -28,6 +25,9 @@ class _CompanyHomeState extends State<CompanyHome> {
   bool isLoadingCompanyListings = true;
   List<dynamic> produceListings = [];
   bool isLoadingProduceListings = true;
+
+  List<dynamic> filteredListings = [];
+  bool isLoadingFilteredListings = true;
 
   String isSelected = 'All';
 
@@ -83,6 +83,8 @@ class _CompanyHomeState extends State<CompanyHome> {
       setState(() {
         // Ensure the UI updates after data fetch
         companyListings = listing;
+        _applyFilter();
+        isLoadingFilteredListings = false;
         isLoadingCompanyListings = false;
         print("companyListings : ${companyListings}");
       });
@@ -94,6 +96,17 @@ class _CompanyHomeState extends State<CompanyHome> {
     }
   }
 
+  void _applyFilter() {
+    if (isSelected == 'All') {
+      filteredListings = companyListings;
+    } else {
+      filteredListings = companyListings
+          .where((listing) =>
+              listing['status']?.toUpperCase() == isSelected.toUpperCase())
+          .toList();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -101,7 +114,6 @@ class _CompanyHomeState extends State<CompanyHome> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryGreenDark,
-        leading: const Icon(Icons.menu, color: Colors.white),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -178,18 +190,16 @@ class _CompanyHomeState extends State<CompanyHome> {
                 child: isLoadingCompanyListings
                     ? Center(
                         child: CircularProgressIndicator(color: Colors.green))
-                    : companyListings.isEmpty
-                        ? Center(
-                            child: Text('No Listings Found'),
-                          )
+                    : filteredListings.isEmpty
+                        ? Center(child: Text('No Listings Found'))
                         : ListView.builder(
-                            itemCount: companyListings.length > 5
+                            itemCount: filteredListings.length > 5
                                 ? 5
-                                : companyListings.length,
+                                : filteredListings.length,
                             itemBuilder: (context, index) {
                               return _listingCard(
                                 width,
-                                companyListings[index],
+                                filteredListings[index],
                               );
                             }),
               ),
@@ -266,20 +276,44 @@ class _CompanyHomeState extends State<CompanyHome> {
             child: Text(listing['location'],
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
-          Container(
-            width: width,
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(5),
-                bottomRight: Radius.circular(5),
+          GestureDetector(
+            onTap: () async {
+              try {
+                await service.startConversation(
+                    senderId: int.parse(SharedPrefHelper.getUserId()),
+                    receiverId: listing["farmerId"],
+                    token: SharedPrefHelper.getToken(),
+                    listingId: listing["listingId"]);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Successfully connected with Farmer'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(e.toString()),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: Container(
+              width: width,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(5),
+                  bottomRight: Radius.circular(5),
+                ),
+                color: Color.fromRGBO(107, 112, 92, 1),
               ),
-              color: Color.fromRGBO(107, 112, 92, 1),
-            ),
-            child: Center(
-              child: Text(
-                'Request to Buy',
-                style: TextStyle(color: Colors.white),
+              child: Center(
+                child: Text(
+                  'Start Conversation',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ),
@@ -323,7 +357,12 @@ class _CompanyHomeState extends State<CompanyHome> {
       children: filters.map((filter) {
         bool selected = isSelected == filter;
         return GestureDetector(
-          onTap: () => setState(() => isSelected = filter),
+          onTap: () {
+            setState(() {
+              isSelected = filter;
+              _applyFilter();
+            });
+          },
           child: Container(
             width: 80,
             height: 30,

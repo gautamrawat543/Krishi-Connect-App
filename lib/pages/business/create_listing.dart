@@ -7,33 +7,19 @@ import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
-class EditListing extends StatefulWidget {
-  const EditListing({required this.listing, super.key});
-
-  final dynamic listing;
+class CreateListing extends StatefulWidget {
+  const CreateListing({super.key});
 
   @override
-  State<EditListing> createState() => _EditListingState();
+  State<CreateListing> createState() => _CreateListingState();
 }
 
-class _EditListingState extends State<EditListing> {
+class _CreateListingState extends State<CreateListing> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _requiredQuantityController =
       TextEditingController();
   final TextEditingController _maxPriceController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _titleController.text = widget.listing['title'];
-    _descriptionController.text = widget.listing['description'];
-    _requiredQuantityController.text =
-        widget.listing['requiredQuantity'].toString();
-    _maxPriceController.text = widget.listing['maxPrice'].toString();
-    _selectedCategory = widget.listing['category'];
-    _selectedUnit = widget.listing['unit'];
-  }
 
   String _selectedCategory = 'GRAINS';
   String _selectedUnit = 'KG';
@@ -62,13 +48,30 @@ class _EditListingState extends State<EditListing> {
 
   ApiService apiService = ApiService();
   Future<void> _submitForm() async {
+    if (_titleController.text.trim().isEmpty ||
+        _descriptionController.text.trim().isEmpty ||
+        _requiredQuantityController.text.trim().isEmpty ||
+        _maxPriceController.text.trim().isEmpty) {
+      _showSnackBar("Please fill in all the fields", isError: true);
+      return;
+    }
+
+    if (int.tryParse(_requiredQuantityController.text.trim()) == null) {
+      _showSnackBar("Enter a valid number for Required Quantity",
+          isError: true);
+      return;
+    }
+
+    if (double.tryParse(_maxPriceController.text.trim()) == null) {
+      _showSnackBar("Enter a valid number for Max Price", isError: true);
+      return;
+    }
     setState(() {
       _isLoading = true;
     });
 
     try {
-      final response = await apiService.updateBuyerRequest(
-        requestId: widget.listing['requestId'],
+      final response = await apiService.createBuyerRequest(
         businessId: int.tryParse(SharedPrefHelper.getUserId()) ?? 0,
         title: _titleController.text,
         description: _descriptionController.text,
@@ -83,7 +86,7 @@ class _EditListingState extends State<EditListing> {
       if (response.containsKey('error')) {
         _showSnackBar(response['error'], isError: true);
       } else {
-        _showSnackBar("Listing Updated Successfully!", isError: false);
+        _showSnackBar("Listing created successfully!", isError: false);
         NavigationHelper.pushReplacement(context, MainScreen());
       }
     } catch (e) {
@@ -118,17 +121,20 @@ class _EditListingState extends State<EditListing> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Edit Purchase Request',
-                  style: AppTextStyles.pageHeading),
+              Text(
+                'Bulk Purchase Request',
+                style: AppTextStyles.pageHeading,
+              ),
               SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildLabel('Title'),
-              _buildTextField('eg: Bulk Purchase of Tomatoes', _titleController,
+              buildTextField('eg: Bulk Purchase of Tomatoes', _titleController,
                   TextInputType.text),
               _buildLabel('Description'),
-              _buildTextField('eg: Looking for high quality tomatoes in bulk',
+              buildTextField('eg: Looking for high quality tomatoes in bulk',
                   _descriptionController, TextInputType.text),
               _buildLabel('Category'),
-              _buildDropdownField(categories, _selectedCategory, (value) {
+              buildDropdownField(categories, _selectedCategory, (value) {
                 setState(() => _selectedCategory = value!);
               }),
               SizedBox(height: 8),
@@ -138,7 +144,7 @@ class _EditListingState extends State<EditListing> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildLabel('Required Quantity'),
-                        _buildTextField('eg: 500', _requiredQuantityController,
+                        buildTextField('eg: 500', _requiredQuantityController,
                             TextInputType.number),
                       ]),
                 ),
@@ -148,7 +154,7 @@ class _EditListingState extends State<EditListing> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildLabel('Unit'),
-                        _buildDropdownField(units, _selectedUnit, (value) {
+                        buildDropdownField(units, _selectedUnit, (value) {
                           setState(() => _selectedUnit = value!);
                         }),
                       ]),
@@ -156,7 +162,7 @@ class _EditListingState extends State<EditListing> {
               ]),
               SizedBox(height: 8),
               _buildLabel('Max Price'),
-              _buildTextField(
+              buildTextField(
                   'eg: 1600', _maxPriceController, TextInputType.number),
               const SizedBox(height: 20),
               GestureDetector(
@@ -175,7 +181,7 @@ class _EditListingState extends State<EditListing> {
                           ),
                         )
                       : const Text(
-                          'Update Listing',
+                          'Create Listing',
                           style: AppTextStyles.buttonTextStyle,
                           textAlign: TextAlign.center,
                         ),
@@ -188,7 +194,7 @@ class _EditListingState extends State<EditListing> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller,
+  Widget buildTextField(String label, TextEditingController controller,
       TextInputType keyboardType) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
@@ -200,7 +206,7 @@ class _EditListingState extends State<EditListing> {
     );
   }
 
-  Widget _buildDropdownField(List<String> items, String selectedValue,
+  Widget buildDropdownField(List<String> items, String selectedValue,
       ValueChanged<String?> onChanged) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
@@ -219,7 +225,10 @@ class _EditListingState extends State<EditListing> {
   Widget _buildLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4.0),
-      child: Text(text, style: AppTextStyles.labelStyle),
+      child: Text(
+        text,
+        style: AppTextStyles.labelStyle,
+      ),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:krishi_connect_app/data/farmer_data.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -177,6 +176,13 @@ class _SearchPageFarmerState extends State<SearchPageFarmer> {
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
           ),
           Text(
+            'Business Name: : ${listing["businessName"].toString()}',
+            style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                color: Color.fromRGBO(0, 0, 0, 0.75)),
+          ),
+          Text(
             'Description: ${listing['description']}',
             style: TextStyle(
                 fontWeight: FontWeight.w400,
@@ -309,7 +315,30 @@ class _SearchPageFarmerState extends State<SearchPageFarmer> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      try {
+                        await service.startConversation(
+                            senderId: int.parse(SharedPrefHelper.getUserId()),
+                            receiverId: listing["businessId"],
+                            token: SharedPrefHelper.getToken(),
+                            buyerRequestId: listing["requestId"]);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Successfully connected with Buyer'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.toString()),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
                     child: Text(
                       'Connect with Buyer',
                       style: TextStyle(color: Colors.white),
@@ -358,98 +387,6 @@ class _SearchPageFarmerState extends State<SearchPageFarmer> {
               Icons.search,
               color: Colors.green,
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget searchCard(dynamic farmer) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.green, width: 2),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 90,
-            margin: EdgeInsets.only(right: 10),
-            child: Image.asset(
-              'assets/app_icon.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    'Name:\t',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    farmer['name'],
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    'Number:\t',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    farmer['phone'],
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    'State:\t',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    farmer['location'],
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-              // Row(
-              //   children: [
-              //     Text(
-              //       'Crop:\t',
-              //       style: TextStyle(
-              //         fontSize: 15,
-              //       ),
-              //     ),
-              //     Text(
-              //       farmer.crop,
-              //       style: TextStyle(
-              //         fontSize: 15,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-            ],
           ),
         ],
       ),

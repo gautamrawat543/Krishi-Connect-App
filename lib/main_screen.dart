@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:krishi_connect_app/pages/common/chat_screen.dart';
 import 'package:krishi_connect_app/pages/business/company_home.dart';
 import 'package:krishi_connect_app/pages/farmer/farmer_home.dart';
-import 'package:krishi_connect_app/pages/common/farmer_profile.dart';
+import 'package:krishi_connect_app/pages/common/profile.dart';
 import 'package:krishi_connect_app/pages/business/search_page_business.dart';
 import 'package:krishi_connect_app/pages/farmer/search_page_farmer.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
@@ -28,13 +28,13 @@ class _MainScreenState extends State<MainScreen> {
             const FarmerHome(),
             const SearchPageFarmer(),
             const ChatScreen(),
-            const FarmerProfile(),
+            const Profile(),
           ]
         : [
             const CompanyHome(),
             const SearchPageBusiness(),
             const ChatScreen(),
-            const FarmerProfile(),
+            const Profile(),
           ];
   }
 

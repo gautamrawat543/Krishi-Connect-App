@@ -122,7 +122,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _wakeUpBackend() async {
-    const String backendUrl = "https://krishi-connect-app.onrender.com/";
+    const String backendUrl =
+        "https://krishi-connect-app.onrender.com/swagger-ui/index.html";
     try {
       final response = await http.get(Uri.parse(backendUrl));
       print("Backend wake-up response: ${response.statusCode}");

@@ -319,18 +319,18 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> updateBuyerRequest({
-    required int requestId,
-    required int businessId,
-    required String title,
-    required String description,
-    required String category,
-    required String unit,
-    required String location,
-    required int requiredQuantity,
-    required double maxPrice,
-    required String token,
-  }) async {
+  Future<Map<String, dynamic>> updateBuyerRequest(
+      {required int requestId,
+      required int businessId,
+      required String title,
+      required String description,
+      required String category,
+      required String unit,
+      required String location,
+      required int requiredQuantity,
+      required double maxPrice,
+      required String token,
+      required String status}) async {
     final url = Uri.parse("$baseUrl/api/authenticated/buyer-requests");
 
     final Map<String, dynamic> requestBody = {
@@ -343,7 +343,7 @@ class ApiService {
       "unit": unit,
       "maxPrice": maxPrice,
       "location": location,
-      "status": "OPEN",
+      "status": status,
     };
 
     try {
@@ -469,6 +469,22 @@ class ApiService {
       }
     } catch (e) {
       return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> getFarmerListingById2({
+    required String listingId,
+    required String token,
+  }) async {
+    final response = await http.get(
+      Uri.parse("$baseUrl/api/authenticated/listing/$listingId"),
+      headers: {"Authorization": "Bearer $token"},
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception("Failed to fetch listing by id");
     }
   }
 
@@ -607,33 +623,35 @@ class ApiService {
     }
   }
 
- Future<List<Map<String, dynamic>>> fetchChatMessages({
-  required int conversationId,
-  required String token,
-}) async {
-  print("Fetching messages for conversation ID: $conversationId");
-  final url =
-      Uri.parse("$baseUrl/api/chat/conversations/$conversationId/messages");
+  Future<List<Map<String, dynamic>>> fetchChatMessages({
+    required int conversationId,
+    required String token,
+  }) async {
+    print("Fetching messages for conversation ID: $conversationId");
+    final url =
+        Uri.parse("$baseUrl/api/chat/conversations/$conversationId/messages");
 
-  try {
-    final response = await http.get(
-      url,
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      },
-    );
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
 
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonData = jsonDecode(response.body);
-      return jsonData.map<Map<String, dynamic>>((msg) => Map<String, dynamic>.from(msg)).toList();
-    } else {
-      print("❌ Failed to fetch messages: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(response.body);
+        return jsonData
+            .map<Map<String, dynamic>>((msg) => Map<String, dynamic>.from(msg))
+            .toList();
+      } else {
+        print("❌ Failed to fetch messages: ${response.statusCode}");
+        return [];
+      }
+    } catch (e) {
+      print("❌ Exception while fetching messages: $e");
       return [];
     }
-  } catch (e) {
-    print("❌ Exception while fetching messages: $e");
-    return [];
   }
-}
 }

@@ -4,11 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:krishi_connect_app/pages/buyer_listing.dart';
-import 'package:krishi_connect_app/pages/farmer_buyer_listing.dart';
-import 'package:krishi_connect_app/pages/farmer_listing.dart';
+import 'package:krishi_connect_app/pages/business/buyer_listing.dart';
+import 'package:krishi_connect_app/pages/farmer/farmer_buyer_listing.dart';
+import 'package:krishi_connect_app/pages/farmer/farmer_listing.dart';
 import 'package:krishi_connect_app/services/api/news_api.dart';
-import 'package:krishi_connect_app/data/company_listing.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
@@ -26,6 +25,7 @@ class _FarmerHomeState extends State<FarmerHome> {
   List<dynamic> newsArticles = [];
   List<dynamic> companyListings = [];
   bool isCompanyLoading = false;
+  bool isConnected = false;
 
   bool isLoading = false;
   int page = 1; // Track page number for pagination
@@ -35,28 +35,28 @@ class _FarmerHomeState extends State<FarmerHome> {
     super.initState();
     loadNews();
     loadCompanyListings();
-    loadBuyerListings();
+    loadFarmerListings();
   }
 
-  List<dynamic> buyerListings = [];
-  bool isLoadingBuyerListings = true;
+  List<dynamic> farmerListings = [];
+  bool isLoadingFarmerListings = true;
   ApiService service = ApiService();
 
-  Future<void> loadBuyerListings() async {
+  Future<void> loadFarmerListings() async {
     try {
       final listing = await service.getFarmerListingById(
           token: SharedPrefHelper.getToken(),
           farmerId: SharedPrefHelper.getUserId());
       setState(() {
         // Ensure the UI updates after data fetch
-        buyerListings = listing;
-        isLoadingBuyerListings = false;
-        print(buyerListings);
+        farmerListings = listing;
+        isLoadingFarmerListings = false;
+        print(farmerListings);
       });
     } catch (e) {
       print(e);
       setState(() {
-        isLoadingBuyerListings = false;
+        isLoadingFarmerListings = false;
       });
     }
   }
@@ -108,10 +108,6 @@ class _FarmerHomeState extends State<FarmerHome> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.primaryGreenDark,
-          leading: Icon(
-            Icons.menu,
-            color: Colors.white,
-          ),
         ),
         body: NotificationListener<ScrollNotification>(
           onNotification: (scrollInfo) {
@@ -229,33 +225,12 @@ class _FarmerHomeState extends State<FarmerHome> {
                         SizedBox(
                           height: 25,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'My Listings',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            GestureDetector(
-                              // onTap: () {
-                              //   NavigationHelper.push(
-                              //       context,
-                              //       BuyerListing(
-                              //         companyListings: companyListings,
-                              //       ));
-                              // },
-                              child: Text(
-                                'See All>',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color.fromRGBO(107, 142, 35, 1)),
-                              ),
-                            ),
-                          ],
+                        Text(
+                          'My Listings',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         SizedBox(
                           height: 6,
@@ -268,22 +243,20 @@ class _FarmerHomeState extends State<FarmerHome> {
                         ),
                         SizedBox(
                           height: height * 0.5,
-                          child: isLoadingBuyerListings
+                          child: isLoadingFarmerListings
                               ? Center(
                                   child: CircularProgressIndicator(
                                       color: Colors.green))
-                              : buyerListings.isEmpty
+                              : farmerListings.isEmpty
                                   ? Center(
                                       child: Text('No Listings Found'),
                                     )
                                   : ListView.builder(
-                                      itemCount: buyerListings.length > 5
-                                          ? 5
-                                          : buyerListings.length,
+                                      itemCount: farmerListings.length,
                                       itemBuilder: (context, index) {
                                         return farmerListingCard(
                                           width,
-                                          buyerListings[index],
+                                          farmerListings[index],
                                         );
                                       }),
                         ),
@@ -439,7 +412,30 @@ class _FarmerHomeState extends State<FarmerHome> {
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    try {
+                      await service.startConversation(
+                          senderId: int.parse(SharedPrefHelper.getUserId()),
+                          receiverId: listing["businessId"],
+                          token: SharedPrefHelper.getToken(),
+                          buyerRequestId: listing["requestId"]);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Successfully connected with Buyer'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      Navigator.pop(context);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.toString()),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      Navigator.pop(context);
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryGreenDark),
                   child: const Text('Connect with Buyer',
@@ -531,19 +527,6 @@ class _FarmerHomeState extends State<FarmerHome> {
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 25),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Connect with Buyer',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(107, 142, 35, 1)),
-                  ),
-                ),
               ],
             ),
           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:krishi_connect_app/pages/edit_listing.dart';
+import 'package:krishi_connect_app/pages/business/edit_listing.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 
@@ -35,24 +35,11 @@ class _BuyerListingState extends State<BuyerListing> {
               const SizedBox(
                 height: 20,
               ),
-              const Text('Buyer Listings', style: AppTextStyles.pageHeading),
+              const Text('My Listings', style: AppTextStyles.pageHeading),
               const SizedBox(
                 height: 6,
               ),
               const Divider(thickness: 2, color: AppColors.primaryGreenDark),
-              const SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(child: searchBox()),
-                  const Icon(
-                    Icons.filter_list_alt,
-                    color: AppColors.primaryGreenDark,
-                  )
-                ],
-              ),
               const SizedBox(
                 height: 20,
               ),

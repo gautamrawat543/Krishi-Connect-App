@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:krishi_connect_app/data/farmer_data.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -18,12 +17,12 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
 
   TextEditingController searchController = TextEditingController();
 
-  List<Map<String, dynamic>> filteredBuyerListings = [];
-  bool isLoadingFilteredBuyerListings = false;
+  List<Map<String, dynamic>> filteredFarmerListings = [];
+  bool isLoadingFilteredFarmerListings = false;
 
   Future<void> filterBuyerListings() async {
     setState(() {
-      isLoadingFilteredBuyerListings = true;
+      isLoadingFilteredFarmerListings = true;
     });
     try {
       final token = await SharedPrefHelper.getToken();
@@ -31,14 +30,14 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
           token: token, query: searchController.text);
       setState(() {
         // Ensure the UI updates after data fetch
-        filteredBuyerListings = listing;
-        isLoadingFilteredBuyerListings = false;
-        print(filteredBuyerListings);
+        filteredFarmerListings = listing;
+        isLoadingFilteredFarmerListings = false;
+        print(filteredFarmerListings);
       });
     } catch (e) {
       print(e);
       setState(() {
-        isLoadingFilteredBuyerListings = false;
+        isLoadingFilteredFarmerListings = false;
       });
     }
   }
@@ -49,10 +48,14 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
     // fetchFarmers();
     loadBuyerListings();
     searchController.addListener(() {
-      if (searchController.text.trim().isEmpty) {
+      final query = searchController.text.trim();
+
+      if (query.isEmpty) {
         setState(() {
-          filteredBuyerListings = [];
+          filteredFarmerListings = [];
         });
+      } else if (query.length >= 3) {
+        filterBuyerListings();
       }
     });
   }
@@ -70,8 +73,8 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
     });
   }
 
-  List<dynamic> buyerListings = [];
-  bool isLoadingBuyerListings = true;
+  List<dynamic> FarmerListings = [];
+  bool isLoadingFarmerListings = true;
 
   Future<void> loadBuyerListings() async {
     try {
@@ -79,14 +82,14 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
       final listing = await service.getFarmerListing(token: token);
       setState(() {
         // Ensure the UI updates after data fetch
-        buyerListings = listing;
-        isLoadingBuyerListings = false;
-        print(buyerListings);
+        FarmerListings = listing;
+        isLoadingFarmerListings = false;
+        print(FarmerListings);
       });
     } catch (e) {
       print(e);
       setState(() {
-        isLoadingBuyerListings = false;
+        isLoadingFarmerListings = false;
       });
     }
   }
@@ -119,27 +122,27 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                 ),
                 SizedBox(
                   height: height * 0.7,
-                  child: isLoadingFilteredBuyerListings ||
-                          isLoadingBuyerListings
+                  child: isLoadingFilteredFarmerListings ||
+                          isLoadingFarmerListings
                       ? Center(child: CircularProgressIndicator())
                       : (searchController.text.trim().length >= 3)
-                          ? filteredBuyerListings.isEmpty
+                          ? filteredFarmerListings.isEmpty
                               ? Center(
                                   child: Text('No Matching Listings Found'))
                               : ListView.builder(
-                                  itemCount: filteredBuyerListings.length,
+                                  itemCount: filteredFarmerListings.length,
                                   itemBuilder: (context, index) {
                                     return farmerListingCard(
-                                        width, filteredBuyerListings[index]);
+                                        width, filteredFarmerListings[index]);
                                   },
                                 )
-                          : buyerListings.isEmpty
+                          : FarmerListings.isEmpty
                               ? Center(child: Text('No Farmers Listings Found'))
                               : ListView.builder(
-                                  itemCount: buyerListings.length,
+                                  itemCount: FarmerListings.length,
                                   itemBuilder: (context, index) {
                                     return farmerListingCard(
-                                        width, buyerListings[index]);
+                                        width, FarmerListings[index]);
                                   },
                                 ),
                 ),
@@ -250,7 +253,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                   '${listing["category"]}: ${listing["title"]}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
-                Text('Business Name: : ${listing["businessName"].toString()}',
+                Text('Farmer Name: : ${listing["farmerName"].toString()}',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -306,9 +309,32 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      try {
+                        await service.startConversation(
+                            senderId: int.parse(SharedPrefHelper.getUserId()),
+                            receiverId: listing["farmerId"],
+                            token: SharedPrefHelper.getToken(),
+                            listingId: listing["listingId"]);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Successfully connected with Farmer'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.toString()),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
                     child: Text(
-                      'Connect with Buyer',
+                      'Connect with Farmer',
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
