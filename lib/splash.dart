@@ -89,7 +89,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:krishi_connect_app/main_screen.dart';
-import 'package:krishi_connect_app/pages/login.dart';
+import 'package:krishi_connect_app/pages/common/login.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -122,7 +122,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _wakeUpBackend() async {
-    const String backendUrl = "https://krishi-connect-app.onrender.com/";
+    const String backendUrl =
+        "https://krishi-connect-app.onrender.com/swagger-ui/index.html";
     try {
       final response = await http.get(Uri.parse(backendUrl));
       print("Backend wake-up response: ${response.statusCode}");
