@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -50,6 +52,7 @@ class _CompanyHomeState extends State<CompanyHome> {
         produceListings = listings;
         isLoadingProduceListings = false;
       });
+      print(produceListings);
     } catch (e) {
       print(e);
       setState(() {

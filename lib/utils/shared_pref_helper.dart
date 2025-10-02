@@ -68,6 +68,16 @@ class SharedPrefHelper {
     return _prefs?.getString('location') ?? '';
   }
 
+  //Set Profile Pic
+  static Future<void> setProfilePic(String profilePic) async {
+    await _prefs?.setString('profilePic', profilePic);
+  }
+
+  // Get Profile Pic
+  static String getProfilePic() {
+    return _prefs?.getString('profilePic') ?? '';
+  }
+
   // Clear All Data
   static Future<void> clearAll() async {
     await _prefs?.clear();

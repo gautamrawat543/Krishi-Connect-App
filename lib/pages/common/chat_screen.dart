@@ -71,44 +71,64 @@ class _ChatScreenState extends State<ChatScreen> {
                                 convoId: convo['conversationId'],
                               )));
                 },
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 20,
+                child: ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    // child: Image.asset(
+                    //   'assets/app_icon.png',
+                    //   height: 50,
+                    //   fit: BoxFit.cover,
+                    // ),
+                    child: Image.network(
+                      convo['otherUserProfilePicUrl'],
+                      errorBuilder: (context, error, stackTrace) => Image.asset(
+                        'assets/app_icon.png',
+                        height: 50,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.asset(
-                          'assets/app_icon.png',
-                          height: 50,
-                          fit: BoxFit.cover,
-                        ),
-                        // child: Image.network(
-                        //   convo['otherUserProfilePicUrl'],
-                        //   errorBuilder: (context, error, stackTrace) =>
-                        //       Image.asset(
-                        //     'assets/app_icon.png',
-                        //     height: 50,
-                        //     fit: BoxFit.cover,
-                        //   ),
-                        // ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(convo['otherUserName']),
-                          Text(convo['lastMessageTime'])
-                        ],
-                      ),
-                    ],
-                  ),
+                  title: Text(convo['otherUserName']),
+                  subtitle: Text(convo['lastMessageTime']),
                 ),
+                // Container(
+                //   padding: const EdgeInsets.all(8.0),
+                //   margin: EdgeInsets.symmetric(
+                //     horizontal: 20,
+                //   ),
+                //   child: Row(
+                //     children: [
+                // ClipRRect(
+                //   borderRadius: BorderRadius.circular(50),
+                //   child: Image.asset(
+                //     'assets/app_icon.png',
+                //     height: 50,
+                //     fit: BoxFit.cover,
+                //   ),
+                //   // child: Image.network(
+                //   //   convo['otherUserProfilePicUrl'],
+                //   //   errorBuilder: (context, error, stackTrace) =>
+                //   //       Image.asset(
+                //   //     'assets/app_icon.png',
+                //   //     height: 50,
+                //   //     fit: BoxFit.cover,
+                //   //   ),
+                //   // ),
+                // ),
+                //       const SizedBox(
+                //         width: 10,
+                //       ),
+                //       Column(
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //         children: [
+                //           Text(convo['otherUserName']),
+                //           Text(convo['lastMessageTime'])
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
               );
             }),
       ),

@@ -55,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
       SharedPrefHelper.setUsername(userDetail["name"]);
       SharedPrefHelper.setUserId(userDetail["userId"].toString());
       SharedPrefHelper.setLocation(userDetail["location"]);
+      SharedPrefHelper.setProfilePic(userDetail["profilePicture"]);
 
       // Navigate to MainScreen
       Navigator.pushAndRemoveUntil(

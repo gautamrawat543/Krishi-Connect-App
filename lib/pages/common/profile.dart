@@ -34,6 +34,7 @@ class _ProfileState extends State<Profile> {
       setState(() {
         farmerData = data;
       });
+      print(farmerData);
     } catch (e) {
       print('User by ID Error: $e');
     }
@@ -41,6 +42,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    print(SharedPrefHelper.getToken());
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -63,10 +65,18 @@ class _ProfileState extends State<Profile> {
                     Container(
                       height: 160,
                       width: 160,
-                      margin: EdgeInsets.only(right: 10),
-                      child: Image.asset(
-                        'assets/app_icon.png',
-                        fit: BoxFit.cover,
+                      margin: const EdgeInsets.only(right: 10),
+                      child: ClipOval(
+                        child: Image.network(
+                          farmerData['profilePicture'] ?? '',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              'assets/app_icon.png',
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
