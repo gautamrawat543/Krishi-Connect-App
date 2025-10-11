@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:krishi_connect_app/pages/common/login.dart';
 import 'package:krishi_connect_app/pages/common/detail_register.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -17,10 +18,17 @@ class Registeration extends StatefulWidget {
 }
 
 class _RegisterationState extends State<Registeration> {
-  String _selectedRole = 'Farmer'; // Default selected value
+  String _selectedRole = ''; // Default selected value
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _selectedRole = AppLocalizations.of(context)!.farmer;
+  }
 
   void _submitForm() {
     print(_selectedRole);
@@ -61,7 +69,7 @@ class _RegisterationState extends State<Registeration> {
                 width: width * 0.35,
               ),
               Text(
-                'KrishiConnect',
+                AppLocalizations.of(context)!.appTitle,
                 style: AppTextStyles.krishiHeading,
               ),
               SizedBox(
@@ -78,7 +86,8 @@ class _RegisterationState extends State<Registeration> {
                     controller: _nameController,
                     cursorColor: AppColors.labelColor,
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: customInputDecoration('Full Name'),
+                    decoration: customInputDecoration(
+                        AppLocalizations.of(context)!.fullName),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter a name";
@@ -109,7 +118,8 @@ class _RegisterationState extends State<Registeration> {
                     keyboardType: TextInputType.number,
                     cursorColor: AppColors.labelColor,
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: customInputDecoration('Phone Number'),
+                    decoration: customInputDecoration(
+                        AppLocalizations.of(context)!.phoneNumber),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter a number";
@@ -129,7 +139,7 @@ class _RegisterationState extends State<Registeration> {
                 padding: const EdgeInsets.only(left: 10),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Register as:',
+                  child: Text('${AppLocalizations.of(context)!.registerAs}',
                       style: AppTextStyles.bottomText.copyWith(fontSize: 16)),
                 ),
               ),
@@ -139,8 +149,10 @@ class _RegisterationState extends State<Registeration> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _roleButton(context, width, height, 'Farmer'),
-                  _roleButton(context, width, height, 'Business'),
+                  _roleButton(context, width, height,
+                      AppLocalizations.of(context)!.farmer),
+                  _roleButton(context, width, height,
+                      AppLocalizations.of(context)!.business),
                 ],
               ),
               SizedBox(
@@ -159,20 +171,21 @@ class _RegisterationState extends State<Registeration> {
                   ),
                   child: Center(
                     child: Text(
-                      'Continue',
+                      AppLocalizations.of(context)!.continueBtn,
                       style: AppTextStyles.buttonTextStyle,
                     ),
                   ),
                 ),
               ),
               SizedBox(height: 40),
-              Text('Already have an account? ',
+              Text(AppLocalizations.of(context)!.alreadyAccount,
                   style: AppTextStyles.bottomText),
               GestureDetector(
                 onTap: () {
                   NavigationHelper.push(context, LoginPage());
                 },
-                child: Text('Login Here', style: AppTextStyles.linkText),
+                child: Text(AppLocalizations.of(context)!.loginHere,
+                    style: AppTextStyles.linkText),
               ),
             ],
           ),

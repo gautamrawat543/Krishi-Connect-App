@@ -1,0 +1,15 @@
+{
+  "appTitle": "कृषी कनेक्ट",
+  "phoneNumber": "फोन नंबर",
+  "password": "पासवर्ड",
+  "login": "लॉगिन",
+  "noAccount": "तुमचं खाते नाहीये?",
+  "signUpHere": "इथे नोंदणी करा",
+  "fullName": "पूर्ण नाव",
+  "registerAs": "नोंदणी करा म्हणून:",
+  "farmer": "शेतकरी",
+  "business": "व्यवसाय",
+  "continueBtn": "पुढे जा",
+  "alreadyAccount": "आधीच खाते आहे?",
+  "loginHere": "इथे लॉगिन करा"
+}

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:krishi_connect_app/main.dart';
 import 'package:krishi_connect_app/main_screen.dart';
 import 'package:krishi_connect_app/pages/common/registeration.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
@@ -22,6 +24,31 @@ class _LoginPageState extends State<LoginPage> {
   bool _isPasswordHidden = true;
 
   bool isLoading = false;
+
+  String _selectedLanguage = 'en'; // Default language
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedLanguage();
+  }
+
+  Future<void> _loadSelectedLanguage() async {
+    String? langCode = SharedPrefHelper.getLanguageCode();
+    if (langCode != null) {
+      setState(() {
+        _selectedLanguage = langCode;
+      });
+    }
+  }
+
+  void _changeLanguage(String code) {
+    myAppKey.currentState?.changeLanguage(code); // instantly changes language
+    setState(() {
+      _selectedLanguage = code;
+    });
+  }
+
   void _submitForm() async {
     if (_numberController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -74,6 +101,34 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 40, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  DropdownButton<String>(
+                    value: _selectedLanguage,
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'en',
+                        child: Text('English'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'hi',
+                        child: Text('हिन्दी'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'mr',
+                        child: Text('मराठी'),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) _changeLanguage(value);
+                    },
+                  )
+                ],
+              ),
+            ),
             SizedBox(
               height: 100,
             ),
@@ -82,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
               width: width * 0.35,
             ),
             Text(
-              'KrishiConnect',
+              AppLocalizations.of(context)!.appTitle,
               style: AppTextStyles.krishiHeading,
             ),
             SizedBox(
@@ -100,7 +155,8 @@ class _LoginPageState extends State<LoginPage> {
                   keyboardType: TextInputType.number,
                   cursorColor: AppColors.labelColor,
                   onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                  decoration: customInputDecoration("Phone Number"),
+                  decoration: customInputDecoration(
+                      AppLocalizations.of(context)!.phoneNumber),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Please enter a number";
@@ -129,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                   cursorColor: AppColors.labelColor,
                   onTapOutside: (_) => FocusScope.of(context).unfocus(),
                   decoration: customInputDecoration(
-                    "Password",
+                    AppLocalizations.of(context)!.password,
                     suffixIcon: IconButton(
                       icon: Icon(
                         _isPasswordHidden
@@ -170,20 +226,22 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.white,
                         ),
                       )
-                    : const Text(
-                        'Login',
+                    : Text(
+                        AppLocalizations.of(context)!.login,
                         style: AppTextStyles.buttonTextStyle,
                         textAlign: TextAlign.center,
                       ),
               ),
             ),
             SizedBox(height: 50),
-            Text('Don\'t have an account? ', style: AppTextStyles.bottomText),
+            Text(AppLocalizations.of(context)!.noAccount,
+                style: AppTextStyles.bottomText),
             GestureDetector(
               onTap: () {
                 NavigationHelper.push(context, Registeration());
               },
-              child: Text('SignUp Here', style: AppTextStyles.linkText),
+              child: Text(AppLocalizations.of(context)!.signUpHere,
+                  style: AppTextStyles.linkText),
             ),
           ],
         ),

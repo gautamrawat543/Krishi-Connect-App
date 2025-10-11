@@ -75,12 +75,20 @@ class _DetailRegisterState extends State<DetailRegister> {
     });
     ApiService apiService = ApiService();
 
+    // Map name/role to API-compatible role
+    String apiRole;
+    if (widget.role.toLowerCase() == 'farmer' || widget.role == 'किसान') {
+      apiRole = 'Farmer';
+    } else {
+      apiRole = 'Business';
+    }
+
     var response = await apiService.registerUserWithImage(
       name: widget.name,
       email: _emailController.text,
       phone: widget.number,
       password: _passwordController2.text,
-      role: widget.role,
+      role: apiRole,
       location: _city,
       profilePicFile: _selectedImage,
     );

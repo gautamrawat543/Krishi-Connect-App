@@ -1,0 +1,15 @@
+{
+  "appTitle": "KrishiConnect",
+  "phoneNumber": "Phone Number",
+  "password": "Password",
+  "login": "Login",
+  "noAccount": "Don't have an account?",
+  "signUpHere": "SignUp Here",
+  "fullName": "Full Name",
+  "registerAs": "Register as:",
+  "farmer": "Farmer",
+  "business": "Business",
+  "continueBtn": "Continue",
+  "alreadyAccount": "Already have an account?",
+  "loginHere": "Login Here"
+}

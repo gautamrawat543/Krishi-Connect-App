@@ -3,6 +3,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPrefHelper {
   static SharedPreferences? _prefs;
 
+  static const String _languageKey = 'language_code';
+
+  static Future<void> setLanguageCode(String code) async {
+    await _prefs?.setString(_languageKey, code);
+  }
+
+  static String? getLanguageCode() {
+    return _prefs?.getString(_languageKey);
+  }
+
   // Initialize SharedPreferences (call this in main() before runApp)
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
