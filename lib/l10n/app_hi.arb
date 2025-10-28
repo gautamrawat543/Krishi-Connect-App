@@ -11,5 +11,57 @@
   "business": "व्यवसाय",
   "continueBtn": "जारी रखें",
   "alreadyAccount": "क्या आपका अकाउंट पहले से है?",
-  "loginHere": "यहाँ लॉगिन करें"
+  "loginHere": "यहाँ लॉगिन करें",
+
+  "welcomeBack": "वापस आने पर स्वागत है",
+  "buyerListings": "खरीदार सूचियाँ",
+   "exploreMoreAboutFarming" : "खेती के बारे में और जानें",
+   "createAListing" : "सूची बनाना",
+   "myListings" : "मेरी सूचियाँ",
+
+   "noListingsFound" : "कोई सूची नहीं मिली",
+    "seeAll" : "सभी देखें >",
+    "searchByCrop" : "फसल के अनुसार खोजें",
+    "about" : "जानकारी",
+    "conversations" : "संवाद",
+    "myProfile" : "मेरा प्रोफ़ाइल",
+    "logOut" : "लॉग आउट",
+    "availableProduce" : "उपलब्ध उत्पाद",
+    "startConversation" : "संवाद शुरू करें",
+    "createARequest" : "अनुरोध बनाएँ",
+    "bulkPurchaseRequest": "थोक खरीद अनुरोध",
+    "title": "शीर्षक",
+    "exampleBulkPurchaseOfTomatoes": "उदाहरण: टमाटर की थोक खरीद",
+    "description": "विवरण",
+    "exampleLookingForHighQualityTomatoes": "उदाहरण: उच्च गुणवत्ता वाले टमाटर थोक में चाहिए",
+    "category": "श्रेणी",
+    "requiredQuantity": "आवश्यक मात्रा",
+    "example500": "उदाहरण: 500",
+    "unit": "इकाई",
+    "maxPrice": "अधिकतम मूल्य",
+    "example1600": "उदाहरण: 1600",
+    "createListing": "सूची बनाएँ",
+
+    "exampleBulkPurchaseTomatoes": "उदाहरण: टमाटर की थोक खरीद",
+    "exampleHighQualityTomatoes": "उदाहरण: उच्च गुणवत्ता वाले टमाटर थोक में चाहिए",
+    "exampleQuantity": "उदाहरण: 500",
+    "examplePrice": "उदाहरण: 1600",
+    "selectImage": "छवि चुनें",
+    "tapToSelectImage": "छवि चुनने के लिए टैप करें",
+    "status": "स्थिति",
+
+    "requestId": "अनुरोध आईडी",
+  "businessName": "व्यवसाय का नाम",
+  "clickForInfo": "जानकारी के लिए क्लिक करें",
+  "priceOffered": "प्रस्तावित मूल्य",
+  "location": "स्थान",
+  "createdAt": "निर्माण तिथि",
+  "title": "शीर्षक",
+  "description": "विवरण",
+  "category": "श्रेणी",
+  "requiredQuantity": "आवश्यक मात्रा",
+  "unit": "इकाई"
+
+  
+
 }

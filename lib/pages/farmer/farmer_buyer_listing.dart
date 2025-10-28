@@ -5,9 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FarmerBuyerListing extends StatefulWidget {
-  FarmerBuyerListing({super.key, required this.listing});
+  const FarmerBuyerListing({super.key, required this.listing});
 
   final dynamic listing;
 
@@ -27,7 +28,7 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
         backgroundColor: AppColors.primaryGreenDark,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new_rounded),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
           color: Colors.white,
         ),
       ),
@@ -40,7 +41,7 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
               const Text('Buyer Listings', style: AppTextStyles.pageHeading),
               const SizedBox(height: 6),
               const Divider(thickness: 2, color: AppColors.primaryGreenDark),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               SizedBox(
@@ -106,27 +107,36 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Request Id: #${listing["requestId"]}',
-                    style: AppTextStyles.modalLabel),
-                Text('Title: ${listing["title"]}',
-                    style: AppTextStyles.modalTitle),
-                Text('Business Name: ${listing["businessName"]}',
-                    style: AppTextStyles.modalLabel),
-                const Text(' click for Info',
-                    style: AppTextStyles.modalInfoLink),
-                Text('Description: ${listing["description"]}',
-                    style: AppTextStyles.modalLabel),
-                Text('Category: ${listing["category"]}',
+                Text(
+                    '${AppLocalizations.of(context)!.requestId}: #${listing["requestId"]}',
                     style: AppTextStyles.modalLabel),
                 Text(
-                    'Required QTY: ${listing["requiredQuantity"]} ${listing["unit"]}',
+                    '${AppLocalizations.of(context)!.title}: ${listing["title"]}',
+                    style: AppTextStyles.modalTitle),
+                Text(
+                    '${AppLocalizations.of(context)!.businessName}: ${listing["businessName"]}',
                     style: AppTextStyles.modalLabel),
-                Text('Price Offered: ₹ ${listing["maxPrice"]}',
+                Text(AppLocalizations.of(context)!.clickForInfo,
+                    style: AppTextStyles.modalInfoLink),
+                Text(
+                    '${AppLocalizations.of(context)!.description}: ${listing["description"]}',
                     style: AppTextStyles.modalLabel),
-                Text('Location: ${listing["location"]}',
+                Text(
+                    '${AppLocalizations.of(context)!.category}: ${listing["category"]}',
+                    style: AppTextStyles.modalLabel),
+                Text(
+                  '${AppLocalizations.of(context)!.requiredQuantity}: ${listing["requiredQuantity"]} ${listing["unit"]}',
+                  style: AppTextStyles.modalLabel,
+                ),
+                Text(
+                    '${AppLocalizations.of(context)!.priceOffered}: ₹ ${listing["maxPrice"]}',
+                    style: AppTextStyles.modalLabel),
+                Text(
+                    '${AppLocalizations.of(context)!.location}: ${listing["location"]}',
                     style: AppTextStyles.modalLabel),
                 const SizedBox(height: 10),
-                const Text('Created at:', style: AppTextStyles.modalLabel),
+                Text('${AppLocalizations.of(context)!.createdAt}:',
+                    style: AppTextStyles.modalLabel),
                 if (listing["createdAt"].toString() != "null")
                   Text(
                     DateFormat("d MMMM y, h:mm a")
@@ -145,7 +155,7 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
                             token: SharedPrefHelper.getToken(),
                             buyerRequestId: listing["requestId"]);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text('Successfully connected with Buyer'),
                             backgroundColor: Colors.green,
                           ),

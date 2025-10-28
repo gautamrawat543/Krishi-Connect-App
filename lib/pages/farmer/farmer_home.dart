@@ -13,6 +13,7 @@ import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FarmerHome extends StatefulWidget {
   const FarmerHome({super.key});
@@ -137,28 +138,31 @@ class _FarmerHomeState extends State<FarmerHome> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         Text(
-                          'Welcome back\n${SharedPrefHelper.getUsername().toUpperCase()}!',
+                          '${AppLocalizations.of(context)!.welcomeBack}\n${SharedPrefHelper.getUsername().toUpperCase()}!',
                           style: AppTextStyles.welcomeHeading,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
-                        sectionHeader('Buyer Listings', onTap: () {
-                          NavigationHelper.push(
-                            context,
-                            FarmerBuyerListing(listing: companyListings),
-                          );
-                        }),
-                        SizedBox(
+                        sectionHeader(
+                          AppLocalizations.of(context)!.buyerListings,
+                          onTap: () {
+                            NavigationHelper.push(
+                              context,
+                              FarmerBuyerListing(listing: companyListings),
+                            );
+                          },
+                        ),
+                        const SizedBox(
                           height: 6,
                         ),
-                        Divider(
+                        const Divider(
                             thickness: 2, color: AppColors.primaryGreenDark),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         SizedBox(
@@ -166,12 +170,12 @@ class _FarmerHomeState extends State<FarmerHome> {
                               ? height * 0.2
                               : height * 0.35,
                           child: isCompanyLoading
-                              ? Center(
+                              ? const Center(
                                   child: CircularProgressIndicator(
                                       color: Colors.green),
                                 )
                               : companyListings.isEmpty
-                                  ? Center(
+                                  ? const Center(
                                       child: Text(
                                           'No buyer listings available right now.',
                                           style: AppTextStyles.noDataText))
@@ -185,36 +189,38 @@ class _FarmerHomeState extends State<FarmerHome> {
                                       },
                                     ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
-                        sectionHeader('Explore more about Farming'),
-                        SizedBox(
+                        sectionHeader(AppLocalizations.of(context)!
+                            .exploreMoreAboutFarming),
+                        const SizedBox(
                           height: 6,
                         ),
-                        Divider(
+                        const Divider(
                             thickness: 2, color: AppColors.primaryGreenDark),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         newsCard(height, width),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Create a Listing',
-                              style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color.fromRGBO(0, 0, 0, 0.75)),
+                              AppLocalizations.of(context)!.createAListing,
+                              style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w600,
+                                color: Color.fromRGBO(0, 0, 0, 0.75),
+                              ),
                             ),
                             GestureDetector(
                               onTap: () => NavigationHelper.push(
                                   context, FarmerListing()),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.add_circle_outline_rounded,
                                 color: Color.fromRGBO(0, 0, 0, 0.75),
                                 size: 45,
@@ -222,34 +228,37 @@ class _FarmerHomeState extends State<FarmerHome> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 25,
                         ),
                         Text(
-                          'My Listings',
-                          style: TextStyle(
+                          AppLocalizations.of(context)!.myListings,
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 6,
                         ),
-                        Divider(
+                        const Divider(
                             thickness: 2,
                             color: Color.fromRGBO(107, 142, 35, 1)),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                         SizedBox(
                           height: height * 0.5,
                           child: isLoadingFarmerListings
-                              ? Center(
+                              ? const Center(
                                   child: CircularProgressIndicator(
                                       color: Colors.green))
                               : farmerListings.isEmpty
                                   ? Center(
-                                      child: Text('No Listings Found'),
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .noListingsFound,
+                                      ),
                                     )
                                   : ListView.builder(
                                       itemCount: farmerListings.length,
@@ -366,7 +375,10 @@ class _FarmerHomeState extends State<FarmerHome> {
         if (onTap != null)
           GestureDetector(
             onTap: onTap,
-            child: const Text('See All>', style: AppTextStyles.linkStyle),
+            child: Text(
+              AppLocalizations.of(context)!.seeAll,
+              style: AppTextStyles.linkStyle,
+            ),
           ),
       ],
     );
@@ -420,7 +432,7 @@ class _FarmerHomeState extends State<FarmerHome> {
                           token: SharedPrefHelper.getToken(),
                           buyerRequestId: listing["requestId"]);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Successfully connected with Buyer'),
                           backgroundColor: Colors.green,
                         ),
@@ -452,14 +464,14 @@ class _FarmerHomeState extends State<FarmerHome> {
   void showFarmerListingDetails(BuildContext context, dynamic listing) {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
         return Container(
           width: double.infinity,
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: SingleChildScrollView(
@@ -469,18 +481,20 @@ class _FarmerHomeState extends State<FarmerHome> {
               children: [
                 Text(
                   'Request Id: #${listing["listingId"].toString()}',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500),
                 ),
                 Text(
                   '${listing["category"]}: ${listing["title"]}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 Text('Business Name: : ${listing["businessName"].toString()}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
+                const Text(
                   ' click for Info',
                   style: TextStyle(
                     fontSize: 18,
@@ -489,33 +503,33 @@ class _FarmerHomeState extends State<FarmerHome> {
                   ),
                 ),
                 Text('Description: ${listing["description"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text('Category: ${listing["category"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text(
                     'Quantity: ${listing["quantity"].toString()}, ${listing["unit"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text('Price Offered: ₹ ${listing["price"].toString()}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text('Location:  ${listing["location"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 10),
-                Text('Created at:',
+                const SizedBox(height: 10),
+                const Text('Created at:',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -523,7 +537,7 @@ class _FarmerHomeState extends State<FarmerHome> {
                 Text(
                     DateFormat("d MMMM y, h:mm a")
                         .format(DateTime.parse(listing["createdAt"])),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
@@ -537,11 +551,11 @@ class _FarmerHomeState extends State<FarmerHome> {
 
   Widget farmerListingCard(double width, dynamic listing) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 6),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Color.fromRGBO(255, 242, 242, 1),
+          color: const Color.fromRGBO(255, 242, 242, 1),
           boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.25),
@@ -555,36 +569,36 @@ class _FarmerHomeState extends State<FarmerHome> {
         children: [
           Text(
             '${listing['category']}: ${listing['title']}',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
           ),
           Text(
             'Description: ${listing['description']}',
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
             'Required Qty: ${'${listing['quantity']} ' + listing['unit']}',
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
             'Price Offered: ${listing['price'].toString()}',
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 listing['location'],
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 13,
                     color: Color.fromRGBO(0, 0, 0, 0.75)),
@@ -593,7 +607,7 @@ class _FarmerHomeState extends State<FarmerHome> {
                 onTap: () {
                   showFarmerListingDetails(context, listing);
                 },
-                child: Text(
+                child: const Text(
                   'About>',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,

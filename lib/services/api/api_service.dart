@@ -113,7 +113,7 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final responseData = response.body;
-        print("Login Successful: ${responseData}");
+        print("Login Successful: $responseData");
         return {"token": responseData};
       } else {
         print("Login Failed: ${response.body}");

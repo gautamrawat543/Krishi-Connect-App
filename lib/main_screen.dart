@@ -52,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor: Colors.green, // Highlight selected tab
-        unselectedItemColor: Color.fromRGBO(107, 142, 35, 1),
+        unselectedItemColor: const Color.fromRGBO(107, 142, 35, 1),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

@@ -5,8 +5,11 @@ import 'package:krishi_connect_app/main_screen.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FarmerListing extends StatefulWidget {
+  const FarmerListing({super.key});
+
   @override
   _FarmerListingState createState() => _FarmerListingState();
 }
@@ -82,7 +85,7 @@ class _FarmerListingState extends State<FarmerListing> {
         _showSnackBar(response['error'], isError: true);
       } else {
         _showSnackBar("Listing created successfully!", isError: false);
-        NavigationHelper.pushReplacement(context, MainScreen());
+        NavigationHelper.pushReplacement(context, const MainScreen());
       }
     } catch (e) {
       _showSnackBar("An unexpected error occurred", isError: true);
@@ -110,7 +113,9 @@ class _FarmerListingState extends State<FarmerListing> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(107, 142, 35, 1),
-        title: const Text("Bulk Purchase Request"),
+        title: Text(
+          AppLocalizations.of(context)!.bulkPurchaseRequest,
+        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -120,13 +125,17 @@ class _FarmerListingState extends State<FarmerListing> {
           key: _formKey,
           child: ListView(
             children: [
-              _buildLabel('Title'),
+              _buildLabel(AppLocalizations.of(context)!.title),
               _buildTextField(
-                  _titleController, 'eg: Bulk Purchase of Tomatoes'),
-              _buildLabel('Description'),
-              _buildTextField(_descriptionController,
-                  'eg: Looking for high quality tomatoes in bulk'),
-              _buildLabel('Category'),
+                _titleController,
+                AppLocalizations.of(context)!.exampleBulkPurchaseTomatoes,
+              ),
+              _buildLabel(AppLocalizations.of(context)!.description),
+              _buildTextField(
+                _descriptionController,
+                AppLocalizations.of(context)!.exampleHighQualityTomatoes,
+              ),
+              _buildLabel(AppLocalizations.of(context)!.category),
               _buildDropdown(categories, category,
                   (val) => setState(() => category = val!)),
               Row(
@@ -135,9 +144,13 @@ class _FarmerListingState extends State<FarmerListing> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Required Quantity'),
-                        _buildTextField(_requiredQuantityController, 'eg: 500',
-                            isNumber: true),
+                        _buildLabel(
+                            AppLocalizations.of(context)!.requiredQuantity),
+                        _buildTextField(
+                          _requiredQuantityController,
+                          AppLocalizations.of(context)!.exampleQuantity,
+                          isNumber: true,
+                        ),
                       ],
                     ),
                   ),
@@ -146,7 +159,7 @@ class _FarmerListingState extends State<FarmerListing> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Unit'),
+                        _buildLabel(AppLocalizations.of(context)!.unit),
                         _buildDropdown(
                             units, unit, (val) => setState(() => unit = val!)),
                       ],
@@ -154,26 +167,37 @@ class _FarmerListingState extends State<FarmerListing> {
                   ),
                 ],
               ),
-              _buildLabel('Max Price'),
-              _buildTextField(_maxPriceController, 'eg: 1600', isNumber: true),
-              _buildLabel('Select Image'),
+              _buildLabel(AppLocalizations.of(context)!.maxPrice),
+              _buildTextField(
+                _maxPriceController,
+                AppLocalizations.of(context)!.examplePrice,
+                isNumber: true,
+              ),
+              _buildLabel(AppLocalizations.of(context)!.selectImage),
               GestureDetector(
                 onTap: _pickImage,
                 child: Container(
                   height: 150,
-                  margin: EdgeInsets.only(bottom: 12),
+                  margin: const EdgeInsets.only(bottom: 12),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: imageFile != null
                       ? Image.file(imageFile!, fit: BoxFit.cover)
-                      : Center(child: Text('Tap to select image')),
+                      : Center(
+                          child: Text(
+                            AppLocalizations.of(context)!.tapToSelectImage,
+                          ),
+                        ),
                 ),
               ),
-              _buildLabel('Status'),
+              _buildLabel(AppLocalizations.of(context)!.status),
               _buildDropdown(
-                  statusList, status, (val) => setState(() => status = val!)),
+                statusList,
+                status,
+                (val) => setState(() => status = val!),
+              ),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: _submitForm,
@@ -186,13 +210,15 @@ class _FarmerListingState extends State<FarmerListing> {
                   ),
                   child: _isLoading
                       ? const Center(
-                          child: CircularProgressIndicator(color: Colors.white))
-                      : const Text(
-                          'Create Listing',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                          child: CircularProgressIndicator(color: Colors.white),
+                        )
+                      : Text(
+                          AppLocalizations.of(context)!.createListing,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                 ),
@@ -234,8 +260,9 @@ class _FarmerListingState extends State<FarmerListing> {
         ),
         validator: (val) {
           if (val == null || val.trim().isEmpty) return 'Required';
-          if (isNumber && double.tryParse(val.trim()) == null)
+          if (isNumber && double.tryParse(val.trim()) == null) {
             return 'Enter a valid number';
+          }
           return null;
         },
       ),

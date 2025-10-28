@@ -41,7 +41,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.3
   shared_preferences: ^2.2.3
   flutter_svg: ^2.0.10+1
-  intl: ^0.18.1
+  intl: 0.19.0
   image_picker: ^1.1.2
   stomp_dart_client: ^2.0.0
   web_socket_channel: ^2.4.5

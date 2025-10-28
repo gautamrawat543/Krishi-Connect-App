@@ -89,7 +89,7 @@ class _EditListingState extends State<EditListing> {
         _showSnackBar(response['error'], isError: true);
       } else {
         _showSnackBar("Listing Updated Successfully!", isError: false);
-        NavigationHelper.pushReplacement(context, MainScreen());
+        NavigationHelper.pushReplacement(context, const MainScreen());
       }
     } catch (e) {
       _showSnackBar("An unexpected error occurred", isError: true);
@@ -125,7 +125,7 @@ class _EditListingState extends State<EditListing> {
             children: [
               const Text('Edit Purchase Request',
                   style: AppTextStyles.pageHeading),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildLabel('Title'),
               _buildTextField('eg: Bulk Purchase of Tomatoes', _titleController,
                   TextInputType.text),
@@ -136,7 +136,7 @@ class _EditListingState extends State<EditListing> {
               _buildDropdownField(categories, _selectedCategory, (value) {
                 setState(() => _selectedCategory = value!);
               }),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(children: [
                 Expanded(
                   child: Column(
@@ -159,11 +159,11 @@ class _EditListingState extends State<EditListing> {
                       ]),
                 ),
               ]),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               _buildLabel('Max Price'),
               _buildTextField(
                   'eg: 1600', _maxPriceController, TextInputType.number),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               _buildLabel('Status'),
               _buildDropdownField(statusOptions, _selectedStatus, (value) {
                 setState(() => _selectedStatus = value!);

@@ -6,6 +6,7 @@ import 'package:krishi_connect_app/pages/common/registeration.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -47,19 +48,20 @@ class _ProfileState extends State<Profile> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'My Profile',
-            style: TextStyle(color: Colors.white),
+            AppLocalizations.of(context)!.myProfile,
+            style: const TextStyle(color: Colors.white),
           ),
           centerTitle: true,
           backgroundColor: AppColors.primaryGreenDark,
         ),
         body: farmerData.isEmpty
-            ? Center(child: CircularProgressIndicator(color: Colors.green))
+            ? const Center(
+                child: CircularProgressIndicator(color: Colors.green))
             : SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 60,
                     ),
                     Container(
@@ -79,19 +81,19 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     buildCard(farmerData['name']),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     buildCard('+91 ${farmerData['phone']}'),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     buildCard(farmerData['email']),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Align(
@@ -104,11 +106,11 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     buildCard('Edit Password'),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     GestureDetector(
@@ -123,8 +125,8 @@ class _ProfileState extends State<Profile> {
                         );
                       },
                       child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20),
-                        padding: EdgeInsets.symmetric(vertical: 15),
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -138,11 +140,11 @@ class _ProfileState extends State<Profile> {
                               color: Colors.white,
                               height: 20,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(
-                              'Log Out',
+                              AppLocalizations.of(context)!.logOut,
                               style: AppTextStyles.buttonTextStyle,
                               textAlign: TextAlign.center,
                             ),
@@ -150,7 +152,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                   ],

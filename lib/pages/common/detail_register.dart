@@ -116,7 +116,7 @@ class _DetailRegisterState extends State<DetailRegister> {
         isRegistered = false;
       });
     } else {
-      print("User registered successfully: ${response}");
+      print("User registered successfully: $response");
 
       setState(() {
         isRegistered = false;
@@ -164,20 +164,20 @@ class _DetailRegisterState extends State<DetailRegister> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Image.asset(
                   'assets/images/krishi_icon.png',
                   width: width * 0.26,
                 ),
-                Text('KrishiConnect', style: AppTextStyles.krishiHeading),
-                SizedBox(
+                const Text('KrishiConnect', style: AppTextStyles.krishiHeading),
+                const SizedBox(
                   height: 10,
                 ),
                 Text('Complete Profile as ${widget.role}',
                     style: AppTextStyles.subHeadingStyle),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 GestureDetector(
@@ -196,13 +196,13 @@ class _DetailRegisterState extends State<DetailRegister> {
                               fit: BoxFit.cover,
                             ),
                           )
-                        : Icon(
+                        : const Icon(
                             Icons.camera_alt,
                             size: 50,
                           ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Padding(
@@ -221,7 +221,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                         style: AppTextStyles.infoTextStyle),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Padding(
@@ -248,7 +248,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                               ? const CircularProgressIndicator(
                                   color: Colors.white,
                                 )
-                              : Text(
+                              : const Text(
                                   'Search',
                                   style: AppTextStyles.buttonTextStyle,
                                 ),
@@ -257,7 +257,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Padding(
@@ -268,7 +268,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                         style: AppTextStyles.infoTextStyle),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 25,
                 ),
                 SizedBox(
@@ -277,7 +277,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                   child: _buildTextField(
                       _emailController, 'Email', TextInputType.emailAddress),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 SizedBox(
@@ -287,7 +287,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                       TextInputType.visiblePassword,
                       obscure: true),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 SizedBox(
@@ -306,7 +306,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                             () => _isPasswordHidden = !_isPasswordHidden),
                       )),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 GestureDetector(
@@ -329,7 +329,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                           ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 25,
                 ),
                 Padding(
@@ -338,7 +338,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Row(
+                    child: const Row(
                       children: [
                         Icon(
                           Icons.arrow_back_ios_new_rounded,

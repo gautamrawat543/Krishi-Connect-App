@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchPageBusiness extends StatefulWidget {
   const SearchPageBusiness({super.key});
@@ -25,7 +26,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
       isLoadingFilteredFarmerListings = true;
     });
     try {
-      final token = await SharedPrefHelper.getToken();
+      final token = SharedPrefHelper.getToken();
       final listing = await service.searchFarmerListing(
           token: token, query: searchController.text);
       setState(() {
@@ -78,7 +79,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
 
   Future<void> loadBuyerListings() async {
     try {
-      final token = await SharedPrefHelper.getToken();
+      final token = SharedPrefHelper.getToken();
       final listing = await service.getFarmerListing(token: token);
       setState(() {
         // Ensure the UI updates after data fetch
@@ -113,21 +114,21 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 searchBox(),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SizedBox(
                   height: height * 0.7,
                   child: isLoadingFilteredFarmerListings ||
                           isLoadingFarmerListings
-                      ? Center(child: CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : (searchController.text.trim().length >= 3)
                           ? filteredFarmerListings.isEmpty
-                              ? Center(
+                              ? const Center(
                                   child: Text('No Matching Listings Found'))
                               : ListView.builder(
                                   itemCount: filteredFarmerListings.length,
@@ -137,7 +138,8 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                                   },
                                 )
                           : FarmerListings.isEmpty
-                              ? Center(child: Text('No Farmers Listings Found'))
+                              ? const Center(
+                                  child: Text('No Farmers Listings Found'))
                               : ListView.builder(
                                   itemCount: FarmerListings.length,
                                   itemBuilder: (context, index) {
@@ -156,11 +158,11 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
 
   Widget farmerListingCard(double width, dynamic listing) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 6),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Color.fromRGBO(255, 242, 242, 1),
+          color: const Color.fromRGBO(255, 242, 242, 1),
           boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.25),
@@ -174,36 +176,36 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
         children: [
           Text(
             '${listing['category']}: ${listing['title']}',
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
           ),
           Text(
             'Description: ${listing['description']}',
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
             'Required Qty: ${'${listing['quantity']} ' + listing['unit']}',
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
             'Price Offered: ${listing['price'].toString()}',
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 listing['location'],
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 13,
                     color: Color.fromRGBO(0, 0, 0, 0.75)),
@@ -212,7 +214,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                 onTap: () {
                   showFarmerListingDetails(context, listing);
                 },
-                child: Text(
+                child: const Text(
                   'About>',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -230,14 +232,14 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
   void showFarmerListingDetails(BuildContext context, dynamic listing) {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
         return Container(
           width: double.infinity,
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: SingleChildScrollView(
@@ -247,18 +249,20 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
               children: [
                 Text(
                   'Request Id: #${listing["listingId"].toString()}',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w500),
                 ),
                 Text(
                   '${listing["category"]}: ${listing["title"]}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 Text('Farmer Name: : ${listing["farmerName"].toString()}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
+                const Text(
                   ' click for Info',
                   style: TextStyle(
                     fontSize: 18,
@@ -267,33 +271,33 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                   ),
                 ),
                 Text('Description: ${listing["description"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text('Category: ${listing["category"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text(
                     'Quantity: ${listing["quantity"].toString()}, ${listing["unit"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text('Price Offered: ₹ ${listing["price"].toString()}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text('Location:  ${listing["location"]}',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 10),
-                Text('Created at:',
+                const SizedBox(height: 10),
+                const Text('Created at:',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -301,11 +305,11 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                 Text(
                     DateFormat("d MMMM y, h:mm a")
                         .format(DateTime.parse(listing["createdAt"])),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                SizedBox(height: 25),
+                const SizedBox(height: 25),
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
@@ -317,7 +321,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                             token: SharedPrefHelper.getToken(),
                             listingId: listing["listingId"]);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text('Successfully connected with Farmer'),
                             backgroundColor: Colors.green,
                           ),
@@ -333,12 +337,12 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                         Navigator.pop(context);
                       }
                     },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(107, 142, 35, 1)),
                     child: Text(
                       'Connect with Farmer',
                       style: TextStyle(color: Colors.white),
                     ),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(107, 142, 35, 1)),
                   ),
                 ),
               ],
@@ -351,10 +355,11 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
 
   Widget searchBox() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: Color.fromRGBO(107, 142, 35, 1), width: 1.5),
+        border: Border.all(
+            color: const Color.fromRGBO(107, 142, 35, 1), width: 1.5),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -363,7 +368,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
             child: TextField(
               controller: searchController,
               decoration: InputDecoration(
-                hintText: "Search by crop",
+                hintText: AppLocalizations.of(context)!.searchByCrop,
                 border: InputBorder.none,
               ),
             ),
@@ -373,11 +378,11 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
               if (searchController.text.trim().length > 2) {
                 filterBuyerListings();
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('Please enter atleast 3 characters')));
               }
             },
-            child: Icon(
+            child: const Icon(
               Icons.search,
               color: Colors.green,
             ),
@@ -389,8 +394,8 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
 
   Widget searchCard(dynamic farmer) {
     return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(5),
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.green, width: 2),
@@ -399,7 +404,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
         children: [
           Container(
             height: 90,
-            margin: EdgeInsets.only(right: 10),
+            margin: const EdgeInsets.only(right: 10),
             child: Image.asset(
               'assets/app_icon.png',
               fit: BoxFit.cover,
@@ -410,7 +415,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
             children: [
               Row(
                 children: [
-                  Text(
+                  const Text(
                     'Name:\t',
                     style: TextStyle(
                       fontSize: 15,
@@ -418,7 +423,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                   ),
                   Text(
                     farmer['name'],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                     ),
                   ),
@@ -426,7 +431,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
               ),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     'Number:\t',
                     style: TextStyle(
                       fontSize: 15,
@@ -434,7 +439,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                   ),
                   Text(
                     farmer['phone'],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                     ),
                   ),
@@ -442,7 +447,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
               ),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     'State:\t',
                     style: TextStyle(
                       fontSize: 15,
@@ -450,7 +455,7 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                   ),
                   Text(
                     farmer['location'],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 15,
                     ),
                   ),

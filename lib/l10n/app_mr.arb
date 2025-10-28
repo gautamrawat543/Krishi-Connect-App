@@ -11,5 +11,54 @@
   "business": "व्यवसाय",
   "continueBtn": "पुढे जा",
   "alreadyAccount": "आधीच खाते आहे?",
-  "loginHere": "इथे लॉगिन करा"
+  "loginHere": "इथे लॉगिन करा",
+
+
+ "welcomeBack": "पुन्हा स्वागत आहे",
+"buyerListings": "खरेदीदारांच्या यादी",
+"exploreMoreAboutFarming": "शेतीबद्दल अधिक जाणून घ्या",
+"createAListing": "यादी तयार करा",
+"myListings": "माझ्या यादी",
+
+"noListingsFound": "कोणतीही यादी सापडली नाही",
+"seeAll": "सर्व पहा >",
+"searchByCrop": "पिकानुसार शोधा",
+"about": "माहिती",
+"conversations": "संवाद",
+"myProfile": "माझे प्रोफाइल",
+"logOut": "लॉग आऊट",
+"availableProduce": "उपलब्ध उत्पादन",
+"startConversation": "संवाद सुरू करा",
+"createARequest": "विनंती तयार करा",
+"bulkPurchaseRequest": "थोक खरेदी विनंती",
+"title": "शीर्षक",
+"exampleBulkPurchaseOfTomatoes": "उदा: टोमॅटोची थोक खरेदी",
+"description": "वर्णन",
+"exampleLookingForHighQualityTomatoes": "उदा: उच्च दर्जाचे टोमॅटो थोकात हवे आहेत",
+"category": "श्रेणी",
+"requiredQuantity": "आवश्यक प्रमाण",
+"example500": "उदा: 500",
+"unit": "एकक",
+"maxPrice": "कमाल किंमत",
+"example1600": "उदा: 1600",
+"createListing": "यादी तयार करा",
+
+"exampleBulkPurchaseTomatoes": "उदा: टोमॅटोची थोक खरेदी",
+"exampleHighQualityTomatoes": "उदा: उच्च दर्जाचे टोमॅटो थोकात हवे आहेत",
+"exampleQuantity": "उदा: 500",
+"examplePrice": "उदा: 1600",
+"selectImage": "प्रतिमा निवडा",
+"tapToSelectImage": "प्रतिमा निवडण्यासाठी टॅप करा",
+"status": "स्थिती",
+
+"requestId": "विनंती क्रमांक",
+"businessName": "व्यवसायाचे नाव",
+"clickForInfo": "माहितीसाठी क्लिक करा",
+"priceOffered": "दिलेली किंमत",
+"location": "ठिकाण",
+"createdAt": "तयार केलेले"
+
+
+
+
 }

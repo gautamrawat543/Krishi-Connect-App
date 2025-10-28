@@ -6,6 +6,7 @@ import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateListing extends StatefulWidget {
   const CreateListing({super.key});
@@ -87,7 +88,7 @@ class _CreateListingState extends State<CreateListing> {
         _showSnackBar(response['error'], isError: true);
       } else {
         _showSnackBar("Listing created successfully!", isError: false);
-        NavigationHelper.pushReplacement(context, MainScreen());
+        NavigationHelper.pushReplacement(context, const MainScreen());
       }
     } catch (e) {
       _showSnackBar("An unexpected error occurred", isError: true);
@@ -122,48 +123,64 @@ class _CreateListingState extends State<CreateListing> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Bulk Purchase Request',
+                AppLocalizations.of(context)!.bulkPurchaseRequest,
                 style: AppTextStyles.pageHeading,
               ),
-              SizedBox(height: 20),
               const SizedBox(height: 20),
-              _buildLabel('Title'),
-              buildTextField('eg: Bulk Purchase of Tomatoes', _titleController,
-                  TextInputType.text),
-              _buildLabel('Description'),
-              buildTextField('eg: Looking for high quality tomatoes in bulk',
-                  _descriptionController, TextInputType.text),
-              _buildLabel('Category'),
+              const SizedBox(height: 20),
+              _buildLabel(AppLocalizations.of(context)!.title),
+              buildTextField(
+                AppLocalizations.of(context)!.exampleBulkPurchaseOfTomatoes,
+                _titleController,
+                TextInputType.text,
+              ),
+              _buildLabel(AppLocalizations.of(context)!.description),
+              buildTextField(
+                AppLocalizations.of(context)!
+                    .exampleLookingForHighQualityTomatoes,
+                _descriptionController,
+                TextInputType.text,
+              ),
+              _buildLabel(AppLocalizations.of(context)!.category),
               buildDropdownField(categories, _selectedCategory, (value) {
                 setState(() => _selectedCategory = value!);
               }),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(children: [
                 Expanded(
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildLabel('Required Quantity'),
-                        buildTextField('eg: 500', _requiredQuantityController,
-                            TextInputType.number),
-                      ]),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildLabel(
+                          AppLocalizations.of(context)!.requiredQuantity),
+                      buildTextField(
+                        AppLocalizations.of(context)!.example500,
+                        _requiredQuantityController,
+                        TextInputType.number,
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildLabel('Unit'),
-                        buildDropdownField(units, _selectedUnit, (value) {
-                          setState(() => _selectedUnit = value!);
-                        }),
-                      ]),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildLabel(AppLocalizations.of(context)!.unit),
+                      buildDropdownField(units, _selectedUnit, (value) {
+                        setState(() => _selectedUnit = value!);
+                      }),
+                    ],
+                  ),
                 ),
               ]),
-              SizedBox(height: 8),
-              _buildLabel('Max Price'),
+              const SizedBox(height: 8),
+              _buildLabel(AppLocalizations.of(context)!.maxPrice),
               buildTextField(
-                  'eg: 1600', _maxPriceController, TextInputType.number),
+                AppLocalizations.of(context)!.example1600,
+                _maxPriceController,
+                TextInputType.number,
+              ),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () => _submitForm(),
@@ -180,8 +197,8 @@ class _CreateListingState extends State<CreateListing> {
                             color: Colors.white,
                           ),
                         )
-                      : const Text(
-                          'Create Listing',
+                      : Text(
+                          AppLocalizations.of(context)!.createListing,
                           style: AppTextStyles.buttonTextStyle,
                           textAlign: TextAlign.center,
                         ),

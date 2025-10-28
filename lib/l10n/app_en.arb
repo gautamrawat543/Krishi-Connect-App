@@ -11,5 +11,58 @@
   "business": "Business",
   "continueBtn": "Continue",
   "alreadyAccount": "Already have an account?",
-  "loginHere": "Login Here"
+  "loginHere": "Login Here",
+
+  "welcomeBack": "Welcome back",
+  "buyerListings": "Buyer Listings",
+  "exploreMoreAboutFarming" : "Explore More About Farming",
+  "createAListing" : "Create A Listing",
+  "myListings" : "My Listings",
+  
+  "noListingsFound" : "No Listings Found",
+  "seeAll" : "see all>",
+  "searchByCrop" : "Search by crop",
+  "about" : "about",
+  "conversations" : "Conversations",
+  "myProfile" : "My Profile",
+  "logOut" : "Log Out",
+  "availableProduce" : "Available Produce",
+  "startConversation" : "Start Conversation",
+  "createARequest" : "Create A Request",
+  "bulkPurchaseRequest": "Bulk Purchase Request",
+  "title": "Title",
+  "exampleBulkPurchaseOfTomatoes": "eg: Bulk Purchase of Tomatoes",
+  "description": "Description",
+  "exampleLookingForHighQualityTomatoes": "eg: Looking for high quality tomatoes in bulk",
+  "category": "Category",
+  "requiredQuantity": "Required Quantity",
+  "example500": "eg: 500",
+  "unit": "Unit",
+  "maxPrice": "Max Price",
+  "example1600": "eg: 1600",
+  "createListing": "Create Listing",
+
+
+"exampleBulkPurchaseTomatoes": "eg: Bulk Purchase of Tomatoes",
+"exampleHighQualityTomatoes": "eg: Looking for high quality tomatoes in bulk",
+"exampleQuantity": "eg: 500",
+"examplePrice": "eg: 1600",
+"selectImage": "Select Image",
+"tapToSelectImage": "Tap to select image",
+"status": "Status",
+"requestId": "Request Id",
+"businessName": "Business Name",
+"clickForInfo": "Click for Info",
+"priceOffered": "Price Offered",
+"location": "Location",
+"createdAt": "Created at"
+
+
+
+
+
+
+
+
+
 }
