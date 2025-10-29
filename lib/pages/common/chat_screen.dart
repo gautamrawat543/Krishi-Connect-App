@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:krishi_connect_app/pages/common/chat_message.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -50,7 +52,10 @@ class _ChatScreenState extends State<ChatScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(title: Text('Conversations')),
+     appBar: AppBar(
+  title: Text(AppLocalizations.of(context)!.conversations),
+),
+
       body: SizedBox(
         height: height * 0.9,
         child: ListView.builder(

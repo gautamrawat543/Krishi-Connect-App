@@ -11,7 +11,7 @@ import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
       // Navigate to MainScreen
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
+          MaterialPageRoute(builder: (context) => const MainScreen()),
           (route) => false);
     }
   }
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
             Image.asset(
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
               AppLocalizations.of(context)!.appTitle,
               style: AppTextStyles.krishiHeading,
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Padding(
@@ -169,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Padding(
@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             GestureDetector(
@@ -233,12 +233,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
               ),
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             Text(AppLocalizations.of(context)!.noAccount,
                 style: AppTextStyles.bottomText),
             GestureDetector(
               onTap: () {
-                NavigationHelper.push(context, Registeration());
+                NavigationHelper.push(context, const Registeration());
               },
               child: Text(AppLocalizations.of(context)!.signUpHere,
                   style: AppTextStyles.linkText),

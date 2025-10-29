@@ -364,7 +364,7 @@ class _ChatMessageState extends State<ChatMessage> {
             callback: (StompFrame frame) {
               if (frame.body != null) {
                 final decoded = jsonDecode(frame.body!);
-                print('📩 Message received: ${decoded}');
+                print('📩 Message received: $decoded');
                 setState(() {
                   messages.add(decoded);
                 });

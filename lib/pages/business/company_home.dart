@@ -12,6 +12,7 @@ import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CompanyHome extends StatefulWidget {
   const CompanyHome({super.key});
@@ -89,7 +90,7 @@ class _CompanyHomeState extends State<CompanyHome> {
         _applyFilter();
         isLoadingFilteredListings = false;
         isLoadingCompanyListings = false;
-        print("companyListings : ${companyListings}");
+        print("companyListings : $companyListings");
       });
     } catch (e) {
       print(e);
@@ -126,22 +127,23 @@ class _CompanyHomeState extends State<CompanyHome> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Text(
-                'Welcome back\n${SharedPrefHelper.getUsername().toUpperCase()}!',
+                '${AppLocalizations.of(context)!.welcomeBack}\n${SharedPrefHelper.getUsername().toUpperCase()}!',
                 style: AppTextStyles.welcomeHeading,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              _sectionHeader('Available Produce'),
-              SizedBox(
+              _sectionHeader(AppLocalizations.of(context)!.availableProduce),
+
+              const SizedBox(
                 height: 6,
               ),
               const Divider(thickness: 2, color: AppColors.primaryGreenDark),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               //available produce listing
@@ -161,40 +163,54 @@ class _CompanyHomeState extends State<CompanyHome> {
                   },
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
-              _titleRow('Create a Request', Icons.add_circle_outline_rounded,
-                  () {
-                NavigationHelper.push(context, const CreateListing());
-              }),
-              SizedBox(
+              _titleRow(
+                AppLocalizations.of(context)!.createARequest,
+                Icons.add_circle_outline_rounded,
+                () {
+                  NavigationHelper.push(context, const CreateListing());
+                },
+              ),
+
+              const SizedBox(
                 height: 25,
               ),
-              _sectionHeader('My Listings', showAll: true, onTap: () {
-                NavigationHelper.push(
-                  context,
-                  BuyerListing(companyListings: companyListings),
-                );
-              }),
-              SizedBox(
+              _sectionHeader(
+                AppLocalizations.of(context)!.myListings,
+                showAll: true,
+                onTap: () {
+                  NavigationHelper.push(
+                    context,
+                    BuyerListing(companyListings: companyListings),
+                  );
+                },
+              ),
+
+              const SizedBox(
                 height: 6,
               ),
               const Divider(thickness: 2, color: AppColors.primaryGreenDark),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               _filterChips(),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               SizedBox(
                 height: height * 0.5,
                 child: isLoadingCompanyListings
-                    ? Center(
-                        child: CircularProgressIndicator(color: Colors.green))
+                    ? const Center(
+                        child: CircularProgressIndicator(color: Colors.green),
+                      )
                     : filteredListings.isEmpty
-                        ? Center(child: Text('No Listings Found'))
+                        ? Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.noListingsFound,
+                            ),
+                          )
                         : ListView.builder(
                             itemCount: filteredListings.length > 5
                                 ? 5
@@ -204,8 +220,9 @@ class _CompanyHomeState extends State<CompanyHome> {
                                 width,
                                 filteredListings[index],
                               );
-                            }),
-              ),
+                            },
+                          ),
+              )
             ],
           ),
         ),
@@ -219,7 +236,7 @@ class _CompanyHomeState extends State<CompanyHome> {
   ) {
     return Container(
       width: width * 0.5,
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: Colors.white,
@@ -228,7 +245,7 @@ class _CompanyHomeState extends State<CompanyHome> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(5),
             ),
             child: Image.network(
@@ -248,14 +265,16 @@ class _CompanyHomeState extends State<CompanyHome> {
               horizontal: 5,
             ),
             child: Text(listing['title'],
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 5,
             ),
             child: Text('Price: ₹ ${listing['price'].toString()}',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -263,21 +282,24 @@ class _CompanyHomeState extends State<CompanyHome> {
             ),
             child: Text(
                 'Quantity: ${listing['quantity'].toString()} ${listing['unit']}',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 5,
             ),
             child: Text('Farmer: ${listing['farmerName']}',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
           Padding(
             padding: const EdgeInsets.only(
               left: 5,
             ),
             child: Text(listing['location'],
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
           GestureDetector(
             onTap: () async {
@@ -288,7 +310,7 @@ class _CompanyHomeState extends State<CompanyHome> {
                     token: SharedPrefHelper.getToken(),
                     listingId: listing["listingId"]);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     content: Text('Successfully connected with Farmer'),
                     backgroundColor: Colors.green,
                   ),
@@ -305,7 +327,7 @@ class _CompanyHomeState extends State<CompanyHome> {
             child: Container(
               width: width,
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(5),
                   bottomRight: Radius.circular(5),
@@ -314,8 +336,8 @@ class _CompanyHomeState extends State<CompanyHome> {
               ),
               child: Center(
                 child: Text(
-                  'Start Conversation',
-                  style: TextStyle(color: Colors.white),
+                  AppLocalizations.of(context)!.startConversation,
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
             ),

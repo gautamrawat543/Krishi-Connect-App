@@ -104,12 +104,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _wakeUpBackend().then((_) {
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () {
         bool isRegistered = SharedPrefHelper.isRegistered();
         if (isRegistered) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => MainScreen()),
+            MaterialPageRoute(builder: (context) => const MainScreen()),
           );
         } else {
           Navigator.pushReplacement(
@@ -135,7 +135,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } catch (e) {
       print("Error waking up backend: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Error waking up backend. Please try again later."),
         ),
       );
