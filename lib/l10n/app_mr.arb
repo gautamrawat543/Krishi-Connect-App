@@ -24,6 +24,7 @@
 "seeAll": "सर्व पहा >",
 "searchByCrop": "पिकानुसार शोधा",
 "about": "माहिती",
+"edit":"संपादित करा",
 "conversations": "संवाद",
 "myProfile": "माझे प्रोफाइल",
 "logOut": "लॉग आऊट",
@@ -45,6 +46,7 @@
 
 "exampleBulkPurchaseTomatoes": "उदा: टोमॅटोची थोक खरेदी",
 "exampleHighQualityTomatoes": "उदा: उच्च दर्जाचे टोमॅटो थोकात हवे आहेत",
+"editPurchaseRequest":"खरेदी विनंती संपादित करा",
 "exampleQuantity": "उदा: 500",
 "examplePrice": "उदा: 1600",
 "selectImage": "प्रतिमा निवडा",
@@ -56,7 +58,9 @@
 "clickForInfo": "माहितीसाठी क्लिक करा",
 "priceOffered": "दिलेली किंमत",
 "location": "ठिकाण",
-"createdAt": "तयार केलेले"
+"createdAt": "तयार केलेले",
+"updateListing":"सूची अद्यतन करा",
+"noMatchingListing":"जुळणाऱ्या सूची सापडल्या नाहीत"
 
 
 

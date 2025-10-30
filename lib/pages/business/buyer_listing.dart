@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:krishi_connect_app/pages/business/edit_listing.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BuyerListing extends StatefulWidget {
   BuyerListing({super.key, required this.companyListings});
@@ -35,7 +36,8 @@ class _BuyerListingState extends State<BuyerListing> {
               const SizedBox(
                 height: 20,
               ),
-              const Text('My Listings', style: AppTextStyles.pageHeading),
+              Text('${AppLocalizations.of(context)!.myListings}',
+                  style: AppTextStyles.pageHeading),
               const SizedBox(
                 height: 6,
               ),
@@ -92,13 +94,16 @@ class _BuyerListingState extends State<BuyerListing> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Title: ${listing['title']}', style: AppTextStyles.cardTitle),
-          Text('Company Name: ${listing['businessName']}',
+          Text('${AppLocalizations.of(context)!.title}: ${listing['title']}',
+              style: AppTextStyles.cardTitle),
+          Text(
+              '${AppLocalizations.of(context)!.businessName}: ${listing['businessName']}',
               style: AppTextStyles.cardSubText),
           Text(
-              'Required Qty: ${listing['requiredQuantity']} ${listing['unit']}',
+              '${AppLocalizations.of(context)!.requiredQuantity}: ${listing['requiredQuantity']} ${listing['unit']}',
               style: AppTextStyles.cardSubText),
-          Text('Price Offered: ${listing['maxPrice']}',
+          Text(
+              '${AppLocalizations.of(context)!.priceOffered}: ${listing['maxPrice']}',
               style: AppTextStyles.cardSubText),
           const SizedBox(height: 5),
           Row(
@@ -112,7 +117,8 @@ class _BuyerListingState extends State<BuyerListing> {
                     EditListing(listing: listing),
                   );
                 },
-                child: const Text('Edit>', style: AppTextStyles.linkStyle),
+                child: Text('${AppLocalizations.of(context)!.edit}>',
+                    style: AppTextStyles.linkStyle),
               ),
             ],
           ),

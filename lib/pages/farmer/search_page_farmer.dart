@@ -128,8 +128,9 @@ class _SearchPageFarmerState extends State<SearchPageFarmer> {
                       ? const Center(child: CircularProgressIndicator())
                       : (searchController.text.trim().length >= 3)
                           ? filteredBuyerListings.isEmpty
-                              ? const Center(
-                                  child: Text('No Matching Listings Found'))
+                              ? Center(
+                                  child: Text(AppLocalizations.of(context)!
+                                      .noMatchingListing))
                               : ListView.builder(
                                   itemCount: filteredBuyerListings.length,
                                   itemBuilder: (context, index) {
@@ -138,8 +139,9 @@ class _SearchPageFarmerState extends State<SearchPageFarmer> {
                                   },
                                 )
                           : buyerListings.isEmpty
-                              ? const Center(
-                                  child: Text('No Farmers Listings Found'))
+                              ? Center(
+                                  child: Text(AppLocalizations.of(context)!
+                                      .noListingsFound))
                               : ListView.builder(
                                   itemCount: buyerListings.length,
                                   itemBuilder: (context, index) {
@@ -179,28 +181,28 @@ class _SearchPageFarmerState extends State<SearchPageFarmer> {
             style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
           ),
           Text(
-            'Business Name: : ${listing["businessName"].toString()}',
+            '${AppLocalizations.of(context)!.businessName} : ${listing["businessName"].toString()}',
             style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
-            'Description: ${listing['description']}',
+            '${AppLocalizations.of(context)!.description}: ${listing['description']}',
             style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
-            'Required Qty: ${'${listing['requiredQuantity']} ' + listing['unit']}',
+            '${AppLocalizations.of(context)!.requiredQuantity}: ${'${listing['requiredQuantity']} ' + listing['unit']}',
             style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
-            'Price Offered: ${listing['maxPrice'].toString()}',
+            '${AppLocalizations.of(context)!.priceOffered}: ${listing['maxPrice'].toString()}',
             style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
@@ -265,47 +267,44 @@ class _SearchPageFarmerState extends State<SearchPageFarmer> {
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.w500),
                 ),
-                Text('Business Name: : ${listing["businessName"].toString()}',
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                const Text(
-                  ' click for Info',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(48, 1, 255, 0.75),
-                  ),
-                ),
-                Text('Description: ${listing["description"]}',
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Category: ${listing["category"]}',
+                Text(
+                    '${AppLocalizations.of(context)!.businessName} : ${listing["businessName"].toString()}',
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text(
-                    'Quantity: ${listing["requiredQuantity"].toString()}, ${listing["unit"]}',
+                    '${AppLocalizations.of(context)!.description}: ${listing["description"]}',
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Price Offered: ₹ ${listing["maxPrice"].toString()}',
+                Text(
+                    '${AppLocalizations.of(context)!.category}: ${listing["category"]}',
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Location:  ${listing["location"]}',
+                Text(
+                    '${AppLocalizations.of(context)!.requiredQuantity}: ${listing["requiredQuantity"].toString()}, ${listing["unit"]}',
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                Text(
+                    '${AppLocalizations.of(context)!.priceOffered}: ₹ ${listing["maxPrice"].toString()}',
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                Text(
+                    '${AppLocalizations.of(context)!.location}:  ${listing["location"]}',
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 const SizedBox(height: 10),
-                const Text('Created at:',
+                Text('${AppLocalizations.of(context)!.createdAt}:',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,

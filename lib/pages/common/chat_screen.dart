@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:krishi_connect_app/pages/common/chat_message.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
+import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -47,15 +48,24 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  String _formatDateTime(String rawDate) {
+    try {
+      DateTime parsed = DateTime.parse(rawDate);
+      String formatted = DateFormat("MMM d, hh:mm a").format(parsed);
+      return formatted;
+    } catch (e) {
+      return rawDate; // fallback if parsing fails
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-     appBar: AppBar(
-  title: Text(AppLocalizations.of(context)!.conversations),
-),
-
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.conversations),
+      ),
       body: SizedBox(
         height: height * 0.9,
         child: ListView.builder(
@@ -79,61 +89,32 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: ListTile(
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(50),
-                    // child: Image.asset(
-                    //   'assets/app_icon.png',
-                    //   height: 50,
-                    //   fit: BoxFit.cover,
-                    // ),
                     child: Image.network(
                       convo['otherUserProfilePicUrl'],
-                      errorBuilder: (context, error, stackTrace) => Image.asset(
-                        'assets/app_icon.png',
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
+                      errorBuilder: (context, error, stackTrace) {
+                        String name = convo['otherUserName'] ?? '';
+                        String initial =
+                            name.isNotEmpty ? name[0].toUpperCase() : '?';
+                        return Container(
+                          color: Colors.transparent,
+                          child: CircleAvatar(
+                            backgroundColor: AppColors.primaryGreenDark,
+                            child: Text(
+                              initial,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   title: Text(convo['otherUserName']),
-                  subtitle: Text(convo['lastMessageTime']),
+                  subtitle: Text(_formatDateTime(convo['lastMessageTime'])),
                 ),
-                // Container(
-                //   padding: const EdgeInsets.all(8.0),
-                //   margin: EdgeInsets.symmetric(
-                //     horizontal: 20,
-                //   ),
-                //   child: Row(
-                //     children: [
-                // ClipRRect(
-                //   borderRadius: BorderRadius.circular(50),
-                //   child: Image.asset(
-                //     'assets/app_icon.png',
-                //     height: 50,
-                //     fit: BoxFit.cover,
-                //   ),
-                //   // child: Image.network(
-                //   //   convo['otherUserProfilePicUrl'],
-                //   //   errorBuilder: (context, error, stackTrace) =>
-                //   //       Image.asset(
-                //   //     'assets/app_icon.png',
-                //   //     height: 50,
-                //   //     fit: BoxFit.cover,
-                //   //   ),
-                //   // ),
-                // ),
-                //       const SizedBox(
-                //         width: 10,
-                //       ),
-                //       Column(
-                //         crossAxisAlignment: CrossAxisAlignment.start,
-                //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //         children: [
-                //           Text(convo['otherUserName']),
-                //           Text(convo['lastMessageTime'])
-                //         ],
-                //       ),
-                //     ],
-                //   ),
-                // ),
               );
             }),
       ),

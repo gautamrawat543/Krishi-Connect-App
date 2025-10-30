@@ -23,6 +23,7 @@
     "seeAll" : "सभी देखें >",
     "searchByCrop" : "फसल के अनुसार खोजें",
     "about" : "जानकारी",
+    "edit":"संपादित करें",
     "conversations" : "संवाद",
     "myProfile" : "मेरा प्रोफ़ाइल",
     "logOut" : "लॉग आउट",
@@ -44,6 +45,7 @@
 
     "exampleBulkPurchaseTomatoes": "उदाहरण: टमाटर की थोक खरीद",
     "exampleHighQualityTomatoes": "उदाहरण: उच्च गुणवत्ता वाले टमाटर थोक में चाहिए",
+    "editPurchaseRequest":"खरीद अनुरोध संपादित करें",
     "exampleQuantity": "उदाहरण: 500",
     "examplePrice": "उदाहरण: 1600",
     "selectImage": "छवि चुनें",
@@ -60,7 +62,9 @@
   "description": "विवरण",
   "category": "श्रेणी",
   "requiredQuantity": "आवश्यक मात्रा",
-  "unit": "इकाई"
+  "unit": "इकाई",
+  "updateListing":"सूची अपडेट करें",
+  "noMatchingListing":"कोई मेल खाती सूचियाँ नहीं मिलीं"
 
   
 

@@ -272,7 +272,8 @@ class _CompanyHomeState extends State<CompanyHome> {
             padding: const EdgeInsets.symmetric(
               horizontal: 5,
             ),
-            child: Text('Price: ₹ ${listing['price'].toString()}',
+            child: Text(
+                '${AppLocalizations.of(context)!.priceOffered}: ₹ ${listing['price'].toString()}',
                 style:
                     const TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
@@ -281,7 +282,7 @@ class _CompanyHomeState extends State<CompanyHome> {
               horizontal: 5,
             ),
             child: Text(
-                'Quantity: ${listing['quantity'].toString()} ${listing['unit']}',
+                '${AppLocalizations.of(context)!.requiredQuantity}: ${listing['quantity'].toString()} ${listing['unit']}',
                 style:
                     const TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
@@ -289,7 +290,8 @@ class _CompanyHomeState extends State<CompanyHome> {
             padding: const EdgeInsets.symmetric(
               horizontal: 5,
             ),
-            child: Text('Farmer: ${listing['farmerName']}',
+            child: Text(
+                '${AppLocalizations.of(context)!.farmer}: ${listing['farmerName']}',
                 style:
                     const TextStyle(fontWeight: FontWeight.w400, fontSize: 14)),
           ),
@@ -422,13 +424,16 @@ class _CompanyHomeState extends State<CompanyHome> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Title: ${listing['title']}', style: AppTextStyles.cardTitle),
-          Text('Company Name: ${listing['businessName']}',
+          Text('${AppLocalizations.of(context)!.title}: ${listing['title']}',
+              style: AppTextStyles.cardTitle),
+          Text(
+              '${AppLocalizations.of(context)!.businessName}: ${listing['businessName']}',
               style: AppTextStyles.cardSubText),
           Text(
-              'Required Qty: ${listing['requiredQuantity']} ${listing['unit']}',
+              '${AppLocalizations.of(context)!.requiredQuantity}: ${listing['requiredQuantity']} ${listing['unit']}',
               style: AppTextStyles.cardSubText),
-          Text('Price Offered: ${listing['maxPrice']}',
+          Text(
+              '${AppLocalizations.of(context)!.priceOffered}: ${listing['maxPrice']}',
               style: AppTextStyles.cardSubText),
           const SizedBox(height: 5),
           Row(
@@ -439,7 +444,8 @@ class _CompanyHomeState extends State<CompanyHome> {
                 onTap: () {
                   NavigationHelper.push(context, EditListing(listing: listing));
                 },
-                child: const Text('Edit>', style: AppTextStyles.linkStyle),
+                child: Text('${AppLocalizations.of(context)!.edit}>',
+                    style: AppTextStyles.linkStyle),
               ),
             ],
           )

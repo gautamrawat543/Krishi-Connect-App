@@ -85,7 +85,7 @@ class _FarmerListingState extends State<FarmerListing> {
         _showSnackBar(response['error'], isError: true);
       } else {
         _showSnackBar("Listing created successfully!", isError: false);
-        NavigationHelper.pushReplacement(context, const MainScreen());
+        NavigationHelper.pushAndRemoveUntil(context, const MainScreen());
       }
     } catch (e) {
       _showSnackBar("An unexpected error occurred", isError: true);
@@ -115,6 +115,7 @@ class _FarmerListingState extends State<FarmerListing> {
         backgroundColor: const Color.fromRGBO(107, 142, 35, 1),
         title: Text(
           AppLocalizations.of(context)!.bulkPurchaseRequest,
+          style: const TextStyle(color: Colors.white),
         ),
         centerTitle: true,
         automaticallyImplyLeading: false,

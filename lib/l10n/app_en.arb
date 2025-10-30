@@ -23,6 +23,7 @@
   "seeAll" : "see all>",
   "searchByCrop" : "Search by crop",
   "about" : "about",
+  "edit":"edit",
   "conversations" : "Conversations",
   "myProfile" : "My Profile",
   "logOut" : "Log Out",
@@ -44,6 +45,7 @@
 
 
 "exampleBulkPurchaseTomatoes": "eg: Bulk Purchase of Tomatoes",
+"editPurchaseRequest":"Edit Purchase Request",
 "exampleHighQualityTomatoes": "eg: Looking for high quality tomatoes in bulk",
 "exampleQuantity": "eg: 500",
 "examplePrice": "eg: 1600",
@@ -55,7 +57,9 @@
 "clickForInfo": "Click for Info",
 "priceOffered": "Price Offered",
 "location": "Location",
-"createdAt": "Created at"
+"createdAt": "Created at",
+"updateListing":"Update Listing",
+"noMatchingListing":"No Matching Listings Found"
 
 
 

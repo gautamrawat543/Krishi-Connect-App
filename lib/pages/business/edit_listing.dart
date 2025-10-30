@@ -6,6 +6,7 @@ import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/navigation_helper.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditListing extends StatefulWidget {
   const EditListing({required this.listing, super.key});
@@ -123,16 +124,21 @@ class _EditListingState extends State<EditListing> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Edit Purchase Request',
+              Text(AppLocalizations.of(context)!.editPurchaseRequest,
                   style: AppTextStyles.pageHeading),
               const SizedBox(height: 20),
-              _buildLabel('Title'),
-              _buildTextField('eg: Bulk Purchase of Tomatoes', _titleController,
+              _buildLabel(AppLocalizations.of(context)!.title),
+              _buildTextField(
+                  AppLocalizations.of(context)!.exampleBulkPurchaseOfTomatoes,
+                  _titleController,
                   TextInputType.text),
-              _buildLabel('Description'),
-              _buildTextField('eg: Looking for high quality tomatoes in bulk',
-                  _descriptionController, TextInputType.text),
-              _buildLabel('Category'),
+              _buildLabel(AppLocalizations.of(context)!.description),
+              _buildTextField(
+                  AppLocalizations.of(context)!
+                      .exampleLookingForHighQualityTomatoes,
+                  _descriptionController,
+                  TextInputType.text),
+              _buildLabel(AppLocalizations.of(context)!.category),
               _buildDropdownField(categories, _selectedCategory, (value) {
                 setState(() => _selectedCategory = value!);
               }),
@@ -142,8 +148,11 @@ class _EditListingState extends State<EditListing> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Required Quantity'),
-                        _buildTextField('eg: 500', _requiredQuantityController,
+                        _buildLabel(
+                            AppLocalizations.of(context)!.requiredQuantity),
+                        _buildTextField(
+                            AppLocalizations.of(context)!.example500,
+                            _requiredQuantityController,
                             TextInputType.number),
                       ]),
                 ),
@@ -152,7 +161,7 @@ class _EditListingState extends State<EditListing> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Unit'),
+                        _buildLabel(AppLocalizations.of(context)!.unit),
                         _buildDropdownField(units, _selectedUnit, (value) {
                           setState(() => _selectedUnit = value!);
                         }),
@@ -160,11 +169,11 @@ class _EditListingState extends State<EditListing> {
                 ),
               ]),
               const SizedBox(height: 8),
-              _buildLabel('Max Price'),
-              _buildTextField(
-                  'eg: 1600', _maxPriceController, TextInputType.number),
+              _buildLabel(AppLocalizations.of(context)!.maxPrice),
+              _buildTextField(AppLocalizations.of(context)!.example1600,
+                  _maxPriceController, TextInputType.number),
               const SizedBox(height: 8),
-              _buildLabel('Status'),
+              _buildLabel(AppLocalizations.of(context)!.status),
               _buildDropdownField(statusOptions, _selectedStatus, (value) {
                 setState(() => _selectedStatus = value!);
               }),
@@ -184,8 +193,8 @@ class _EditListingState extends State<EditListing> {
                             color: Colors.white,
                           ),
                         )
-                      : const Text(
-                          'Update Listing',
+                      : Text(
+                          AppLocalizations.of(context)!.updateListing,
                           style: AppTextStyles.buttonTextStyle,
                           textAlign: TextAlign.center,
                         ),

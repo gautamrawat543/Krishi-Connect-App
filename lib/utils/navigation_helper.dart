@@ -12,4 +12,13 @@ class NavigationHelper {
       MaterialPageRoute(builder: (context) => page),
     );
   }
+
+  static void pushAndRemoveUntil(BuildContext context, Widget page) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => page,
+      ),
+      (route) => false,
+    );
+  }
 }

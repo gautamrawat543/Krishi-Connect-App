@@ -128,8 +128,9 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                       ? const Center(child: CircularProgressIndicator())
                       : (searchController.text.trim().length >= 3)
                           ? filteredFarmerListings.isEmpty
-                              ? const Center(
-                                  child: Text('No Matching Listings Found'))
+                              ? Center(
+                                  child: Text(AppLocalizations.of(context)!
+                                      .noMatchingListing))
                               : ListView.builder(
                                   itemCount: filteredFarmerListings.length,
                                   itemBuilder: (context, index) {
@@ -179,21 +180,21 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
             style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
           ),
           Text(
-            'Description: ${listing['description']}',
+            '${AppLocalizations.of(context)!.description}: ${listing['description']}',
             style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
-            'Required Qty: ${'${listing['quantity']} ' + listing['unit']}',
+            '${AppLocalizations.of(context)!.requiredQuantity}: ${'${listing['quantity']} ' + listing['unit']}',
             style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 color: Color.fromRGBO(0, 0, 0, 0.75)),
           ),
           Text(
-            'Price Offered: ${listing['price'].toString()}',
+            '${AppLocalizations.of(context)!.priceOffered}: ${listing['price'].toString()}',
             style: const TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
@@ -214,8 +215,8 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                 onTap: () {
                   showFarmerListingDetails(context, listing);
                 },
-                child: const Text(
-                  'About>',
+                child: Text(
+                  '${AppLocalizations.of(context)!.about}>',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 13,
@@ -257,47 +258,44 @@ class _SearchPageBusinessState extends State<SearchPageBusiness> {
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.w500),
                 ),
-                Text('Farmer Name: : ${listing["farmerName"].toString()}',
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                const Text(
-                  ' click for Info',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Color.fromRGBO(48, 1, 255, 0.75),
-                  ),
-                ),
-                Text('Description: ${listing["description"]}',
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Category: ${listing["category"]}',
+                Text(
+                    '${AppLocalizations.of(context)!.farmer}: ${listing["farmerName"].toString()}',
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text(
-                    'Quantity: ${listing["quantity"].toString()}, ${listing["unit"]}',
+                    '${AppLocalizations.of(context)!.description}: ${listing["description"]}',
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Price Offered: ₹ ${listing["price"].toString()}',
+                Text(
+                    '${AppLocalizations.of(context)!.category}: ${listing["category"]}',
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text('Location:  ${listing["location"]}',
+                Text(
+                    '${AppLocalizations.of(context)!.requiredQuantity}: ${listing["quantity"].toString()}, ${listing["unit"]}',
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                Text(
+                    '${AppLocalizations.of(context)!.priceOffered}: ₹ ${listing["price"].toString()}',
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(0, 0, 0, 0.75))),
+                Text(
+                    '${AppLocalizations.of(context)!.location}:  ${listing["location"]}',
                     style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
                 const SizedBox(height: 10),
-                const Text('Created at:',
+                Text('${AppLocalizations.of(context)!.createdAt}:',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,

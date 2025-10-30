@@ -73,16 +73,29 @@ class _ProfileState extends State<Profile> {
                           farmerData['profilePicture'] ?? '',
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              'assets/app_icon.png',
-                              fit: BoxFit.cover,
+                            String name = farmerData['name'] ?? '';
+                            String initial =
+                                name.isNotEmpty ? name[0].toUpperCase() : '?';
+                            return Center(
+                              child: CircleAvatar(
+                                radius: 40,
+                                backgroundColor: AppColors.primaryGreenDark,
+                                child: Text(
+                                  initial,
+                                  style: const TextStyle(
+                                    fontSize: 50,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                             );
                           },
                         ),
                       ),
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 5,
                     ),
                     buildCard(farmerData['name']),
                     const SizedBox(
@@ -106,10 +119,6 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    buildCard('Edit Password'),
                     const SizedBox(
                       height: 40,
                     ),
@@ -176,13 +185,6 @@ class _ProfileState extends State<Profile> {
           Text(
             text,
             style: AppTextStyles.labelStyle,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.edit_outlined,
-              color: Color.fromRGBO(0, 0, 0, 0.6),
-            ),
           ),
         ],
       ),

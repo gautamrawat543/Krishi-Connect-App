@@ -295,6 +295,8 @@ import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class ChatMessage extends StatefulWidget {
   final String buyerRequestid;
   final String listingid;
@@ -537,36 +539,38 @@ class _ChatMessageState extends State<ChatMessage> {
                       style: AppTextStyles.cardSubText)
                   : Text('Request Id: #${listing["requestId"]}',
                       style: AppTextStyles.cardSubText),
-              Text('Title: ${listing["title"]}',
+              Text(
+                  '${AppLocalizations.of(context)!.title}: ${listing["title"]}',
                   style: AppTextStyles.modalTitle),
               isFarmer
-                  ? Text('Farmer Name: ${listing["farmerName"]}',
-                      style: AppTextStyles.modalLabel)
-                  : Text('Business Name: ${listing["businessName"]}',
-                      style: AppTextStyles.modalLabel),
-              const Text(' click for Info', style: AppTextStyles.modalInfoLink),
-              Text('Description: ${listing["description"]}',
-                  style: AppTextStyles.modalLabel),
-              Text('Category: ${listing["category"]}',
-                  style: AppTextStyles.modalLabel),
-              isFarmer
-                  ? Text('Quantity: ${listing["quantity"]} ${listing["unit"]}',
+                  ? Text(
+                      '${AppLocalizations.of(context)!.farmer}: ${listing["farmerName"]}',
                       style: AppTextStyles.modalLabel)
                   : Text(
-                      'Required QTY: ${listing["requiredQuantity"]} ${listing["unit"]}',
+                      '${AppLocalizations.of(context)!.businessName}: ${listing["businessName"]}',
+                      style: AppTextStyles.modalLabel),
+              Text(
+                  '${AppLocalizations.of(context)!.description}: ${listing["description"]}',
+                  style: AppTextStyles.modalLabel),
+              Text(
+                  '${AppLocalizations.of(context)!.category}: ${listing["category"]}',
+                  style: AppTextStyles.modalLabel),
+              isFarmer
+                  ? Text(
+                      '${AppLocalizations.of(context)!.requiredQuantity}: ${listing["quantity"]} ${listing["unit"]}',
+                      style: AppTextStyles.modalLabel)
+                  : Text(
+                      '${AppLocalizations.of(context)!.requiredQuantity}: ${listing["requiredQuantity"]} ${listing["unit"]}',
                       style: AppTextStyles.modalLabel),
               isFarmer
-                  ? Text('Price Offered: ₹ ${listing["price"]}',
+                  ? Text(
+                      '${AppLocalizations.of(context)!.priceOffered}: ₹ ${listing["price"]}',
                       style: AppTextStyles.modalLabel)
-                  : Text('Price Offered: ₹ ${listing["maxPrice"]}',
+                  : Text(
+                      '${AppLocalizations.of(context)!.priceOffered}: ₹ ${listing["maxPrice"]}',
                       style: AppTextStyles.modalLabel),
-              Text('Location:  ${listing["location"]}',
-                  style: AppTextStyles.modalLabel),
-              const SizedBox(height: 10),
-              const Text('Created at:', style: AppTextStyles.modalLabel),
               Text(
-                  DateFormat("d MMMM y, h:mm a")
-                      .format(DateTime.parse(listing["createdAt"])),
+                  '${AppLocalizations.of(context)!.location}:  ${listing["location"]}',
                   style: AppTextStyles.modalLabel),
               const SizedBox(height: 25),
             ],

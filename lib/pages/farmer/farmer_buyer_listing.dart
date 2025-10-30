@@ -38,7 +38,8 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
           child: Column(
             children: [
               const SizedBox(height: 20),
-              const Text('Buyer Listings', style: AppTextStyles.pageHeading),
+              Text(AppLocalizations.of(context)!.buyerListings,
+                  style: AppTextStyles.pageHeading),
               const SizedBox(height: 6),
               const Divider(thickness: 2, color: AppColors.primaryGreenDark),
               const SizedBox(
@@ -69,13 +70,16 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Title: ${listing['title']}', style: AppTextStyles.cardTitle),
-          Text('Company Name: ${listing['businessName']}',
+          Text('${AppLocalizations.of(context)!.title}: ${listing['title']}',
+              style: AppTextStyles.cardTitle),
+          Text(
+              '${AppLocalizations.of(context)!.businessName}: ${listing['businessName']}',
               style: AppTextStyles.cardSubText),
           Text(
-              'Required Qty: ${listing['requiredQuantity']} ${listing['unit']}',
+              '${AppLocalizations.of(context)!.requiredQuantity}: ${listing['requiredQuantity']} ${listing['unit']}',
               style: AppTextStyles.cardSubText),
-          Text('Price Offered: ₹ ${listing['maxPrice']}',
+          Text(
+              '${AppLocalizations.of(context)!.priceOffered}: ₹ ${listing['maxPrice']}',
               style: AppTextStyles.cardSubText),
           const SizedBox(height: 5),
           Row(
@@ -84,7 +88,8 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
               Text(listing['location'], style: AppTextStyles.smallLabel),
               GestureDetector(
                 onTap: () => showListingDetails(context, listing),
-                child: const Text('About>', style: AppTextStyles.linkStyle),
+                child: Text('${AppLocalizations.of(context)!.about}>',
+                    style: AppTextStyles.linkStyle),
               ),
             ],
           ),
@@ -116,8 +121,6 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
                 Text(
                     '${AppLocalizations.of(context)!.businessName}: ${listing["businessName"]}',
                     style: AppTextStyles.modalLabel),
-                Text(AppLocalizations.of(context)!.clickForInfo,
-                    style: AppTextStyles.modalInfoLink),
                 Text(
                     '${AppLocalizations.of(context)!.description}: ${listing["description"]}',
                     style: AppTextStyles.modalLabel),
