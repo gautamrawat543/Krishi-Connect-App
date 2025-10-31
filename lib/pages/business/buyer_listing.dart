@@ -31,31 +31,38 @@ class _BuyerListingState extends State<BuyerListing> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              Text('${AppLocalizations.of(context)!.myListings}',
-                  style: AppTextStyles.pageHeading),
-              const SizedBox(
-                height: 6,
-              ),
-              const Divider(thickness: 2, color: AppColors.primaryGreenDark),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: height * 0.7,
-                child: ListView.builder(
-                  itemCount: widget.companyListings.length,
-                  itemBuilder: (context, index) {
-                    return listingCard(width, widget.companyListings[index]);
-                  },
+          child: widget.companyListings.isEmpty
+              ? Center(
+                  child: Text(
+                  AppLocalizations.of(context)!.noListingsFound,
+                ))
+              : Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(AppLocalizations.of(context)!.myListings,
+                        style: AppTextStyles.pageHeading),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    const Divider(
+                        thickness: 2, color: AppColors.primaryGreenDark),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: height * 0.7,
+                      child: ListView.builder(
+                        itemCount: widget.companyListings.length,
+                        itemBuilder: (context, index) {
+                          return listingCard(
+                              width, widget.companyListings[index]);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );

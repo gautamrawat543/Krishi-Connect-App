@@ -90,7 +90,7 @@ class _EditListingState extends State<EditListing> {
         _showSnackBar(response['error'], isError: true);
       } else {
         _showSnackBar("Listing Updated Successfully!", isError: false);
-        NavigationHelper.pushReplacement(context, const MainScreen());
+        NavigationHelper.pushAndRemoveUntil(context, const MainScreen());
       }
     } catch (e) {
       _showSnackBar("An unexpected error occurred", isError: true);

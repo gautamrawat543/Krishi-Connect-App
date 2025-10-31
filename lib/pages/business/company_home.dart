@@ -147,25 +147,27 @@ class _CompanyHomeState extends State<CompanyHome> {
                 height: 8,
               ),
               //available produce listing
-              SizedBox(
-                height: height * 0.28,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: produceListings.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: _availableProduceListing(
-                        width,
-                        produceListings[index],
+              produceListings.isEmpty
+                  ? const Center(child: Text('No produce found'))
+                  : SizedBox(
+                      height: height * 0.28,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: produceListings.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: _availableProduceListing(
+                              width,
+                              produceListings[index],
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
+                    ),
               const SizedBox(
-                height: 5,
+                height: 20,
               ),
               _titleRow(
                 AppLocalizations.of(context)!.createARequest,

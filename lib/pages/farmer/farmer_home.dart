@@ -416,20 +416,13 @@ class _FarmerHomeState extends State<FarmerHome> {
                   '${AppLocalizations.of(context)!.category}: ${listing["category"]}',
                   style: AppTextStyles.modalLabel),
               Text(
-                  '${AppLocalizations.of(context)!.requiredQuantity}: ${listing["requiredQuantity"]}, ${listing["unit"]}',
+                  '${AppLocalizations.of(context)!.requiredQuantity}: ${listing["requiredQuantity"]} ${listing["unit"]}',
                   style: AppTextStyles.modalLabel),
               Text(
                   '${AppLocalizations.of(context)!.priceOffered}: ₹ ${listing["maxPrice"]}',
                   style: AppTextStyles.modalLabel),
               Text(
                   '${AppLocalizations.of(context)!.location}:  ${listing["location"]}',
-                  style: AppTextStyles.modalLabel),
-              const SizedBox(height: 10),
-              Text('${AppLocalizations.of(context)!.createdAt}:',
-                  style: AppTextStyles.modalLabel),
-              Text(
-                  DateFormat("d MMMM y, h:mm a")
-                      .format(DateTime.parse(listing["createdAt"])),
                   style: AppTextStyles.modalLabel),
               const SizedBox(height: 25),
               Align(
@@ -500,12 +493,6 @@ class _FarmerHomeState extends State<FarmerHome> {
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.w500),
                 ),
-                Text(
-                    '${AppLocalizations.of(context)!.businessName}: : ${listing["businessName"].toString()}',
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
                 Text(
                     '${AppLocalizations.of(context)!.description}: ${listing["description"]}',
                     style: const TextStyle(

@@ -35,27 +35,30 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              Text(AppLocalizations.of(context)!.buyerListings,
-                  style: AppTextStyles.pageHeading),
-              const SizedBox(height: 6),
-              const Divider(thickness: 2, color: AppColors.primaryGreenDark),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: height * 0.7,
-                child: ListView.builder(
-                  itemCount: widget.listing.length,
-                  itemBuilder: (context, index) {
-                    return listingCard(width, widget.listing[index]);
-                  },
+          child: widget.listing.isEmpty
+              ? const Center(child: Text('No listings found'))
+              : Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Text(AppLocalizations.of(context)!.buyerListings,
+                        style: AppTextStyles.pageHeading),
+                    const SizedBox(height: 6),
+                    const Divider(
+                        thickness: 2, color: AppColors.primaryGreenDark),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: height * 0.7,
+                      child: ListView.builder(
+                        itemCount: widget.listing.length,
+                        itemBuilder: (context, index) {
+                          return listingCard(width, widget.listing[index]);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -137,15 +140,6 @@ class _FarmerBuyerListingState extends State<FarmerBuyerListing> {
                 Text(
                     '${AppLocalizations.of(context)!.location}: ${listing["location"]}',
                     style: AppTextStyles.modalLabel),
-                const SizedBox(height: 10),
-                Text('${AppLocalizations.of(context)!.createdAt}:',
-                    style: AppTextStyles.modalLabel),
-                if (listing["createdAt"].toString() != "null")
-                  Text(
-                    DateFormat("d MMMM y, h:mm a")
-                        .format(DateTime.parse(listing["createdAt"])),
-                    style: AppTextStyles.modalLabel,
-                  ),
                 const SizedBox(height: 25),
                 Align(
                   alignment: Alignment.centerRight,
