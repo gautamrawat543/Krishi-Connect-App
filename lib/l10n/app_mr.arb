@@ -60,7 +60,16 @@
 "location": "ठिकाण",
 "createdAt": "तयार केलेले",
 "updateListing":"सूची अद्यतन करा",
-"noMatchingListing":"जुळणाऱ्या सूची सापडल्या नाहीत"
+"noMatchingListing":"जुळणाऱ्या सूची सापडल्या नाहीत",
+"completeProfileAs": "प्रोफाइल पूर्ण करा म्हणून",
+"pinCode": "पिन कोड",
+"search": "शोधा",
+"state": "राज्य",
+"city": "शहर",
+"email": "ईमेल",
+"signUp": "साइन अप करा",
+"goBack": "मागे जा",
+"confirmPassword": "पासवर्डची पुष्टी करा"
 
 
 

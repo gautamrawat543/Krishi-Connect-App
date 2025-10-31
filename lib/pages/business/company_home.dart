@@ -148,8 +148,9 @@ class _CompanyHomeState extends State<CompanyHome> {
               ),
               //available produce listing
               SizedBox(
-                height: height * 0.38,
+                height: height * 0.28,
                 child: ListView.builder(
+                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: produceListings.length,
                   itemBuilder: (context, index) {
@@ -236,13 +237,13 @@ class _CompanyHomeState extends State<CompanyHome> {
   ) {
     return Container(
       width: width * 0.5,
-      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: Colors.white,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.all(

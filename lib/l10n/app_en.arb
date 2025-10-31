@@ -59,7 +59,16 @@
 "location": "Location",
 "createdAt": "Created at",
 "updateListing":"Update Listing",
-"noMatchingListing":"No Matching Listings Found"
+"noMatchingListing":"No Matching Listings Found",
+"completeProfileAs": "Complete Profile as",
+"pinCode": "Pin code",
+"search": "Search",
+"state": "State",
+"city": "City",
+"email": "Email",
+"signUp": "Sign Up",
+"goBack": "Go Back",
+"confirmPassword": "Confirm Password"
 
 
 

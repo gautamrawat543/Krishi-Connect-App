@@ -68,55 +68,67 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: SizedBox(
         height: height * 0.9,
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: conversations.length,
-            itemBuilder: (context, index) {
-              final convo = conversations[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ChatMessage(
-                                buyerRequestid:
-                                    convo['buyerRequestId'].toString(),
-                                listingid: convo['listingId'].toString(),
-                                name: convo['otherUserName'],
-                                convoId: convo['conversationId'],
-                              )));
-                },
-                child: ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Image.network(
-                      convo['otherUserProfilePicUrl'],
-                      errorBuilder: (context, error, stackTrace) {
-                        String name = convo['otherUserName'] ?? '';
-                        String initial =
-                            name.isNotEmpty ? name[0].toUpperCase() : '?';
-                        return Container(
-                          color: Colors.transparent,
-                          child: CircleAvatar(
-                            backgroundColor: AppColors.primaryGreenDark,
-                            child: Text(
-                              initial,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
+        child: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(
+                color: Colors.green,
+              ))
+            : conversations.isEmpty
+                ? const Center(
+                    child: Text('No conversations found'),
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: conversations.length,
+                    itemBuilder: (context, index) {
+                      final convo = conversations[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatMessage(
+                                        buyerRequestid:
+                                            convo['buyerRequestId'].toString(),
+                                        listingid:
+                                            convo['listingId'].toString(),
+                                        name: convo['otherUserName'],
+                                        convoId: convo['conversationId'],
+                                      )));
+                        },
+                        child: ListTile(
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.network(
+                              convo['otherUserProfilePicUrl'],
+                              errorBuilder: (context, error, stackTrace) {
+                                String name = convo['otherUserName'] ?? '';
+                                String initial = name.isNotEmpty
+                                    ? name[0].toUpperCase()
+                                    : '?';
+                                return Container(
+                                  color: Colors.transparent,
+                                  child: CircleAvatar(
+                                    backgroundColor: AppColors.primaryGreenDark,
+                                    child: Text(
+                                      initial,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  title: Text(convo['otherUserName']),
-                  subtitle: Text(_formatDateTime(convo['lastMessageTime'])),
-                ),
-              );
-            }),
+                          title: Text(convo['otherUserName']),
+                          subtitle:
+                              Text(_formatDateTime(convo['lastMessageTime'])),
+                        ),
+                      );
+                    }),
       ),
     );
   }

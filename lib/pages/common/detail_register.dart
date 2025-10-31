@@ -10,6 +10,7 @@ import 'package:krishi_connect_app/main_screen.dart';
 import 'package:krishi_connect_app/services/api/api_service.dart';
 import 'package:krishi_connect_app/utils/app_styles.dart';
 import 'package:krishi_connect_app/utils/shared_pref_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailRegister extends StatefulWidget {
   const DetailRegister(
@@ -171,11 +172,13 @@ class _DetailRegisterState extends State<DetailRegister> {
                   'assets/images/krishi_icon.png',
                   width: width * 0.26,
                 ),
-                const Text('KrishiConnect', style: AppTextStyles.krishiHeading),
+                Text(AppLocalizations.of(context)!.appTitle,
+                    style: AppTextStyles.krishiHeading),
                 const SizedBox(
                   height: 10,
                 ),
-                Text('Complete Profile as ${widget.role}',
+                Text(
+                    '${AppLocalizations.of(context)!.completeProfileAs} ${widget.role}',
                     style: AppTextStyles.subHeadingStyle),
                 const SizedBox(
                   height: 30,
@@ -209,7 +212,8 @@ class _DetailRegisterState extends State<DetailRegister> {
                   padding: const EdgeInsets.only(left: 12),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Name: ${widget.name}',
+                    child: Text(
+                        '${AppLocalizations.of(context)!.fullName}: ${widget.name}',
                         style: AppTextStyles.infoTextStyle),
                   ),
                 ),
@@ -217,7 +221,8 @@ class _DetailRegisterState extends State<DetailRegister> {
                   padding: const EdgeInsets.only(left: 12),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Phone Num: ${widget.number}',
+                    child: Text(
+                        '${AppLocalizations.of(context)!.phoneNumber}: ${widget.number}',
                         style: AppTextStyles.infoTextStyle),
                   ),
                 ),
@@ -232,7 +237,9 @@ class _DetailRegisterState extends State<DetailRegister> {
                       SizedBox(
                           width: width * 0.52,
                           height: height * 0.055,
-                          child: _buildTextField(_pincodeController, 'Pin code',
+                          child: _buildTextField(
+                              _pincodeController,
+                              AppLocalizations.of(context)!.pinCode,
                               TextInputType.number)),
                       GestureDetector(
                         onTap: _fetchLocationDetails,
@@ -248,8 +255,8 @@ class _DetailRegisterState extends State<DetailRegister> {
                               ? const CircularProgressIndicator(
                                   color: Colors.white,
                                 )
-                              : const Text(
-                                  'Search',
+                              : Text(
+                                  AppLocalizations.of(context)!.search,
                                   style: AppTextStyles.buttonTextStyle,
                                 ),
                         ),
@@ -264,7 +271,8 @@ class _DetailRegisterState extends State<DetailRegister> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('State: $_state \nCity: $_city',
+                    child: Text(
+                        '${AppLocalizations.of(context)!.state}: $_state \n${AppLocalizations.of(context)!.city}: $_city',
                         style: AppTextStyles.infoTextStyle),
                   ),
                 ),
@@ -275,7 +283,9 @@ class _DetailRegisterState extends State<DetailRegister> {
                   width: width * 0.92,
                   height: 50,
                   child: _buildTextField(
-                      _emailController, 'Email', TextInputType.emailAddress),
+                      _emailController,
+                      AppLocalizations.of(context)!.email,
+                      TextInputType.emailAddress),
                 ),
                 const SizedBox(
                   height: 15,
@@ -283,7 +293,9 @@ class _DetailRegisterState extends State<DetailRegister> {
                 SizedBox(
                   width: width * 0.9,
                   height: 50,
-                  child: _buildTextField(_passwordController1, 'Password',
+                  child: _buildTextField(
+                      _passwordController1,
+                      '${AppLocalizations.of(context)!.password}',
                       TextInputType.visiblePassword,
                       obscure: true),
                 ),
@@ -293,8 +305,10 @@ class _DetailRegisterState extends State<DetailRegister> {
                 SizedBox(
                   width: width * 0.9,
                   height: 50,
-                  child: _buildTextField(_passwordController2,
-                      'Confirm Password', TextInputType.visiblePassword,
+                  child: _buildTextField(
+                      _passwordController2,
+                      AppLocalizations.of(context)!.confirmPassword,
+                      TextInputType.visiblePassword,
                       obscure: _isPasswordHidden,
                       suffix: IconButton(
                         icon: Icon(
@@ -323,8 +337,8 @@ class _DetailRegisterState extends State<DetailRegister> {
                         ? const CircularProgressIndicator(
                             color: Colors.white,
                           )
-                        : const Text(
-                            'Sign Up',
+                        : Text(
+                            AppLocalizations.of(context)!.signUp,
                             style: AppTextStyles.buttonTextStyle,
                           ),
                   ),
@@ -338,7 +352,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Row(
+                    child: Row(
                       children: [
                         Icon(
                           Icons.arrow_back_ios_new_rounded,
@@ -346,7 +360,7 @@ class _DetailRegisterState extends State<DetailRegister> {
                           color: Colors.black45,
                         ),
                         Text(
-                          'Go Back',
+                          AppLocalizations.of(context)!.goBack,
                           style: TextStyle(
                             color: Colors.black45,
                             fontSize: 18,
