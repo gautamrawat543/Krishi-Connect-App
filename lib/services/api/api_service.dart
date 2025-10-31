@@ -643,7 +643,8 @@ class ApiService {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> jsonData = jsonDecode(response.body);
+        final decoded = utf8.decode(response.bodyBytes);
+        final List<dynamic> jsonData = jsonDecode(decoded);
         return jsonData
             .map<Map<String, dynamic>>((msg) => Map<String, dynamic>.from(msg))
             .toList();
