@@ -303,19 +303,6 @@ class _SearchPageFarmerState extends State<SearchPageFarmer> {
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Color.fromRGBO(0, 0, 0, 0.75))),
-                const SizedBox(height: 10),
-                Text('${AppLocalizations.of(context)!.createdAt}:',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
-                Text(
-                    DateFormat("d MMMM y, h:mm a")
-                        .format(DateTime.parse(listing["createdAt"])),
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromRGBO(0, 0, 0, 0.75))),
                 const SizedBox(height: 25),
                 Align(
                   alignment: Alignment.centerRight,
